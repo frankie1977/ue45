@@ -98,12 +98,10 @@ class SpielDetail extends StatelessWidget {
           textAlign: align,
           style: theme.textTheme.bodySmall,
         ),
-
       );
     }
     return Align(
-      alignment:
-          align == .end ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: align == .end ? Alignment.centerRight : Alignment.centerLeft,
       child: InkWell(
         onTap: () => _spielerAuswaehlen(context, team, istHeim, index, null),
         borderRadius: BorderRadius.circular(12),
@@ -133,16 +131,18 @@ class SpielDetail extends StatelessWidget {
       null => '–',
       Einzel(:final heimSpieler, :final gastSpieler) =>
         (heimLinks ? heimSpieler : gastSpieler)?.name ?? '–',
-      Doppel(:final heimSpieler, :final gastSpieler) =>
-        seitenNames(heimLinks ? heimSpieler : gastSpieler),
+      Doppel(:final heimSpieler, :final gastSpieler) => seitenNames(
+        heimLinks ? heimSpieler : gastSpieler,
+      ),
     };
 
     final rechtsSpielerAll = switch (spiel) {
       null => '–',
       Einzel(:final heimSpieler, :final gastSpieler) =>
         (heimLinks ? gastSpieler : heimSpieler)?.name ?? '–',
-      Doppel(:final heimSpieler, :final gastSpieler) =>
-        seitenNames(heimLinks ? gastSpieler : heimSpieler),
+      Doppel(:final heimSpieler, :final gastSpieler) => seitenNames(
+        heimLinks ? gastSpieler : heimSpieler,
+      ),
     };
 
     final rowCount = slot.istDoppel ? 2 : 1;
@@ -174,13 +174,14 @@ class SpielDetail extends StatelessWidget {
         final rechtsScore = satz != null
             ? (heimLinks ? satz.gastTore : satz.heimTore)
             : null;
-        final scoreText =
-            linksScore != null ? '$linksScore : $rechtsScore' : '– : –';
+        final scoreText = linksScore != null
+            ? '$linksScore : $rechtsScore'
+            : '– : –';
         final titelSuffix = slot.istDoppel ? ' – Satz ${i + 1}' : '';
         final spielerKomplett = linksPlayer != null && rechtsPlayer != null;
 
         return Padding(
-          padding: const .symmetric(horizontal: 16, vertical: 4),
+          padding: const .symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
               SizedBox(

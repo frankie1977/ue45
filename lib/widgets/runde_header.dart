@@ -13,7 +13,7 @@ class RundeHeader extends StatelessWidget {
         titel,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
           color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
+          fontWeight: .bold,
         ),
       ),
     );

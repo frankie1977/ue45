@@ -23,7 +23,7 @@ class SpielerPickerDialog extends StatelessWidget {
               child: Text(
                 s.name,
                 style: s.id == aktuell?.id
-                    ? const TextStyle(fontWeight: FontWeight.bold)
+                    ? const TextStyle(fontWeight: .bold)
                     : null,
               ),
             ),

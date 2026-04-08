@@ -18,39 +18,39 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.robotoTextTheme().copyWith(
           displayLarge: GoogleFonts.roboto(
             fontSize: 86,
-            fontWeight: FontWeight.bold,
+            fontWeight: .bold,
           ),
           displayMedium: GoogleFonts.roboto(
             fontSize: 67,
-            fontWeight: FontWeight.bold,
+            fontWeight: .bold,
           ),
           displaySmall: GoogleFonts.roboto(
             fontSize: 58,
-            fontWeight: FontWeight.bold,
+            fontWeight: .bold,
           ),
           headlineLarge: GoogleFonts.roboto(
             fontSize: 48,
-            fontWeight: FontWeight.w600,
+            fontWeight: .w600,
           ),
           headlineMedium: GoogleFonts.roboto(
             fontSize: 41,
-            fontWeight: FontWeight.w600,
+            fontWeight: .w600,
           ),
           headlineSmall: GoogleFonts.roboto(
             fontSize: 34,
-            fontWeight: FontWeight.w600,
+            fontWeight: .w600,
           ),
           titleLarge: GoogleFonts.roboto(
             fontSize: 31,
-            fontWeight: FontWeight.w600,
+            fontWeight: .w600,
           ),
           titleMedium: GoogleFonts.roboto(
             fontSize: 26,
-            fontWeight: FontWeight.w500,
+            fontWeight: .w500,
           ),
           titleSmall: GoogleFonts.roboto(
             fontSize: 22,
-            fontWeight: FontWeight.w500,
+            fontWeight: .w500,
           ),
           bodyLarge: GoogleFonts.roboto(
             fontSize: 24,
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
           ),
           labelLarge: GoogleFonts.roboto(
             fontSize: 22,
-            fontWeight: FontWeight.w500,
+            fontWeight: .w500,
           ),
           labelMedium: GoogleFonts.roboto(
             fontSize: 19,

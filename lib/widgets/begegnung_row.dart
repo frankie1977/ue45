@@ -137,7 +137,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                       Text(
                         linksName,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: .bold,
                         ),
                       )
                     ],
@@ -152,7 +152,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                     textAlign: .center,
                     style: done
                         ? theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: .bold,
                             color: theme.colorScheme.primary,
                           )
                         : theme.textTheme.bodyMedium?.copyWith(
@@ -164,7 +164,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                   child: Text(
                     rechtsName,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: .bold,
                     ),
                   ),
                 ),

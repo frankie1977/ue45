@@ -49,7 +49,7 @@ class TabelleRow extends StatelessWidget {
             child: Text(
               team.name,
               style: theme.textTheme.bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
+                  ?.copyWith(fontWeight: .bold),
             ),
           ),
           SizedBox(
@@ -106,7 +106,7 @@ class TabelleRow extends StatelessWidget {
               '$punkte',
               textAlign: .center,
               style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
                 color: theme.colorScheme.primary,
               ),
             ),

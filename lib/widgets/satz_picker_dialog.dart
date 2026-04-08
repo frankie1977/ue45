@@ -102,7 +102,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                     widget.linksTeamName,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: .bold,
                     ),
                   ),
                   Text(
@@ -144,7 +144,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                     widget.rechtsTeamName,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: .bold,
                     ),
                   ),
                   Text(
