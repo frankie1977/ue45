@@ -41,10 +41,12 @@ class TabelleRow extends StatelessWidget {
             width: 28,
             child: Text(
               '$rang',
+              textAlign: TextAlign.right,
               style: theme.textTheme.bodySmall
                   ?.copyWith(color: theme.colorScheme.outline),
             ),
           ),
+          SizedBox(width: 10,),
           Expanded(
             child: Text(
               team.name,

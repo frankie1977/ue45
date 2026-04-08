@@ -6,9 +6,6 @@ import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
 
 Liga buildSampleLiga() {
-
-
-
   // Team A – Rote Teufel
   final a1 = Spieler(id: 'a1', vorname: 'Anna', nachname: 'Meier');
   final a2 = Spieler(id: 'a2', vorname: 'Luca', nachname: 'Rossi');
@@ -101,7 +98,15 @@ Liga buildSampleLiga() {
 
   Liga liga = Liga.mitSpielplan(
     name: 'Testliga',
-    teams: [teamA, teamB, teamC, teamD, teamE, teamF, teamG],
+    teams: [
+      teamA,
+      teamB,
+      teamC,
+      teamD,
+      teamE,
+      teamF,
+      // teamG,
+    ],
   );
 
   final Begegnung alte = liga.begegnungen.first;

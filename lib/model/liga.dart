@@ -2,6 +2,7 @@ import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/satz.dart';
 import 'package:ue45x/model/spiel.dart';
 import 'package:ue45x/model/spieler.dart';
+import 'package:ue45x/model/spieler_stats.dart';
 import 'package:ue45x/model/spieltag.dart';
 import 'package:ue45x/model/team.dart';
 
@@ -406,6 +407,81 @@ class Liga {
         return _direkterVergleich(b, a);
       });
     return sorted;
+  }
+
+  // ── Spieler-Statistiken ──────────────────────────────────────────
+
+  /// Top 10 Spieler sortiert nach: Ligapunkte-Quote, dann Tordifferenz.
+  /// Nur Spieler mit mindestens einem gespielten Satz.
+  List<SpielerStats> get spielerTopListe {
+    final Map<String, SpielerStats> map = {};
+
+    void add(
+      Spieler spieler,
+      Team team,
+      int punkteGeholt,
+      int toreGeholt,
+      int toreKassiert,
+    ) {
+      final neu = SpielerStats(
+        spieler: spieler,
+        team: team,
+        punkteGeholt: punkteGeholt,
+        punkteMoeglich: 2,
+        toreGeholt: toreGeholt,
+        toreKassiert: toreKassiert,
+      );
+      map[spieler.id] =
+          map.containsKey(spieler.id) ? map[spieler.id]! + neu : neu;
+    }
+
+    for (final beg in begegnungen) {
+      for (final slot in SpielSlot.values) {
+        switch (beg.spielAt(slot)) {
+          case Einzel(
+            :final heimSpieler,
+            :final gastSpieler,
+            satz: final Satz satz,
+          ) when satz.istAbgeschlossen:
+            if (heimSpieler != null) {
+              add(heimSpieler, beg.heimTeam,
+                  satz.punkteHeim, satz.heimTore, satz.gastTore);
+            }
+            if (gastSpieler != null) {
+              add(gastSpieler, beg.gastTeam,
+                  satz.punkteGast, satz.gastTore, satz.heimTore);
+            }
+          case Doppel(
+            :final heimSpieler,
+            :final gastSpieler,
+            :final saetze,
+          ):
+            for (final satz in saetze.where((s) => s.istAbgeschlossen)) {
+              for (final sp in heimSpieler) {
+                add(sp, beg.heimTeam,
+                    satz.punkteHeim, satz.heimTore, satz.gastTore);
+              }
+              for (final sp in gastSpieler) {
+                add(sp, beg.gastTeam,
+                    satz.punkteGast, satz.gastTore, satz.heimTore);
+              }
+            }
+          default:
+            break;
+        }
+      }
+    }
+
+    return (map.values.toList()
+          ..sort((a, b) {
+            final q = b.quote.compareTo(a.quote);
+            if (q != 0) {
+              return q;
+            }
+            return b.torDifferenz.compareTo(a.torDifferenz);
+          }))
+        .take(10)
+        .toList();
   }
 
   // ── JSON ─────────────────────────────────────────────────────────

@@ -6,14 +6,20 @@ class TabelleHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.labelSmall?.copyWith(
-          color: Theme.of(context).colorScheme.outline,
-        );
+      color: Theme.of(context).colorScheme.outline,
+    );
 
     return Padding(
       padding: const .symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          SizedBox(width: 28, child: Text('#', style: style)),
+          SizedBox(
+            width: 28,
+            child: Text('#', textAlign: .right, style: style),
+          ),
+          SizedBox(
+            width: 10,
+          ),
           Expanded(child: Text('Team', style: style)),
           SizedBox(
             width: 32,
