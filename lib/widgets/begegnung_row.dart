@@ -30,15 +30,15 @@ class _BegegnungRowState extends State<BegegnungRow> {
     }
     final Spiel neuesSpiel = switch (spiel) {
       Einzel(:final heimSpieler, :final gastSpieler) => Einzel(
-          heimSpieler: heimSpieler,
-          gastSpieler: gastSpieler,
-          satz: satz,
-        ),
+        heimSpieler: heimSpieler,
+        gastSpieler: gastSpieler,
+        satz: satz,
+      ),
       Doppel(:final heimSpieler, :final gastSpieler, :final saetze) => Doppel(
-          heimSpieler: heimSpieler,
-          gastSpieler: gastSpieler,
-          saetze: _saetzeAktualisiert(saetze, satzIndex, satz),
-        ),
+        heimSpieler: heimSpieler,
+        gastSpieler: gastSpieler,
+        saetze: _saetzeAktualisiert(saetze, satzIndex, satz),
+      ),
     };
     widget.onBegegnungGeaendert(
       widget.begegnung.mitSpiel(slot, neuesSpiel),
@@ -56,17 +56,17 @@ class _BegegnungRowState extends State<BegegnungRow> {
     }
     final Spiel neuesSpiel = switch (spiel) {
       Einzel(:final heimSpieler, :final gastSpieler) => Einzel(
-          heimSpieler: heimSpieler,
-          gastSpieler: gastSpieler,
-        ),
+        heimSpieler: heimSpieler,
+        gastSpieler: gastSpieler,
+      ),
       Doppel(:final heimSpieler, :final gastSpieler, :final saetze) => Doppel(
-          heimSpieler: heimSpieler,
-          gastSpieler: gastSpieler,
-          saetze: [
-            for (int k = 0; k < saetze.length; k++)
-              if (k != satzIndex) saetze[k],
-          ],
-        ),
+        heimSpieler: heimSpieler,
+        gastSpieler: gastSpieler,
+        saetze: [
+          for (int k = 0; k < saetze.length; k++)
+            if (k != satzIndex) saetze[k],
+        ],
+      ),
     };
     widget.onBegegnungGeaendert(
       widget.begegnung.mitSpiel(slot, neuesSpiel),
@@ -112,14 +112,14 @@ class _BegegnungRowState extends State<BegegnungRow> {
       children: [
         InkWell(
           onTap: () => setState(() {
-                _expanded = !_expanded;
-              }),
+            _expanded = !_expanded;
+          }),
           child: Padding(
             padding: const .symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
                 SizedBox(
-                  width: 24,
+                  width: 30,
                   child: Icon(
                     _expanded ? Icons.expand_less : Icons.expand_more,
                     size: 16,
@@ -139,26 +139,73 @@ class _BegegnungRowState extends State<BegegnungRow> {
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: .bold,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
                 SizedBox(
-                  width: 80,
-                  child: Text(
-                    scoreLinks == 0 && scoreRechts == 0 && !done
-                        ? '– : –'
-                        : '$scoreLinks : $scoreRechts',
-                    textAlign: .center,
-                    style: done
-                        ? theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: .bold,
-                            color: theme.colorScheme.primary,
-                          )
-                        : theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.outline,
-                          ),
+                  width: 100,
+                  child: Row(
+                    mainAxisAlignment: .center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          scoreLinks == 0 && scoreRechts == 0 && !done
+                              ? '–'
+                              : '$scoreLinks',
+                          textAlign: .right,
+                          style: done
+                              ? theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: .bold,
+                                  color: theme.colorScheme.primary,
+                                )
+                              : theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.outline,
+                                ),
+                        ),
+                      ),
+                      Text(
+                        ' : ',
+                        style: done
+                            ? theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: .bold,
+                                color: theme.colorScheme.primary,
+                              )
+                            : theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.outline,
+                              ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          scoreLinks == 0 && scoreRechts == 0 && !done
+                              ? '–'
+                              : '$scoreRechts',
+                          style: done
+                              ? theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: .bold,
+                                  color: theme.colorScheme.primary,
+                                )
+                              : theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.outline,
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
+                  // child: Text(
+                  //   scoreLinks == 0 && scoreRechts == 0 && !done
+                  //       ? '– : –'
+                  //       : '$scoreLinks : $scoreRechts',
+                  //   textAlign: .center,
+                  //   style: done
+                  //       ? theme.textTheme.titleSmall?.copyWith(
+                  //           fontWeight: .bold,
+                  //           color: theme.colorScheme.primary,
+                  //         )
+                  //       : theme.textTheme.bodyMedium?.copyWith(
+                  //           color: theme.colorScheme.outline,
+                  //         ),
+                  // ),
                 ),
                 Expanded(
                   child: Text(
@@ -188,8 +235,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                     : widget.begegnung.heimTeam,
                 onSatzGesetzt: (satzIndex, satz) =>
                     _satzSetzen(slot, satzIndex, satz),
-                onSatzGeloescht: (satzIndex) =>
-                    _satzLoeschen(slot, satzIndex),
+                onSatzGeloescht: (satzIndex) => _satzLoeschen(slot, satzIndex),
                 onSpielerGeandert: (neuesSpiel) =>
                     _spielerSetzen(slot, neuesSpiel),
               ),
@@ -211,13 +257,34 @@ class _BegegnungRowState extends State<BegegnungRow> {
                   ),
                 ),
                 SizedBox(
-                  width: 80,
-                  child: Text(
-                    '$toreLinks : $toreRechts',
-                    textAlign: .center,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.outline,
-                    ),
+                  width: 100,
+                  child: Row(
+                    mainAxisAlignment: .center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '$toreLinks',
+                          textAlign: .right,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        ' : ',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.outline,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          '$toreRechts',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const Expanded(child: SizedBox()),

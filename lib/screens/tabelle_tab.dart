@@ -12,24 +12,30 @@ class TabelleTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final teams = liga.tabelle;
 
-    return Column(
-      children: [
-        const TabelleHeader(),
-        const Divider(height: 1),
-        Expanded(
-          child: ListView.separated(
-            itemCount: teams.length,
-            separatorBuilder: (_, _) => const Divider(height: 1),
-            itemBuilder: (BuildContext context, int index) {
-              return TabelleRow(
-                rang: index + 1,
-                team: teams[index],
-                liga: liga,
-              );
-            },
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: [
+            const TabelleHeader(),
+            const Divider(height: 1),
+            Expanded(
+              child: ListView.separated(
+                itemCount: teams.length,
+                separatorBuilder: (_, _) => const Divider(height: 1),
+                itemBuilder: (BuildContext context, int index) {
+                  return TabelleRow(
+                    rang: index + 1,
+                    team: teams[index],
+                    liga: liga,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

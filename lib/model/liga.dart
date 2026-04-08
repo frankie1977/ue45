@@ -386,9 +386,8 @@ class Liga {
 
   // ── Tabelle ──────────────────────────────────────────────────────
 
-  /// Teams sortiert nach:
-  /// 1. Ligapunkte, 2. Punktedifferenz, 3. Tordifferenz,
-  /// 4. Direkter Vergleich.
+  /// Teams sortiert nach: Ligapunkte, Punktedifferenz (+/-),
+  /// Tordifferenz, Direkter Vergleich.
   List<Team> get tabelle {
     final sorted = List<Team>.from(teams)
       ..sort((a, b) {
@@ -396,9 +395,9 @@ class Liga {
         if (lp != 0) {
           return lp;
         }
-        final sv = punkteDifferenzVon(b).compareTo(punkteDifferenzVon(a));
-        if (sv != 0) {
-          return sv;
+        final pv = punkteDifferenzVon(b).compareTo(punkteDifferenzVon(a));
+        if (pv != 0) {
+          return pv;
         }
         final tv = torDifferenzVon(b).compareTo(torDifferenzVon(a));
         if (tv != 0) {

@@ -33,9 +33,9 @@ class _LigaScreenState extends State<LigaScreen> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(_liga.name),
-        ),
+        // appBar: AppBar(
+        //   title: Text(_liga.name),
+        // ),
         body: Row(
           children: [
             SizedBox(

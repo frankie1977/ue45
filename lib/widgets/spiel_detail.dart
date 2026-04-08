@@ -181,16 +181,22 @@ class SpielDetail extends StatelessWidget {
         final spielerKomplett = linksPlayer != null && rechtsPlayer != null;
 
         return Padding(
-          padding: const .symmetric(horizontal: 16, vertical: 8),
+          padding: .only(
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: slot.istDoppel && i == 0 ? 0 : 8,
+          ),
           child: Row(
             children: [
               SizedBox(
-                width: 24,
+                width: 30,
                 child: i == 0
                     ? Text(
                         slot.label,
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: theme.colorScheme.outline,
+                          fontWeight: .bold,
                         ),
                       )
                     : null,
@@ -206,7 +212,7 @@ class SpielDetail extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 80,
+                width: 100,
                 child: spielerKomplett && i <= saetze.length
                     ? InkWell(
                         onTap: () async {
