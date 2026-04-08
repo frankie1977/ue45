@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ue45x/model/liga.dart';
 import 'package:ue45x/sample_data.dart';
+import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/screens/begegnungen_tab.dart';
 import 'package:ue45x/screens/tabelle_tab.dart';
 import 'package:ue45x/screens/teams_tab.dart';
@@ -90,7 +91,13 @@ class LigaScreen extends StatefulWidget {
 }
 
 class _LigaScreenState extends State<LigaScreen> {
-  Liga liga = buildSampleLiga();
+  Liga _liga = buildSampleLiga();
+
+  void _begegnungGeaendert(Begegnung begegnung) {
+    setState(() {
+      _liga = _liga.mitBegegnung(begegnung);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,19 +105,19 @@ class _LigaScreenState extends State<LigaScreen> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(liga.name),
+          title: Text(_liga.name),
           bottom: const TabBar(
             tabs: [
               Tab(
-                icon: Icon(Icons.groups, size: 32,),
+                icon: Icon(Icons.groups, size: 32),
                 text: 'Teams',
               ),
               Tab(
-                icon: Icon(Icons.sports_soccer, size: 32,),
+                icon: Icon(Icons.sports_soccer, size: 32),
                 text: 'Begegnungen',
               ),
               Tab(
-                icon: Icon(Icons.leaderboard, size: 32,),
+                icon: Icon(Icons.leaderboard, size: 32),
                 text: 'Tabelle',
               ),
             ],
@@ -118,9 +125,12 @@ class _LigaScreenState extends State<LigaScreen> {
         ),
         body: TabBarView(
           children: [
-            TeamsTab(liga: liga),
-            BegegnungenTab(liga: liga),
-            TabelleTab(liga: liga),
+            TeamsTab(liga: _liga),
+            BegegnungenTab(
+              liga: _liga,
+              onBegegnungGeaendert: _begegnungGeaendert,
+            ),
+            TabelleTab(liga: _liga),
           ],
         ),
       ),
