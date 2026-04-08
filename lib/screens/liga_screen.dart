@@ -33,9 +33,6 @@ class _LigaScreenState extends State<LigaScreen> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: Text(_liga.name),
-        // ),
         body: Row(
           children: [
             SizedBox(
@@ -46,15 +43,16 @@ class _LigaScreenState extends State<LigaScreen> {
             Expanded(
               child: Column(
                 children: [
+                  SizedBox(height: 10,),
                   const TabBar(
                     tabs: [
                       Tab(
                         icon: Icon(Icons.sports_soccer, size: 32),
-                        text: 'Begegnungen',
+                        text: 'Spiele',
                       ),
                       Tab(
                         icon: Icon(Icons.groups, size: 32),
-                        text: 'Teams',
+                        text: 'Anmeldung',
                       ),
                     ],
                   ),

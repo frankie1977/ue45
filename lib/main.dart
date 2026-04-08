@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorSchemeSeed: Colors.orange,
+        colorSchemeSeed: Colors.blueGrey,
         useMaterial3: true,
         textTheme: GoogleFonts.robotoTextTheme().copyWith(
           displayLarge: GoogleFonts.roboto(

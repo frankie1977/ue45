@@ -20,6 +20,14 @@ class TabelleHeader extends StatelessWidget {
             child: Text('Sp', style: style, textAlign: .center),
           ),
           SizedBox(
+            width: 52,
+            child: Text('Tore', style: style, textAlign: .center),
+          ),
+          SizedBox(
+            width: 44,
+            child: Text('+/−', style: style, textAlign: .center),
+          ),
+          SizedBox(
             width: 32,
             child: Text('S', style: style, textAlign: .center),
           ),
@@ -34,10 +42,6 @@ class TabelleHeader extends StatelessWidget {
           SizedBox(
             width: 44,
             child: Text('+/−', style: style, textAlign: .center),
-          ),
-          SizedBox(
-            width: 52,
-            child: Text('Tore', style: style, textAlign: .center),
           ),
           SizedBox(
             width: 36,

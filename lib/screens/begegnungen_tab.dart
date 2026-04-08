@@ -26,12 +26,21 @@ class _BegegnungenTabState extends State<BegegnungenTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final alleSpieltage = [
+      ...widget.liga.hinrunde,
+      ...widget.liga.rueckrunde,
+    ];
+    final aktiverSpieltag = alleSpieltage.where(
+      (st) => !st.begegnungen.every((b) => b.istAbgeschlossen),
+    ).firstOrNull;
+
     int index = 0;
     final hinrundeWidgets = widget.liga.hinrunde.map((st) {
       final w = SpieltagSection(
         spieltag: st,
         startIndex: index,
         onBegegnungGeaendert: widget.onBegegnungGeaendert,
+        istAktiv: st == aktiverSpieltag,
       );
       index += st.begegnungen.length;
       return w;
@@ -42,6 +51,7 @@ class _BegegnungenTabState extends State<BegegnungenTab>
         spieltag: st,
         startIndex: index,
         onBegegnungGeaendert: widget.onBegegnungGeaendert,
+        istAktiv: st == aktiverSpieltag,
       );
       index += st.begegnungen.length;
       return w;

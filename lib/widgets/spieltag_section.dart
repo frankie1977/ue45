@@ -9,19 +9,21 @@ class SpieltagSection extends StatelessWidget {
     required this.spieltag,
     required this.startIndex,
     required this.onBegegnungGeaendert,
+    this.istAktiv = false,
     super.key,
   });
 
   final Spieltag spieltag;
   final int startIndex;
   final void Function(Begegnung) onBegegnungGeaendert;
+  final bool istAktiv;
 
   @override
   Widget build(BuildContext context) {
     final abgeschlossen = spieltag.begegnungen.every((b) => b.istAbgeschlossen);
 
     return Card(
-      elevation: 3,
+      elevation: istAktiv ? 4 : null,
       margin: const .symmetric(horizontal: 12, vertical: 8),
       clipBehavior: Clip.antiAlias,
       child: Column(

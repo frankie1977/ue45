@@ -61,6 +61,30 @@ class TabelleRow extends StatelessWidget {
             ),
           ),
           SizedBox(
+            width: 52,
+            child: Text(
+              '$tore:$gegenTore',
+              textAlign: .center,
+              style: theme.textTheme.bodySmall,
+            ),
+          ),
+          SizedBox(
+            width: 44,
+            child: Text(
+              liga.torDifferenzVon(team) > 0
+                  ? '+${liga.torDifferenzVon(team)}'
+                  : '${liga.torDifferenzVon(team)}',
+              textAlign: .center,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: liga.torDifferenzVon(team) > 0
+                    ? theme.colorScheme.primary
+                    : liga.torDifferenzVon(team) < 0
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.outline,
+              ),
+            ),
+          ),
+          SizedBox(
             width: 32,
             child: Text(
               '$siege',
@@ -90,14 +114,6 @@ class TabelleRow extends StatelessWidget {
               diffText,
               textAlign: .center,
               style: theme.textTheme.bodySmall?.copyWith(color: diffColor),
-            ),
-          ),
-          SizedBox(
-            width: 52,
-            child: Text(
-              '$tore:$gegenTore',
-              textAlign: .center,
-              style: theme.textTheme.bodySmall,
             ),
           ),
           SizedBox(
