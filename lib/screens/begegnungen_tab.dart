@@ -198,6 +198,10 @@ class _BegegnungRowState extends State<_BegegnungRow> {
     );
   }
 
+  void _spielerSetzen(SpielSlot slot, Spiel neuesSpiel) {
+    widget.onBegegnungGeaendert(widget.begegnung.mitSpiel(slot, neuesSpiel));
+  }
+
   void _satzLoeschen(SpielSlot slot, int satzIndex) {
     final spiel = widget.begegnung.spielAt(slot);
     if (spiel == null) {
@@ -328,12 +332,18 @@ class _BegegnungRowState extends State<_BegegnungRow> {
                 slot: slot,
                 spiel: widget.begegnung.spielAt(slot),
                 heimLinks: heimLinks,
-                linksTeamName: linksName,
-                rechtsTeamName: rechtsName,
+                linksTeam: heimLinks
+                    ? widget.begegnung.heimTeam
+                    : widget.begegnung.gastTeam,
+                rechtsTeam: heimLinks
+                    ? widget.begegnung.gastTeam
+                    : widget.begegnung.heimTeam,
                 onSatzGesetzt: (satzIndex, satz) =>
                     _satzSetzen(slot, satzIndex, satz),
                 onSatzGeloescht: (satzIndex) =>
                     _satzLoeschen(slot, satzIndex),
+                onSpielerGeandert: (neuesSpiel) =>
+                    _spielerSetzen(slot, neuesSpiel),
               ),
             ];
           }),
@@ -351,59 +361,160 @@ class _SpielDetail extends StatelessWidget {
     required this.slot,
     required this.spiel,
     required this.heimLinks,
-    required this.linksTeamName,
-    required this.rechtsTeamName,
+    required this.linksTeam,
+    required this.rechtsTeam,
     required this.onSatzGesetzt,
     required this.onSatzGeloescht,
+    required this.onSpielerGeandert,
   });
 
   final SpielSlot slot;
   final Spiel? spiel;
   final bool heimLinks;
-  final String linksTeamName;
-  final String rechtsTeamName;
+  final Team linksTeam;
+  final Team rechtsTeam;
   final void Function(int satzIndex, Satz satz) onSatzGesetzt;
   final void Function(int satzIndex) onSatzGeloescht;
+  final void Function(Spiel neuesSpiel) onSpielerGeandert;
 
-  String _name(Spieler s) => s.name;
+  Spiel _spielerAktualisieren(bool istHeim, int index, Spieler ausgewaehlt) {
+    switch (spiel) {
+      case null:
+        return slot.istDoppel
+            ? Doppel(
+                heimSpieler: istHeim ? [ausgewaehlt] : [],
+                gastSpieler: istHeim ? [] : [ausgewaehlt],
+              )
+            : Einzel(
+                heimSpieler: istHeim ? ausgewaehlt : null,
+                gastSpieler: istHeim ? null : ausgewaehlt,
+              );
+      case Einzel(:final heimSpieler, :final gastSpieler, :final satz):
+        return Einzel(
+          heimSpieler: istHeim ? ausgewaehlt : heimSpieler,
+          gastSpieler: istHeim ? gastSpieler : ausgewaehlt,
+          satz: satz,
+        );
+      case Doppel(:final heimSpieler, :final gastSpieler, :final saetze):
+        final heim = List<Spieler>.from(heimSpieler);
+        final gast = List<Spieler>.from(gastSpieler);
+        final liste = istHeim ? heim : gast;
+        if (index < liste.length) {
+          liste[index] = ausgewaehlt;
+        } else {
+          liste.add(ausgewaehlt);
+        }
+        return Doppel(
+          heimSpieler: heim,
+          gastSpieler: gast,
+          saetze: saetze,
+        );
+    }
+  }
 
-  String _doppelNames(List<Spieler> spieler) => spieler.map(_name).join(' & ');
+  Future<void> _spielerAuswaehlen(
+    BuildContext context,
+    Team team,
+    bool istHeim,
+    int index,
+    Spieler? aktuell,
+  ) async {
+    final picked = await showDialog<Spieler>(
+      context: context,
+      builder: (ctx) => _SpielerPickerDialog(team: team, aktuell: aktuell),
+    );
+    if (picked != null) {
+      onSpielerGeandert(_spielerAktualisieren(istHeim, index, picked));
+    }
+  }
+
+  Widget _spielerWidget(
+    BuildContext context, {
+    required Spieler? spieler,
+    required Team team,
+    required bool istHeim,
+    required int index,
+    required TextAlign align,
+  }) {
+    final theme = Theme.of(context);
+    if (spieler != null) {
+      return InkWell(
+        onTap: () =>
+            _spielerAuswaehlen(context, team, istHeim, index, spieler),
+        borderRadius: BorderRadius.circular(4),
+        child: Text(
+          spieler.name,
+          textAlign: align,
+          style: theme.textTheme.bodySmall,
+        ),
+      );
+    }
+    return Align(
+      alignment:
+          align == TextAlign.end ? Alignment.centerRight : Alignment.centerLeft,
+      child: InkWell(
+        onTap: () => _spielerAuswaehlen(context, team, istHeim, index, null),
+        borderRadius: BorderRadius.circular(12),
+        child: Icon(
+          Icons.add_circle_outline,
+          size: 18,
+          color: theme.colorScheme.outline,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final String linksNames;
-    final String rechtsNames;
-    final List<Satz> saetze;
+    final List<Satz> saetze = switch (spiel) {
+      null => [],
+      Einzel(:final satz) => satz != null ? [satz] : [],
+      Doppel(:final saetze) => saetze,
+    };
 
-    switch (spiel) {
-      case null:
-        linksNames = '–';
-        rechtsNames = '–';
-        saetze = [];
-      case Einzel(:final heimSpieler, :final gastSpieler, :final satz):
-        linksNames = heimLinks ? _name(heimSpieler) : _name(gastSpieler);
-        rechtsNames = heimLinks ? _name(gastSpieler) : _name(heimSpieler);
-        saetze = satz != null ? [satz] : [];
-      case Doppel(
-        :final heimSpieler,
-        :final gastSpieler,
-        saetze: final doppelSaetze,
-      ):
-        linksNames = heimLinks
-            ? _doppelNames(heimSpieler)
-            : _doppelNames(gastSpieler);
-        rechtsNames = heimLinks
-            ? _doppelNames(gastSpieler)
-            : _doppelNames(heimSpieler);
-        saetze = doppelSaetze;
-    }
+    String seitenNames(List<Spieler> spieler) =>
+        spieler.map((s) => s.name).join(' & ');
+
+    final linksSpielerAll = switch (spiel) {
+      null => '–',
+      Einzel(:final heimSpieler, :final gastSpieler) =>
+        (heimLinks ? heimSpieler : gastSpieler)?.name ?? '–',
+      Doppel(:final heimSpieler, :final gastSpieler) =>
+        seitenNames(heimLinks ? heimSpieler : gastSpieler),
+    };
+
+    final rechtsSpielerAll = switch (spiel) {
+      null => '–',
+      Einzel(:final heimSpieler, :final gastSpieler) =>
+        (heimLinks ? gastSpieler : heimSpieler)?.name ?? '–',
+      Doppel(:final heimSpieler, :final gastSpieler) =>
+        seitenNames(heimLinks ? gastSpieler : heimSpieler),
+    };
 
     final rowCount = slot.istDoppel ? 2 : 1;
 
     return Column(
       children: List.generate(rowCount, (i) {
+        final Spieler? heimPlayer;
+        final Spieler? gastPlayer;
+        switch (spiel) {
+          case null:
+            heimPlayer = null;
+            gastPlayer = null;
+          case Einzel(:final heimSpieler, :final gastSpieler):
+            heimPlayer = heimSpieler;
+            gastPlayer = gastSpieler;
+          case Doppel(:final heimSpieler, :final gastSpieler):
+            heimPlayer = i < heimSpieler.length ? heimSpieler[i] : null;
+            gastPlayer = i < gastSpieler.length ? gastSpieler[i] : null;
+        }
+
+        final linksPlayer = heimLinks ? heimPlayer : gastPlayer;
+        final rechtsPlayer = heimLinks ? gastPlayer : heimPlayer;
+        final linksIstHeim = heimLinks;
+
         final satz = i < saetze.length ? saetze[i] : null;
         final linksScore = satz != null
             ? (heimLinks ? satz.heimTore : satz.gastTore)
@@ -411,10 +522,11 @@ class _SpielDetail extends StatelessWidget {
         final rechtsScore = satz != null
             ? (heimLinks ? satz.gastTore : satz.heimTore)
             : null;
-        final scoreText = linksScore != null
-            ? '$linksScore : $rechtsScore'
-            : '– : –';
+        final scoreText =
+            linksScore != null ? '$linksScore : $rechtsScore' : '– : –';
         final titelSuffix = slot.istDoppel ? ' – Satz ${i + 1}' : '';
+        final spielerKomplett =
+            linksPlayer != null && rechtsPlayer != null;
 
         return Padding(
           padding: const EdgeInsets.symmetric(
@@ -435,17 +547,18 @@ class _SpielDetail extends StatelessWidget {
                     : null,
               ),
               Expanded(
-                child: i == 0
-                    ? Text(
-                        linksNames,
-                        textAlign: TextAlign.end,
-                        style: theme.textTheme.bodySmall,
-                      )
-                    : const SizedBox.shrink(),
+                child: _spielerWidget(
+                  context,
+                  spieler: linksPlayer,
+                  team: linksTeam,
+                  istHeim: linksIstHeim,
+                  index: i,
+                  align: TextAlign.end,
+                ),
               ),
               SizedBox(
                 width: 80,
-                child: spiel != null && i <= saetze.length
+                child: spielerKomplett && i <= saetze.length
                     ? InkWell(
                         onTap: () async {
                           bool loeschen = false;
@@ -453,10 +566,10 @@ class _SpielDetail extends StatelessWidget {
                             context: context,
                             builder: (ctx) => _SatzPickerDialog(
                               titel: '${slot.label}$titelSuffix',
-                              linksTeamName: linksTeamName,
-                              rechtsTeamName: rechtsTeamName,
-                              linksSpielerName: linksNames,
-                              rechtsSpielerName: rechtsNames,
+                              linksTeamName: linksTeam.name,
+                              rechtsTeamName: rechtsTeam.name,
+                              linksSpielerName: linksSpielerAll,
+                              rechtsSpielerName: rechtsSpielerAll,
                               heimLinks: heimLinks,
                               onLoeschen: () {
                                 loeschen = true;
@@ -472,9 +585,7 @@ class _SpielDetail extends StatelessWidget {
                         },
                         borderRadius: BorderRadius.circular(4),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 2),
                           child: Text(
                             scoreText,
                             textAlign: TextAlign.center,
@@ -495,12 +606,14 @@ class _SpielDetail extends StatelessWidget {
                       ),
               ),
               Expanded(
-                child: i == 0
-                    ? Text(
-                        rechtsNames,
-                        style: theme.textTheme.bodySmall,
-                      )
-                    : const SizedBox.shrink(),
+                child: _spielerWidget(
+                  context,
+                  spieler: rechtsPlayer,
+                  team: rechtsTeam,
+                  istHeim: !linksIstHeim,
+                  index: i,
+                  align: TextAlign.start,
+                ),
               ),
             ],
           ),
@@ -722,6 +835,33 @@ class _FreilosRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SpielerPickerDialog extends StatelessWidget {
+  const _SpielerPickerDialog({required this.team, this.aktuell});
+
+  final Team team;
+  final Spieler? aktuell;
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      title: Text(team.name),
+      children: team.spieler
+          .map(
+            (s) => SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, s),
+              child: Text(
+                s.name,
+                style: s.id == aktuell?.id
+                    ? const TextStyle(fontWeight: FontWeight.bold)
+                    : null,
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 }

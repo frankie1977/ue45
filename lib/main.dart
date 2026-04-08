@@ -99,6 +99,12 @@ class _LigaScreenState extends State<LigaScreen> {
     });
   }
 
+  void _ligaGeaendert(Liga liga) {
+    setState(() {
+      _liga = liga;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -125,7 +131,7 @@ class _LigaScreenState extends State<LigaScreen> {
         ),
         body: TabBarView(
           children: [
-            TeamsTab(liga: _liga),
+            TeamsTab(liga: _liga, onLigaGeaendert: _ligaGeaendert),
             BegegnungenTab(
               liga: _liga,
               onBegegnungGeaendert: _begegnungGeaendert,

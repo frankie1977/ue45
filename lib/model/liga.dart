@@ -1,6 +1,7 @@
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/satz.dart';
 import 'package:ue45x/model/spiel.dart';
+import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/spieltag.dart';
 import 'package:ue45x/model/team.dart';
 
@@ -101,6 +102,146 @@ class Liga {
   }
 
   // ── Mutationen ───────────────────────────────────────────────────
+
+  bool get hatErgebnisse => begegnungen.any(
+    (b) => b.spiele.whereType<Spiel>().any((s) => s.saetze.isNotEmpty),
+  );
+
+  Liga mitTeamUmbenennt(String teamId, String neuerName) {
+    final altes = teams.firstWhere((t) => t.id == teamId);
+    final neues = Team(id: altes.id, name: neuerName, spieler: altes.spieler);
+
+    Spieltag aktualisiereTag(Spieltag st) => Spieltag(
+      nummer: st.nummer,
+      istHinrunde: st.istHinrunde,
+      freilos: st.freilos?.id == teamId ? neues : st.freilos,
+      begegnungen: st.begegnungen
+          .map(
+            (b) => Begegnung(
+              id: b.id,
+              heimTeam: b.heimTeam.id == teamId ? neues : b.heimTeam,
+              gastTeam: b.gastTeam.id == teamId ? neues : b.gastTeam,
+              istHinrunde: b.istHinrunde,
+              spiele: b.spiele,
+            ),
+          )
+          .toList(),
+    );
+
+    return Liga(
+      name: name,
+      teams: teams.map((t) => t.id == teamId ? neues : t).toList(),
+      hinrunde: hinrunde.map(aktualisiereTag).toList(),
+      rueckrunde: rueckrunde.map(aktualisiereTag).toList(),
+    );
+  }
+
+  Liga mitTeamHinzugefuegt(Team neuesTeam) => Liga.mitSpielplan(
+    name: name,
+    teams: [...teams, neuesTeam],
+  );
+
+  Liga mitSpielerUmbenennt(String teamId, Spieler aktualisiert) {
+    Spiel spielerErsetzen(Spiel spiel) => switch (spiel) {
+      Einzel(:final heimSpieler, :final gastSpieler, :final satz) => Einzel(
+        heimSpieler: heimSpieler?.id == aktualisiert.id
+            ? aktualisiert
+            : heimSpieler,
+        gastSpieler: gastSpieler?.id == aktualisiert.id
+            ? aktualisiert
+            : gastSpieler,
+        satz: satz,
+      ),
+      Doppel(:final heimSpieler, :final gastSpieler, :final saetze) => Doppel(
+        heimSpieler: heimSpieler
+            .map((s) => s.id == aktualisiert.id ? aktualisiert : s)
+            .toList(),
+        gastSpieler: gastSpieler
+            .map((s) => s.id == aktualisiert.id ? aktualisiert : s)
+            .toList(),
+        saetze: saetze,
+      ),
+    };
+
+    Spieltag tagAktualisieren(Spieltag st) => Spieltag(
+      nummer: st.nummer,
+      istHinrunde: st.istHinrunde,
+      freilos: st.freilos,
+      begegnungen: st.begegnungen
+          .map(
+            (b) => Begegnung(
+              id: b.id,
+              heimTeam: b.heimTeam,
+              gastTeam: b.gastTeam,
+              istHinrunde: b.istHinrunde,
+              spiele: b.spiele
+                  .map((s) => s != null ? spielerErsetzen(s) : null)
+                  .toList(),
+            ),
+          )
+          .toList(),
+    );
+
+    return Liga(
+      name: name,
+      teams: teams
+          .map(
+            (t) => t.id != teamId
+                ? t
+                : Team(
+                    id: t.id,
+                    name: t.name,
+                    spieler: t.spieler
+                        .map(
+                          (s) => s.id == aktualisiert.id ? aktualisiert : s,
+                        )
+                        .toList(),
+                  ),
+          )
+          .toList(),
+      hinrunde: hinrunde.map(tagAktualisieren).toList(),
+      rueckrunde: rueckrunde.map(tagAktualisieren).toList(),
+    );
+  }
+
+  Liga mitSpielerHinzugefuegt(String teamId, Spieler neuerSpieler) => Liga(
+    name: name,
+    teams: teams
+        .map(
+          (t) => t.id != teamId
+              ? t
+              : Team(
+                  id: t.id,
+                  name: t.name,
+                  spieler: [...t.spieler, neuerSpieler],
+                ),
+        )
+        .toList(),
+    hinrunde: hinrunde,
+    rueckrunde: rueckrunde,
+  );
+
+  Liga mitSpielerEntfernt(String teamId, String spielerId) => Liga(
+    name: name,
+    teams: teams
+        .map(
+          (t) => t.id != teamId
+              ? t
+              : Team(
+                  id: t.id,
+                  name: t.name,
+                  spieler: t.spieler.where((s) => s.id != spielerId).toList(),
+                ),
+        )
+        .toList(),
+    hinrunde: hinrunde,
+    rueckrunde: rueckrunde,
+  );
+
+  Liga mitTeamEntfernt(String teamId) => Liga.mitSpielplan(
+    name: name,
+    teams: teams.where((t) => t.id != teamId).toList(),
+  );
 
   /// Gibt eine neue [Liga] zurück, bei der [begegnung] (per ID) ersetzt ist.
   Liga mitBegegnung(Begegnung begegnung) => Liga(

@@ -27,15 +27,18 @@ sealed class Spiel {
 
 /// Einzel: 1 gegen 1, ein Satz.
 class Einzel extends Spiel {
-  final Spieler heimSpieler;
-  final Spieler gastSpieler;
+  /// null = noch nicht eingetragen
+  final Spieler? heimSpieler;
+
+  /// null = noch nicht eingetragen
+  final Spieler? gastSpieler;
 
   /// null = noch nicht gespielt
   final Satz? satz;
 
   const Einzel({
-    required this.heimSpieler,
-    required this.gastSpieler,
+    this.heimSpieler,
+    this.gastSpieler,
     this.satz,
   });
 
@@ -54,14 +57,18 @@ class Einzel extends Spiel {
   @override
   Map<String, dynamic> toJson() => {
     'type': 'einzel',
-    'heimSpieler': heimSpieler.toJson(),
-    'gastSpieler': gastSpieler.toJson(),
+    'heimSpieler': heimSpieler?.toJson(),
+    'gastSpieler': gastSpieler?.toJson(),
     'satz': satz?.toJson(),
   };
 
   factory Einzel.fromJson(Map<String, dynamic> json) => Einzel(
-    heimSpieler: Spieler.fromJson(json['heimSpieler'] as Map<String, dynamic>),
-    gastSpieler: Spieler.fromJson(json['gastSpieler'] as Map<String, dynamic>),
+    heimSpieler: json['heimSpieler'] != null
+        ? Spieler.fromJson(json['heimSpieler'] as Map<String, dynamic>)
+        : null,
+    gastSpieler: json['gastSpieler'] != null
+        ? Spieler.fromJson(json['gastSpieler'] as Map<String, dynamic>)
+        : null,
     satz: json['satz'] != null
         ? Satz.fromJson(json['satz'] as Map<String, dynamic>)
         : null,
