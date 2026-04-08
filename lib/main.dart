@@ -108,35 +108,47 @@ class _LigaScreenState extends State<LigaScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(_liga.name),
-          bottom: const TabBar(
-            tabs: [
-              Tab(
-                icon: Icon(Icons.groups, size: 32),
-                text: 'Teams',
-              ),
-              Tab(
-                icon: Icon(Icons.sports_soccer, size: 32),
-                text: 'Begegnungen',
-              ),
-              Tab(
-                icon: Icon(Icons.leaderboard, size: 32),
-                text: 'Tabelle',
-              ),
-            ],
-          ),
         ),
-        body: TabBarView(
+        body: Row(
           children: [
-            TeamsTab(liga: _liga, onLigaGeaendert: _ligaGeaendert),
-            BegegnungenTab(
-              liga: _liga,
-              onBegegnungGeaendert: _begegnungGeaendert,
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 4,
+              child: TabelleTab(liga: _liga),
             ),
-            TabelleTab(liga: _liga),
+            const VerticalDivider(width: 1),
+            Expanded(
+              child: Column(
+                children: [
+                  const TabBar(
+                    tabs: [
+                      Tab(
+                        icon: Icon(Icons.sports_soccer, size: 32),
+                        text: 'Begegnungen',
+                      ),
+                      Tab(
+                        icon: Icon(Icons.groups, size: 32),
+                        text: 'Teams',
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        BegegnungenTab(
+                          liga: _liga,
+                          onBegegnungGeaendert: _begegnungGeaendert,
+                        ),
+                        TeamsTab(liga: _liga, onLigaGeaendert: _ligaGeaendert),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
