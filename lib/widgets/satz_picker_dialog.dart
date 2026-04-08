@@ -1,0 +1,180 @@
+import 'package:flutter/material.dart';
+import 'package:ue45x/model/satz.dart';
+
+class SatzPickerDialog extends StatefulWidget {
+  const SatzPickerDialog({
+    required this.titel,
+    required this.linksTeamName,
+    required this.rechtsTeamName,
+    required this.linksSpielerName,
+    required this.rechtsSpielerName,
+    required this.heimLinks,
+    required this.onLoeschen,
+    super.key,
+  });
+
+  final String titel;
+  final String linksTeamName;
+  final String rechtsTeamName;
+  final String linksSpielerName;
+  final String rechtsSpielerName;
+  final bool heimLinks;
+  final VoidCallback onLoeschen;
+
+  @override
+  State<SatzPickerDialog> createState() => _SatzPickerDialogState();
+}
+
+class _SatzPickerDialogState extends State<SatzPickerDialog> {
+  // true = links hat 7 gewählt, false = rechts hat 7, null = nichts
+  bool? _siebenLinks;
+
+  Satz _satz(int linksTore, int rechtsTore) => widget.heimLinks
+      ? Satz(heimTore: linksTore, gastTore: rechtsTore)
+      : Satz(heimTore: rechtsTore, gastTore: linksTore);
+
+  void _onLinksGeklickt(BuildContext context, int val) {
+    if (val == 6) {
+      Navigator.pop(context, _satz(6, 6));
+    } else if (val < 7) {
+      Navigator.pop(context, _satz(val, 7));
+    } else {
+      setState(() => _siebenLinks = true);
+    }
+  }
+
+  void _onRechtsGeklickt(BuildContext context, int val) {
+    if (val == 6) {
+      Navigator.pop(context, _satz(6, 6));
+    } else if (val < 7) {
+      Navigator.pop(context, _satz(7, val));
+    } else {
+      setState(() => _siebenLinks = false);
+    }
+  }
+
+  Widget _zahlBtn(
+    BuildContext context, {
+    required int val,
+    required bool istLinks,
+    required bool hervorgehoben,
+  }) {
+    final theme = Theme.of(context);
+    return SizedBox(
+      width: 56,
+      child: FilledButton(
+        onPressed: () => istLinks
+            ? _onLinksGeklickt(context, val)
+            : _onRechtsGeklickt(context, val),
+        style: FilledButton.styleFrom(
+          padding: EdgeInsets.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          backgroundColor: hervorgehoben
+              ? theme.colorScheme.primary
+              : theme.colorScheme.primaryContainer,
+          foregroundColor: hervorgehoben
+              ? theme.colorScheme.onPrimary
+              : theme.colorScheme.onPrimaryContainer,
+        ),
+        child: Text('$val'),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final errorColor = theme.colorScheme.error;
+
+    return AlertDialog(
+      title: Text(widget.titel),
+      contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    widget.linksTeamName,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    widget.linksSpielerName,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.outline,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [7, 6, 5, 4, 3, 2, 1, 0]
+                        .map(
+                          (v) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: _zahlBtn(
+                              context,
+                              val: v,
+                              istLinks: true,
+                              hervorgehoben: v == 7 && _siebenLinks == true,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 20),
+              Column(
+                children: [
+                  Text(
+                    widget.rechtsTeamName,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    widget.rechtsSpielerName,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.outline,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [0, 1, 2, 3, 4, 5, 6, 7]
+                        .map(
+                          (v) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: _zahlBtn(
+                              context,
+                              val: v,
+                              istLinks: false,
+                              hervorgehoben: v == 7 && _siebenLinks == false,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          TextButton.icon(
+            onPressed: widget.onLoeschen,
+            icon: const Icon(Icons.delete_outline, size: 18),
+            label: const Text('Löschen'),
+            style: TextButton.styleFrom(
+              foregroundColor: errorColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

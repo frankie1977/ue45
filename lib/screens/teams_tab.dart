@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ue45x/model/liga.dart';
 import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
+import 'package:ue45x/widgets/namen_dialog.dart';
+import 'package:ue45x/widgets/spieler_dialog.dart';
+import 'package:ue45x/widgets/team_card.dart';
 
 class TeamsTab extends StatelessWidget {
   const TeamsTab({
@@ -16,7 +19,7 @@ class TeamsTab extends StatelessWidget {
   Future<void> _teamUmbenennen(BuildContext context, Team team) async {
     final neuerName = await showDialog<String>(
       context: context,
-      builder: (ctx) => _NamenDialog(
+      builder: (ctx) => NamenDialog(
         titel: 'Team umbenennen',
         initialText: team.name,
         bestaetigenText: 'Umbenennen',
@@ -30,7 +33,7 @@ class TeamsTab extends StatelessWidget {
   Future<void> _teamHinzufuegen(BuildContext context) async {
     final name = await showDialog<String>(
       context: context,
-      builder: (ctx) => _NamenDialog(
+      builder: (ctx) => NamenDialog(
         titel: 'Team hinzufügen',
         initialText: '',
         bestaetigenText: 'Hinzufügen',
@@ -77,7 +80,7 @@ class TeamsTab extends StatelessWidget {
   ) async {
     final result = await showDialog<({String vorname, String nachname})>(
       context: context,
-      builder: (ctx) => _SpielerDialog(
+      builder: (ctx) => SpielerDialog(
         titel: 'Spieler:in umbenennen',
         initialVorname: spieler.vorname,
         initialNachname: spieler.nachname,
@@ -131,7 +134,7 @@ class TeamsTab extends StatelessWidget {
   Future<void> _spielerHinzufuegen(BuildContext context, Team team) async {
     final result = await showDialog<({String vorname, String nachname})>(
       context: context,
-      builder: (ctx) => _SpielerDialog(
+      builder: (ctx) => SpielerDialog(
         titel: 'Spieler:in hinzufügen',
         initialVorname: '',
         initialNachname: '',
@@ -157,7 +160,7 @@ class TeamsTab extends StatelessWidget {
         itemCount: liga.teams.length,
         itemBuilder: (context, index) {
           final team = liga.teams[index];
-          return _TeamCard(
+          return TeamCard(
             team: team,
             kannLoeschen: kannLoeschen,
             onUmbenennen: () => _teamUmbenennen(context, team),
@@ -174,238 +177,6 @@ class TeamsTab extends StatelessWidget {
               child: const Icon(Icons.add),
             )
           : null,
-    );
-  }
-}
-
-class _TeamCard extends StatelessWidget {
-  const _TeamCard({
-    required this.team,
-    required this.kannLoeschen,
-    required this.onUmbenennen,
-    required this.onLoeschen,
-    required this.onSpielerUmbenennen,
-    required this.onSpielerLoeschen,
-    required this.onSpielerHinzufuegen,
-  });
-
-  final Team team;
-  final bool kannLoeschen;
-  final VoidCallback onUmbenennen;
-  final VoidCallback onLoeschen;
-  final void Function(Spieler) onSpielerUmbenennen;
-  final void Function(Spieler) onSpielerLoeschen;
-  final VoidCallback onSpielerHinzufuegen;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Card(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
-      child: ExpansionTile(
-        leading: const Icon(Icons.groups),
-        title: Text(
-          team.name,
-          style: theme.textTheme.titleMedium,
-        ),
-        subtitle: Text('${team.spieler.length} Spieler:innen'),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.edit_outlined),
-              onPressed: onUmbenennen,
-              tooltip: 'Umbenennen',
-            ),
-            if (kannLoeschen)
-              IconButton(
-                icon: const Icon(Icons.delete_outline),
-                color: theme.colorScheme.error,
-                onPressed: onLoeschen,
-                tooltip: 'Team löschen',
-              ),
-          ],
-        ),
-        children: [
-          ...team.spieler.map(
-            (s) => ListTile(
-              leading: const Icon(Icons.person_outline),
-              title: Text(
-                s.name,
-                style: theme.textTheme.bodyLarge,
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => onSpielerUmbenennen(s),
-                    tooltip: 'Umbenennen',
-                  ),
-                  if (kannLoeschen)
-                    IconButton(
-                      icon: const Icon(Icons.person_remove_outlined),
-                      color: theme.colorScheme.error,
-                      onPressed: () => onSpielerLoeschen(s),
-                      tooltip: 'Entfernen',
-                    ),
-                ],
-              ),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.person_add_outlined),
-            title: const Text('Spieler:in hinzufügen'),
-            onTap: onSpielerHinzufuegen,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _NamenDialog extends StatefulWidget {
-  const _NamenDialog({
-    required this.titel,
-    required this.initialText,
-    required this.bestaetigenText,
-  });
-
-  final String titel;
-  final String initialText;
-  final String bestaetigenText;
-
-  @override
-  State<_NamenDialog> createState() => _NamenDialogState();
-}
-
-class _NamenDialogState extends State<_NamenDialog> {
-  late final TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController(text: widget.initialText);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _bestaetigen() {
-    final text = _controller.text.trim();
-    if (text.isNotEmpty) Navigator.pop(context, text);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.titel),
-      content: TextField(
-        controller: _controller,
-        autofocus: true,
-        decoration: const InputDecoration(hintText: 'Teamname'),
-        textCapitalization: TextCapitalization.words,
-        onSubmitted: (_) => _bestaetigen(),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Abbrechen'),
-        ),
-        FilledButton(
-          onPressed: _bestaetigen,
-          child: Text(widget.bestaetigenText),
-        ),
-      ],
-    );
-  }
-}
-
-class _SpielerDialog extends StatefulWidget {
-  const _SpielerDialog({
-    required this.titel,
-    required this.initialVorname,
-    required this.initialNachname,
-    required this.bestaetigenText,
-  });
-
-  final String titel;
-  final String initialVorname;
-  final String initialNachname;
-  final String bestaetigenText;
-
-  @override
-  State<_SpielerDialog> createState() => _SpielerDialogState();
-}
-
-class _SpielerDialogState extends State<_SpielerDialog> {
-  late final TextEditingController _vornameCtrl;
-  late final TextEditingController _nachnameCtrl;
-  final FocusNode _nachnameFocus = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _vornameCtrl = TextEditingController(text: widget.initialVorname);
-    _nachnameCtrl = TextEditingController(text: widget.initialNachname);
-  }
-
-  @override
-  void dispose() {
-    _vornameCtrl.dispose();
-    _nachnameCtrl.dispose();
-    _nachnameFocus.dispose();
-    super.dispose();
-  }
-
-  void _bestaetigen() {
-    final vorname = _vornameCtrl.text.trim();
-    final nachname = _nachnameCtrl.text.trim();
-    if (vorname.isNotEmpty && nachname.isNotEmpty) {
-      Navigator.pop(context, (vorname: vorname, nachname: nachname));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.titel),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _vornameCtrl,
-            autofocus: true,
-            decoration: const InputDecoration(labelText: 'Vorname'),
-            textCapitalization: TextCapitalization.words,
-            onSubmitted: (_) => _nachnameFocus.requestFocus(),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _nachnameCtrl,
-            focusNode: _nachnameFocus,
-            decoration: const InputDecoration(labelText: 'Nachname'),
-            textCapitalization: TextCapitalization.words,
-            onSubmitted: (_) => _bestaetigen(),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Abbrechen'),
-        ),
-        FilledButton(
-          onPressed: _bestaetigen,
-          child: Text(widget.bestaetigenText),
-        ),
-      ],
     );
   }
 }
