@@ -30,8 +30,17 @@ class SpielerTopListe extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  SizedBox(width: 28, child: Text('#', style: labelStyle, textAlign: .right,)),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 28,
+                    child: Text(
+                      '#',
+                      style: labelStyle,
+                      textAlign: .right,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Expanded(child: Text('Spieler:in', style: labelStyle)),
                   SizedBox(
                     width: 152,
@@ -80,8 +89,8 @@ class _SpielerRow extends StatelessWidget {
     final torDiffColor = torDiff > 0
         ? theme.colorScheme.primary
         : torDiff < 0
-            ? theme.colorScheme.error
-            : theme.colorScheme.outline;
+        ? theme.colorScheme.error
+        : theme.colorScheme.outline;
 
     final pct = stats.punkteMoeglich == 0
         ? '–'
@@ -101,7 +110,9 @@ class _SpielerRow extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

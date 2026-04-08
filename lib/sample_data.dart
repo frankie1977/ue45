@@ -91,10 +91,10 @@ Liga buildSampleLiga() {
     spieler: [g1, g2, g3, g4, g5],
   );
 
-  // return Liga.mitSpielplan(
-  //   name: 'Testliga2',
-  //   teams: [teamA, teamB, teamC],
-  // );
+  return Liga.mitSpielplan(
+    name: 'Testliga2',
+    teams: [teamA, teamB, teamC],
+  );
 
   Liga liga = Liga.mitSpielplan(
     name: 'Testliga',

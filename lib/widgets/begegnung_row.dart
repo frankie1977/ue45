@@ -248,13 +248,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
               children: [
                 const SizedBox(width: 24),
                 Expanded(
-                  child: Text(
-                    'Tore',
-                    textAlign: .end,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.outline,
-                    ),
-                  ),
+                  child: SizedBox(),
                 ),
                 SizedBox(
                   width: 100,

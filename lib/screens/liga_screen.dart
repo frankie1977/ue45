@@ -34,6 +34,7 @@ class _LigaScreenState extends State<LigaScreen> {
       length: 2,
       child: Scaffold(
         body: Row(
+          crossAxisAlignment: .start,
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width / 4,
