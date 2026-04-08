@@ -53881,8 +53881,8 @@ return new A.mK(s.geK()+b.geK(),s.geL()+b.geL(),s.gh5()+b.gh5(),s.gh1()+b.gh1(),
 dh(a,b,c){var s=this
 return new A.mK(A.A(s.geK(),b.a,c.a),A.A(s.geL(),b.c,c.b),A.A(s.gh5(),0,c.c),A.A(s.gh1(),0,c.d),A.A(s.gc8(),b.b,c.e),A.A(s.gci(),b.d,c.f))},
 k(a){var s=this
-if(s.gh5()===0&&s.gh1()===0){if(s.geK()===0&&s.geL()===0&&s.gc8()===0&&s.gci()===0)return"EdgeInsets.zero"
-if(s.geK()===s.geL()&&s.geL()===s.gc8()&&s.gc8()===s.gci())return"EdgeInsets.all("+B.c.a9(s.geK(),1)+")"
+if(s.gh5()===0&&s.gh1()===0){if(s.geK()===0&&s.geL()===0&&s.gc8()===0&&s.gci()===0)return".zero"
+if(s.geK()===s.geL()&&s.geL()===s.gc8()&&s.gc8()===s.gci())return".all("+B.c.a9(s.geK(),1)+")"
 return"EdgeInsets("+B.c.a9(s.geK(),1)+", "+B.c.a9(s.gc8(),1)+", "+B.c.a9(s.geL(),1)+", "+B.c.a9(s.gci(),1)+")"}if(s.geK()===0&&s.geL()===0)return"EdgeInsetsDirectional("+B.c.a9(s.gh5(),1)+", "+B.c.a9(s.gc8(),1)+", "+B.c.a9(s.gh1(),1)+", "+B.c.a9(s.gci(),1)+")"
 return"EdgeInsets("+B.c.a9(s.geK(),1)+", "+B.c.a9(s.gc8(),1)+", "+B.c.a9(s.geL(),1)+", "+B.c.a9(s.gci(),1)+") + EdgeInsetsDirectional("+B.c.a9(s.gh5(),1)+", 0.0, "+B.c.a9(s.gh1(),1)+", 0.0)"},
 j(a,b){var s=this
@@ -56764,7 +56764,7 @@ I(){return"FlexFit."+this.b}}
 A.e0.prototype={
 k(a){return this.vn(0)+"; flex="+A.m(this.e)+"; fit="+A.m(this.f)}}
 A.Js.prototype={
-I(){return"MainAxisSize."+this.b}}
+I(){return"."+this.b}}
 A.lQ.prototype={
 I(){return"MainAxisAlignment."+this.b},
 r2(a,b,c,d){var s,r,q,p=this

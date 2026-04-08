@@ -22,13 +22,13 @@ class SpieltagSection extends StatelessWidget {
 
     return Card(
       elevation: 3,
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      margin: const .symmetric(horizontal: 12, vertical: 8),
       clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            padding: const .fromLTRB(16, 12, 16, 4),
             child: Row(
               children: [
                 Expanded(

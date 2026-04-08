@@ -9,7 +9,7 @@ class FreilosRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const .symmetric(horizontal: 16, vertical: 6),
       child: Row(
         children: [
           Icon(

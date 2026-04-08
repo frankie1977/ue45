@@ -34,7 +34,7 @@ class TabelleRow extends StatelessWidget {
             : theme.colorScheme.outline;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const .symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
           SizedBox(
@@ -56,7 +56,7 @@ class TabelleRow extends StatelessWidget {
             width: 32,
             child: Text(
               '$gespielt',
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.bodySmall,
             ),
           ),
@@ -64,7 +64,7 @@ class TabelleRow extends StatelessWidget {
             width: 32,
             child: Text(
               '$siege',
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.bodySmall,
             ),
           ),
@@ -72,7 +72,7 @@ class TabelleRow extends StatelessWidget {
             width: 32,
             child: Text(
               '$unentschieden',
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.bodySmall,
             ),
           ),
@@ -80,7 +80,7 @@ class TabelleRow extends StatelessWidget {
             width: 32,
             child: Text(
               '$niederlagen',
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.bodySmall,
             ),
           ),
@@ -88,7 +88,7 @@ class TabelleRow extends StatelessWidget {
             width: 44,
             child: Text(
               diffText,
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.bodySmall?.copyWith(color: diffColor),
             ),
           ),
@@ -96,7 +96,7 @@ class TabelleRow extends StatelessWidget {
             width: 52,
             child: Text(
               '$tore:$gegenTore',
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.bodySmall,
             ),
           ),
@@ -104,7 +104,7 @@ class TabelleRow extends StatelessWidget {
             width: 36,
             child: Text(
               '$punkte',
-              textAlign: TextAlign.center,
+              textAlign: .center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.primary,

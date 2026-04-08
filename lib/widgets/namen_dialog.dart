@@ -22,7 +22,9 @@ class _NamenDialogState extends State<NamenDialog> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialText);
+    _controller = TextEditingController(
+      text: widget.initialText,
+    );
   }
 
   @override
@@ -46,7 +48,7 @@ class _NamenDialogState extends State<NamenDialog> {
         controller: _controller,
         autofocus: true,
         decoration: const InputDecoration(hintText: 'Teamname'),
-        textCapitalization: TextCapitalization.words,
+        textCapitalization: .words,
         onSubmitted: (_) => _bestaetigen(),
       ),
       actions: [

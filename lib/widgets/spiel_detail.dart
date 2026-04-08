@@ -103,7 +103,7 @@ class SpielDetail extends StatelessWidget {
     }
     return Align(
       alignment:
-          align == TextAlign.end ? Alignment.centerRight : Alignment.centerLeft,
+          align == .end ? Alignment.centerRight : Alignment.centerLeft,
       child: InkWell(
         onTap: () => _spielerAuswaehlen(context, team, istHeim, index, null),
         borderRadius: BorderRadius.circular(12),
@@ -180,7 +180,7 @@ class SpielDetail extends StatelessWidget {
         final spielerKomplett = linksPlayer != null && rechtsPlayer != null;
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const .symmetric(horizontal: 16, vertical: 4),
           child: Row(
             children: [
               SizedBox(
@@ -201,7 +201,7 @@ class SpielDetail extends StatelessWidget {
                   team: linksTeam,
                   istHeim: linksIstHeim,
                   index: i,
-                  align: TextAlign.end,
+                  align: .end,
                 ),
               ),
               SizedBox(
@@ -233,10 +233,10 @@ class SpielDetail extends StatelessWidget {
                         },
                         borderRadius: BorderRadius.circular(4),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          padding: const .symmetric(vertical: 2),
                           child: Text(
                             scoreText,
-                            textAlign: TextAlign.center,
+                            textAlign: .center,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: satz != null
                                   ? theme.colorScheme.primary
@@ -247,7 +247,7 @@ class SpielDetail extends StatelessWidget {
                       )
                     : Text(
                         scoreText,
-                        textAlign: TextAlign.center,
+                        textAlign: .center,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.outline,
                         ),
@@ -260,7 +260,7 @@ class SpielDetail extends StatelessWidget {
                   team: rechtsTeam,
                   istHeim: !linksIstHeim,
                   index: i,
-                  align: TextAlign.start,
+                  align: .start,
                 ),
               ),
             ],

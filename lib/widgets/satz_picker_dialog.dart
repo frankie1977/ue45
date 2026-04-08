@@ -61,13 +61,13 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
   }) {
     final theme = Theme.of(context);
     return SizedBox(
-      width: 56,
+      width: 60,
       child: FilledButton(
         onPressed: () => istLinks
             ? _onLinksGeklickt(context, val)
             : _onRechtsGeklickt(context, val),
         style: FilledButton.styleFrom(
-          padding: EdgeInsets.zero,
+          padding: .zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           backgroundColor: hervorgehoben
               ? theme.colorScheme.primary
@@ -84,18 +84,19 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final errorColor = theme.colorScheme.error;
 
     return AlertDialog(
       title: Text(widget.titel),
-      contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      contentPadding: const .fromLTRB(16, 8, 16, 16),
       content: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
+            crossAxisAlignment: .end,
             children: [
               Column(
+                crossAxisAlignment: .end,
                 children: [
                   Text(
                     widget.linksTeamName,
@@ -115,7 +116,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                     children: [7, 6, 5, 4, 3, 2, 1, 0]
                         .map(
                           (v) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            padding: const .symmetric(horizontal: 2),
                             child: _zahlBtn(
                               context,
                               val: v,
@@ -128,8 +129,16 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                   ),
                 ],
               ),
-              const SizedBox(width: 20),
+              SizedBox(
+                width: 40,
+                child: Text(
+                  textAlign: .center,
+                  'zu',
+                  style: theme.textTheme.bodySmall,
+                ),
+              ),
               Column(
+                crossAxisAlignment: .start,
                 children: [
                   Text(
                     widget.rechtsTeamName,
@@ -149,7 +158,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                     children: [0, 1, 2, 3, 4, 5, 6, 7]
                         .map(
                           (v) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            padding: const .symmetric(horizontal: 2),
                             child: _zahlBtn(
                               context,
                               val: v,
@@ -167,11 +176,11 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
           const SizedBox(height: 14),
           TextButton.icon(
             onPressed: widget.onLoeschen,
-            icon: const Icon(Icons.delete_outline, size: 18),
-            label: const Text('Löschen'),
-            style: TextButton.styleFrom(
-              foregroundColor: errorColor,
+            icon: const Icon(
+              Icons.delete_outline,
+              size: 18,
             ),
+            label: const Text('Löschen'),
           ),
         ],
       ),

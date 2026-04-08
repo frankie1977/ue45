@@ -10,38 +10,38 @@ class TabelleHeader extends StatelessWidget {
         );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const .symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           SizedBox(width: 28, child: Text('#', style: style)),
           Expanded(child: Text('Team', style: style)),
           SizedBox(
             width: 32,
-            child: Text('Sp', style: style, textAlign: TextAlign.center),
+            child: Text('Sp', style: style, textAlign: .center),
           ),
           SizedBox(
             width: 32,
-            child: Text('S', style: style, textAlign: TextAlign.center),
+            child: Text('S', style: style, textAlign: .center),
           ),
           SizedBox(
             width: 32,
-            child: Text('U', style: style, textAlign: TextAlign.center),
+            child: Text('U', style: style, textAlign: .center),
           ),
           SizedBox(
             width: 32,
-            child: Text('N', style: style, textAlign: TextAlign.center),
+            child: Text('N', style: style, textAlign: .center),
           ),
           SizedBox(
             width: 44,
-            child: Text('+/−', style: style, textAlign: TextAlign.center),
+            child: Text('+/−', style: style, textAlign: .center),
           ),
           SizedBox(
             width: 52,
-            child: Text('Tore', style: style, textAlign: TextAlign.center),
+            child: Text('Tore', style: style, textAlign: .center),
           ),
           SizedBox(
             width: 36,
-            child: Text('Pkt', style: style, textAlign: TextAlign.center),
+            child: Text('Pkt', style: style, textAlign: .center),
           ),
         ],
       ),

@@ -101,6 +101,12 @@ class _BegegnungRowState extends State<BegegnungRow> {
     final scoreRechts = heimLinks
         ? widget.begegnung.satzpunkteGast
         : widget.begegnung.satzpunkteHeim;
+    final toreLinks = heimLinks
+        ? widget.begegnung.toreHeim
+        : widget.begegnung.toreGast;
+    final toreRechts = heimLinks
+        ? widget.begegnung.toreGast
+        : widget.begegnung.toreHeim;
 
     return Column(
       children: [
@@ -109,7 +115,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                 _expanded = !_expanded;
               }),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const .symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
                 SizedBox(
@@ -143,7 +149,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                     scoreLinks == 0 && scoreRechts == 0 && !done
                         ? '– : –'
                         : '$scoreLinks : $scoreRechts',
-                    textAlign: TextAlign.center,
+                    textAlign: .center,
                     style: done
                         ? theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
@@ -189,7 +195,36 @@ class _BegegnungRowState extends State<BegegnungRow> {
               ),
             ];
           }),
-          const SizedBox(height: 26),
+          const Divider(height: 1, indent: 16, endIndent: 16),
+          Padding(
+            padding: const .symmetric(horizontal: 16, vertical: 6),
+            child: Row(
+              children: [
+                const SizedBox(width: 24),
+                Expanded(
+                  child: Text(
+                    'Tore',
+                    textAlign: .end,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.outline,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 80,
+                  child: Text(
+                    '$toreLinks : $toreRechts',
+                    textAlign: .center,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.outline,
+                    ),
+                  ),
+                ),
+                const Expanded(child: SizedBox()),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
         ],
       ],
     );

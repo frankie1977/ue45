@@ -26,7 +26,7 @@ class TeamCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      margin: const .symmetric(horizontal: 12, vertical: 6),
       child: ExpansionTile(
         leading: const Icon(Icons.groups),
         title: Text(
@@ -35,7 +35,7 @@ class TeamCard extends StatelessWidget {
         ),
         subtitle: Text('${team.spieler.length} Spieler:innen'),
         trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             IconButton(
               icon: const Icon(Icons.edit_outlined),
@@ -60,7 +60,7 @@ class TeamCard extends StatelessWidget {
                 style: theme.textTheme.bodyLarge,
               ),
               trailing: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: .min,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit_outlined),

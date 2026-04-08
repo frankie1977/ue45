@@ -51,13 +51,13 @@ class _SpielerDialogState extends State<SpielerDialog> {
     return AlertDialog(
       title: Text(widget.titel),
       content: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           TextField(
             controller: _vornameCtrl,
             autofocus: true,
             decoration: const InputDecoration(labelText: 'Vorname'),
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: .words,
             onSubmitted: (_) => _nachnameFocus.requestFocus(),
           ),
           const SizedBox(height: 8),
@@ -65,7 +65,7 @@ class _SpielerDialogState extends State<SpielerDialog> {
             controller: _nachnameCtrl,
             focusNode: _nachnameFocus,
             decoration: const InputDecoration(labelText: 'Nachname'),
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: .words,
             onSubmitted: (_) => _bestaetigen(),
           ),
         ],
