@@ -130,6 +130,38 @@ class _BegegnungRowState extends State<BegegnungRow> {
     return result;
   }
 
+  Set<SpielSlot> _zuvielDoppelSlots() {
+    final Map<String, List<SpielSlot>> heim = {};
+    final Map<String, List<SpielSlot>> gast = {};
+    for (final slot in SpielSlot.values) {
+      if (!slot.istDoppel) {
+        continue;
+      }
+      final spiel = widget.begegnung.spielAt(slot);
+      if (spiel is! Doppel) {
+        continue;
+      }
+      for (final s in spiel.heimSpieler) {
+        heim.putIfAbsent(s.id, () { return <SpielSlot>[]; }).add(slot);
+      }
+      for (final s in spiel.gastSpieler) {
+        gast.putIfAbsent(s.id, () { return <SpielSlot>[]; }).add(slot);
+      }
+    }
+    final result = <SpielSlot>{};
+    for (final slots in heim.values) {
+      if (slots.length > 2) {
+        result.addAll(slots);
+      }
+    }
+    for (final slots in gast.values) {
+      if (slots.length > 2) {
+        result.addAll(slots);
+      }
+    }
+    return result;
+  }
+
   Set<SpielSlot> _duplikatEinzelSpielerSlots() {
     final Map<String, List<SpielSlot>> heim = {};
     final Map<String, List<SpielSlot>> gast = {};
@@ -196,6 +228,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
 
     final duplikatSlots = _duplikatPaarungSlots();
     final duplikatEinzelSlots = _duplikatEinzelSpielerSlots();
+    final zuvielDoppelSlots = _zuvielDoppelSlots();
     final zuwenigSpielerWarnung = _hatZuwenigSpieler();
 
     return Column(
@@ -337,6 +370,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                 },
                 hatDoppeltePaarung: duplikatSlots.contains(slot),
                 hatDuplikatEinzel: duplikatEinzelSlots.contains(slot),
+                hatZuvielDoppel: zuvielDoppelSlots.contains(slot),
                 hatZuwenigSpieler:
                     slot == SpielSlot.d4 && zuwenigSpielerWarnung,
               ),

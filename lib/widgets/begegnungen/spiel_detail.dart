@@ -20,6 +20,7 @@ class SpielDetail extends StatelessWidget {
     required this.hatDoppeltePaarung,
     required this.hatDuplikatEinzel,
     required this.hatZuwenigSpieler,
+    required this.hatZuvielDoppel,
     super.key,
   });
 
@@ -34,6 +35,7 @@ class SpielDetail extends StatelessWidget {
   final bool hatDoppeltePaarung;
   final bool hatDuplikatEinzel;
   final bool hatZuwenigSpieler;
+  final bool hatZuvielDoppel;
 
   Spiel _spielerAktualisieren(bool istHeim, int index, Spieler ausgewaehlt) {
     switch (spiel) {
@@ -200,7 +202,15 @@ class SpielDetail extends StatelessWidget {
             gastSpieler[0].id == gastSpieler[1].id),
       _ => false,
     };
-    final bool zeigeWarnung = hatDoppelteSpieler || hatDoppeltePaarung || hatDuplikatEinzel || hatZuwenigSpieler;
+    final bool zeigeWarnung = hatDoppelteSpieler || hatDoppeltePaarung || hatDuplikatEinzel || hatZuwenigSpieler || hatZuvielDoppel;
+
+    final List<String> warnTexte = [
+      if (hatDoppelteSpieler) 'Gleiche/r Spieler:in zweimal im Doppel!',
+      if (hatDoppeltePaarung) 'Paarung kommt mehrfach vor!',
+      if (hatDuplikatEinzel) 'Spieler:in in mehr als 1 Einzel!',
+      if (hatZuwenigSpieler) 'Weniger als 5 verschiedene Spieler:innen pro Seite!',
+      if (hatZuvielDoppel) 'Spieler:in in mehr als 2 Doppeln!',
+    ];
 
     final rowCount = slot.istDoppel ? 2 : 1;
 
@@ -332,10 +342,43 @@ class SpielDetail extends StatelessWidget {
               SizedBox(
                 width: 28,
                 child: i == 0 && zeigeWarnung
-                    ? Icon(
-                        Icons.warning_rounded,
-                        size: 20,
-                        color: Colors.orange,
+                    ? GestureDetector(
+                        onTap: () {
+                          showDialog<void>(
+                            context: context,
+                            builder: (ctx) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Aufstellungsfehler',
+                                ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    for (final text in warnTexte)
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 4,),
+                                        child: Text(text),
+                                      ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(ctx);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Icon(
+                          Icons.warning_rounded,
+                          size: 20,
+                          color: Colors.orange,
+                        ),
                       )
                     : null,
               ),
