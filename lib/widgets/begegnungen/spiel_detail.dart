@@ -17,6 +17,9 @@ class SpielDetail extends StatelessWidget {
     required this.onSatzGesetzt,
     required this.onSatzGeloescht,
     required this.onSpielerGeandert,
+    required this.hatDoppeltePaarung,
+    required this.hatDuplikatEinzel,
+    required this.hatZuwenigSpieler,
     super.key,
   });
 
@@ -28,6 +31,9 @@ class SpielDetail extends StatelessWidget {
   final void Function(int satzIndex, Satz satz) onSatzGesetzt;
   final void Function(int satzIndex) onSatzGeloescht;
   final void Function(Spiel neuesSpiel) onSpielerGeandert;
+  final bool hatDoppeltePaarung;
+  final bool hatDuplikatEinzel;
+  final bool hatZuwenigSpieler;
 
   Spiel _spielerAktualisieren(bool istHeim, int index, Spieler ausgewaehlt) {
     switch (spiel) {
@@ -186,6 +192,16 @@ class SpielDetail extends StatelessWidget {
       ),
     };
 
+    final bool hatDoppelteSpieler = switch (spiel) {
+      Doppel(:final heimSpieler, :final gastSpieler) =>
+        (heimSpieler.length == 2 &&
+            heimSpieler[0].id == heimSpieler[1].id) ||
+        (gastSpieler.length == 2 &&
+            gastSpieler[0].id == gastSpieler[1].id),
+      _ => false,
+    };
+    final bool zeigeWarnung = hatDoppelteSpieler || hatDoppeltePaarung || hatDuplikatEinzel || hatZuwenigSpieler;
+
     final rowCount = slot.istDoppel ? 2 : 1;
 
     return Column(
@@ -312,6 +328,16 @@ class SpielDetail extends StatelessWidget {
                   index: i,
                   align: .start,
                 ),
+              ),
+              SizedBox(
+                width: 28,
+                child: i == 0 && zeigeWarnung
+                    ? Icon(
+                        Icons.warning_rounded,
+                        size: 20,
+                        color: Colors.orange,
+                      )
+                    : null,
               ),
             ],
           ),

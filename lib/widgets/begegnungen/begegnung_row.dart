@@ -73,6 +73,92 @@ class _BegegnungRowState extends State<BegegnungRow> {
     );
   }
 
+  bool _hatZuwenigSpieler() {
+    bool pruefeSeite({required bool istHeim}) {
+      final Set<String> spielerIds = {};
+      for (final slot in SpielSlot.values) {
+        final spiel = widget.begegnung.spielAt(slot);
+        switch (spiel) {
+          case null:
+            return false;
+          case Einzel(:final heimSpieler, :final gastSpieler):
+            final spieler = istHeim ? heimSpieler : gastSpieler;
+            if (spieler == null) {
+              return false;
+            }
+            spielerIds.add(spieler.id);
+          case Doppel(:final heimSpieler, :final gastSpieler):
+            final spieler = istHeim ? heimSpieler : gastSpieler;
+            if (spieler.length != 2) {
+              return false;
+            }
+            for (final s in spieler) {
+              spielerIds.add(s.id);
+            }
+        }
+      }
+      return spielerIds.length < 5;
+    }
+
+    return pruefeSeite(istHeim: true) || pruefeSeite(istHeim: false);
+  }
+
+  Set<SpielSlot> _duplikatPaarungSlots() {
+    final Map<String, List<SpielSlot>> paarungen = {};
+    for (final slot in SpielSlot.values) {
+      final spiel = widget.begegnung.spielAt(slot);
+      if (spiel is! Doppel) {
+        continue;
+      }
+      if (spiel.heimSpieler.length == 2) {
+        final ids = [spiel.heimSpieler[0].id, spiel.heimSpieler[1].id]..sort();
+        final key = 'heim:${ids[0]}:${ids[1]}';
+        paarungen.putIfAbsent(key, () { return <SpielSlot>[]; }).add(slot);
+      }
+      if (spiel.gastSpieler.length == 2) {
+        final ids = [spiel.gastSpieler[0].id, spiel.gastSpieler[1].id]..sort();
+        final key = 'gast:${ids[0]}:${ids[1]}';
+        paarungen.putIfAbsent(key, () { return <SpielSlot>[]; }).add(slot);
+      }
+    }
+    final result = <SpielSlot>{};
+    for (final slots in paarungen.values) {
+      if (slots.length > 1) {
+        result.addAll(slots);
+      }
+    }
+    return result;
+  }
+
+  Set<SpielSlot> _duplikatEinzelSpielerSlots() {
+    final Map<String, List<SpielSlot>> heim = {};
+    final Map<String, List<SpielSlot>> gast = {};
+    for (final slot in SpielSlot.values) {
+      final spiel = widget.begegnung.spielAt(slot);
+      if (spiel is! Einzel) {
+        continue;
+      }
+      if (spiel.heimSpieler != null) {
+        heim.putIfAbsent(spiel.heimSpieler!.id, () { return <SpielSlot>[]; }).add(slot);
+      }
+      if (spiel.gastSpieler != null) {
+        gast.putIfAbsent(spiel.gastSpieler!.id, () { return <SpielSlot>[]; }).add(slot);
+      }
+    }
+    final result = <SpielSlot>{};
+    for (final slots in heim.values) {
+      if (slots.length > 1) {
+        result.addAll(slots);
+      }
+    }
+    for (final slots in gast.values) {
+      if (slots.length > 1) {
+        result.addAll(slots);
+      }
+    }
+    return result;
+  }
+
   List<Satz> _saetzeAktualisiert(List<Satz> existing, int index, Satz neu) {
     final updated = List<Satz>.from(existing);
     if (index < updated.length) {
@@ -107,6 +193,10 @@ class _BegegnungRowState extends State<BegegnungRow> {
     final toreRechts = heimLinks
         ? widget.begegnung.toreGast
         : widget.begegnung.toreHeim;
+
+    final duplikatSlots = _duplikatPaarungSlots();
+    final duplikatEinzelSlots = _duplikatEinzelSpielerSlots();
+    final zuwenigSpielerWarnung = _hatZuwenigSpieler();
 
     return Column(
       children: [
@@ -244,6 +334,10 @@ class _BegegnungRowState extends State<BegegnungRow> {
                 onSpielerGeandert: (neuesSpiel) {
                   _spielerSetzen(slot, neuesSpiel);
                 },
+                hatDoppeltePaarung: duplikatSlots.contains(slot),
+                hatDuplikatEinzel: duplikatEinzelSlots.contains(slot),
+                hatZuwenigSpieler:
+                    slot == SpielSlot.d4 && zuwenigSpielerWarnung,
               ),
             ];
           }),
