@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/spieltag.dart';
-import 'package:ue45x/widgets/begegnung_row.dart';
-import 'package:ue45x/widgets/freilos_row.dart';
+import 'package:ue45x/widgets/begegnungen/begegnung_row.dart';
+import 'package:ue45x/widgets/begegnungen/freilos_row.dart';
 
 class SpieltagSection extends StatelessWidget {
   const SpieltagSection({

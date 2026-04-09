@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/liga.dart';
-import 'package:ue45x/widgets/runde_header.dart';
-import 'package:ue45x/widgets/spieltag_section.dart';
+import 'package:ue45x/widgets/begegnungen/runde_header.dart';
+import 'package:ue45x/widgets/begegnungen/spieltag_section.dart';
 
 class BegegnungenTab extends StatefulWidget {
   const BegegnungenTab({

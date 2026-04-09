@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/satz.dart';
 import 'package:ue45x/model/spiel.dart';
-import 'package:ue45x/widgets/spiel_detail.dart';
+import 'package:ue45x/widgets/begegnungen/spiel_detail.dart';
 
 class BegegnungRow extends StatefulWidget {
   const BegegnungRow({

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ue45x/model/liga.dart';
-import 'package:ue45x/widgets/spieler_top_liste.dart';
-import 'package:ue45x/widgets/tabelle_header.dart';
-import 'package:ue45x/widgets/tabelle_row.dart';
+import 'package:ue45x/widgets/tabelle/spieler_top_liste.dart';
+import 'package:ue45x/widgets/tabelle/tabelle_header.dart';
+import 'package:ue45x/widgets/tabelle/tabelle_row.dart';
 
 class TabelleTab extends StatelessWidget {
   const TabelleTab({required this.liga, super.key});

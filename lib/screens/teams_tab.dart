@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ue45x/model/liga.dart';
 import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
-import 'package:ue45x/widgets/namen_dialog.dart';
-import 'package:ue45x/widgets/spieler_dialog.dart';
-import 'package:ue45x/widgets/team_card.dart';
+import 'package:ue45x/widgets/anmeldung/namen_dialog.dart';
+import 'package:ue45x/widgets/anmeldung/spieler_dialog.dart';
+import 'package:ue45x/widgets/anmeldung/team_card.dart';
 
 class TeamsTab extends StatelessWidget {
   const TeamsTab({

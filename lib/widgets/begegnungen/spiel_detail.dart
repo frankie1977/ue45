@@ -4,8 +4,8 @@ import 'package:ue45x/model/satz.dart';
 import 'package:ue45x/model/spiel.dart';
 import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
-import 'package:ue45x/widgets/satz_picker_dialog.dart';
-import 'package:ue45x/widgets/spieler_picker_dialog.dart';
+import 'package:ue45x/widgets/begegnungen/satz_picker_dialog.dart';
+import 'package:ue45x/widgets/begegnungen/spieler_picker_dialog.dart';
 
 class SpielDetail extends StatelessWidget {
   const SpielDetail({
