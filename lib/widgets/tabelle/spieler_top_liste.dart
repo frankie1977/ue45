@@ -43,7 +43,15 @@ class SpielerTopListe extends StatelessWidget {
                   ),
                   Expanded(child: Text('Spieler:in', style: labelStyle)),
                   SizedBox(
-                    width: 152,
+                    width: 36,
+                    child: Text(
+                      'S',
+                      style: labelStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 112,
                     child: Text(
                       'Pkt',
                       style: labelStyle,
@@ -53,7 +61,7 @@ class SpielerTopListe extends StatelessWidget {
                   SizedBox(
                     width: 44,
                     child: Text(
-                      '+/−',
+                      'Tore',
                       style: labelStyle,
                       textAlign: TextAlign.center,
                     ),
@@ -135,9 +143,19 @@ class _SpielerRow extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 152,
+            width: 36,
             child: Text(
-              '${stats.punkteGeholt}/${stats.punkteMoeglich} ($pct)',
+              '${stats.punkteMoeglich ~/ 2}',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.outline,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 112,
+            child: Text(
+              '${stats.punkteGeholt} ($pct)',
               textAlign: TextAlign.center,
               style: theme.textTheme.bodySmall,
             ),

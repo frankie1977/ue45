@@ -20,6 +20,10 @@ class SpielerStats {
 
   double get quote => punkteMoeglich == 0 ? 0 : punkteGeholt / punkteMoeglich;
 
+  /// Bayesian Average: zieht unerfahrene Spieler zur Mitte (50%).
+  /// k = 6 entspricht 3 Prior-Spielen bei neutraler Quote.
+  double get bayesianQuote => (punkteGeholt + 3) / (punkteMoeglich + 6);
+
   int get torDifferenz => toreGeholt - toreKassiert;
 
   SpielerStats operator +(SpielerStats other) => SpielerStats(

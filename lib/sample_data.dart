@@ -6,12 +6,12 @@ import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
 
 Liga buildSampleLiga() {
-  // Team A – Rote Teufel
-  final a1 = Spieler(id: 'a1', vorname: 'Anna', nachname: 'Meier');
-  final a2 = Spieler(id: 'a2', vorname: 'Luca', nachname: 'Rossi');
-  final a3 = Spieler(id: 'a3', vorname: 'Sara', nachname: 'Novak');
-  final a4 = Spieler(id: 'a4', vorname: 'David', nachname: 'Koch');
-  final a5 = Spieler(id: 'a5', vorname: 'Amira', nachname: 'Hassan');
+  // Team A – Bolzen Edel
+  final a1 = Spieler(id: 'a1', vorname: 'Alexander', nachname: 'Jaensch');
+  final a2 = Spieler(id: 'a2', vorname: 'Holger', nachname: 'Kruse');
+  final a3 = Spieler(id: 'a3', vorname: 'Jonathan', nachname: 'Ullmann');
+  final a4 = Spieler(id: 'a4', vorname: 'Dagmar', nachname: 'Rings');
+  final a5 = Spieler(id: 'a5', vorname: 'Ilja', nachname: 'Laurillard');
 
   // Team B – Blaue Blitze
   final b1 = Spieler(id: 'b1', vorname: 'Felix', nachname: 'Maier');
@@ -57,7 +57,7 @@ Liga buildSampleLiga() {
 
   final teamA = Team(
     id: 'tA',
-    name: 'Rote Teufel',
+    name: 'Bolzen Edel',
     spieler: [a1, a2, a3, a4, a5],
   );
   final teamB = Team(

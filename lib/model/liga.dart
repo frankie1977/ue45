@@ -638,8 +638,11 @@ class Liga {
       }
     }
 
-    return (map.values.toList()..sort((a, b) {
-          final q = b.quote.compareTo(a.quote);
+    return (map.values
+          .where((s) { return s.punkteMoeglich >= 6; })
+          .toList()
+        ..sort((a, b) {
+          final q = b.bayesianQuote.compareTo(a.bayesianQuote);
           if (q != 0) {
             return q;
           }
