@@ -119,14 +119,20 @@ class Liga {
     for (final beg in begegnungen) {
       for (final spiel in beg.spiele.whereType<Spiel>()) {
         switch (spiel) {
-          case Einzel(:final heimSpieler, :final gastSpieler):
+          case Einzel(
+            :final heimSpieler,
+            :final gastSpieler,
+          ):
             if (heimSpieler != null) {
               ids.add(heimSpieler.id);
             }
             if (gastSpieler != null) {
               ids.add(gastSpieler.id);
             }
-          case Doppel(:final heimSpieler, :final gastSpieler):
+          case Doppel(
+            :final heimSpieler,
+            :final gastSpieler,
+          ):
             ids.addAll(
               heimSpieler.map((s) {
                 return s.id;
@@ -177,7 +183,10 @@ class Liga {
     },
   );
 
-  Liga mitTeamUmbenennt(String teamId, String neuerName) {
+  Liga mitTeamUmbenennt(
+    String teamId,
+    String neuerName,
+  ) {
     final altes = teams.firstWhere((t) {
       return t.id == teamId;
     });
@@ -215,26 +224,39 @@ class Liga {
     teams: [...teams, neuesTeam],
   );
 
-  Liga mitSpielerUmbenennt(String teamId, Spieler aktualisiert) {
+  Liga mitSpielerUmbenennt(
+    String teamId,
+    Spieler aktualisiert,
+  ) {
     Spiel spielerErsetzen(Spiel spiel) => switch (spiel) {
-      Einzel(:final heimSpieler, :final gastSpieler, :final satz) => Einzel(
-        heimSpieler: heimSpieler?.id == aktualisiert.id
-            ? aktualisiert
-            : heimSpieler,
-        gastSpieler: gastSpieler?.id == aktualisiert.id
-            ? aktualisiert
-            : gastSpieler,
-        satz: satz,
-      ),
-      Doppel(:final heimSpieler, :final gastSpieler, :final saetze) => Doppel(
-        heimSpieler: heimSpieler.map((s) {
-          return s.id == aktualisiert.id ? aktualisiert : s;
-        }).toList(),
-        gastSpieler: gastSpieler.map((s) {
-          return s.id == aktualisiert.id ? aktualisiert : s;
-        }).toList(),
-        saetze: saetze,
-      ),
+      Einzel(
+        :final heimSpieler,
+        :final gastSpieler,
+        :final satz,
+      ) =>
+        Einzel(
+          heimSpieler: heimSpieler?.id == aktualisiert.id
+              ? aktualisiert
+              : heimSpieler,
+          gastSpieler: gastSpieler?.id == aktualisiert.id
+              ? aktualisiert
+              : gastSpieler,
+          satz: satz,
+        ),
+      Doppel(
+        :final heimSpieler,
+        :final gastSpieler,
+        :final saetze,
+      ) =>
+        Doppel(
+          heimSpieler: heimSpieler.map((s) {
+            return s.id == aktualisiert.id ? aktualisiert : s;
+          }).toList(),
+          gastSpieler: gastSpieler.map((s) {
+            return s.id == aktualisiert.id ? aktualisiert : s;
+          }).toList(),
+          saetze: saetze,
+        ),
     };
 
     final neuesTeam = Team(
@@ -293,7 +315,10 @@ class Liga {
     );
   }
 
-  Liga mitSpielerHinzugefuegt(String teamId, Spieler neuerSpieler) {
+  Liga mitSpielerHinzugefuegt(
+    String teamId,
+    Spieler neuerSpieler,
+  ) {
     final altes = teams.firstWhere((t) {
       return t.id == teamId;
     });
@@ -313,7 +338,10 @@ class Liga {
     );
   }
 
-  Liga mitSpielerEntfernt(String teamId, String spielerId) {
+  Liga mitSpielerEntfernt(
+    String teamId,
+    String spielerId,
+  ) {
     final altes = teams.firstWhere((t) {
       return t.id == teamId;
     });
@@ -335,24 +363,28 @@ class Liga {
     );
   }
 
-  Liga mitTeamEntfernt(String teamId) => Liga.mitSpielplan(
-    name: name,
-    teams: teams.where((t) {
-      return t.id != teamId;
-    }).toList(),
-  );
+  Liga mitTeamEntfernt(String teamId) {
+    return Liga.mitSpielplan(
+      name: name,
+      teams: teams.where((t) {
+        return t.id != teamId;
+      }).toList(),
+    );
+  }
 
   /// Gibt eine neue [Liga] zurück, bei der [begegnung] (per ID) ersetzt ist.
-  Liga mitBegegnung(Begegnung begegnung) => Liga(
-    name: name,
-    teams: teams,
-    hinrunde: hinrunde.map((st) {
-      return st.mitBegegnung(begegnung);
-    }).toList(),
-    rueckrunde: rueckrunde.map((st) {
-      return st.mitBegegnung(begegnung);
-    }).toList(),
-  );
+  Liga mitBegegnung(Begegnung begegnung) {
+    return Liga(
+      name: name,
+      teams: teams,
+      hinrunde: hinrunde.map((st) {
+        return st.mitBegegnung(begegnung);
+      }).toList(),
+      rueckrunde: rueckrunde.map((st) {
+        return st.mitBegegnung(begegnung);
+      }).toList(),
+    );
+  }
 
   // ── Statistiken pro Team ─────────────────────────────────────────
 
@@ -362,12 +394,14 @@ class Liga {
     },
   );
 
-  int ligapunkteVon(Team team) => abgeschlossen(team).fold(0, (sum, b) {
-    if (b.heimTeam == team) {
-      return sum + b.ligapunkteHeim;
-    }
-    return sum + b.ligapunkteGast;
-  });
+  int ligapunkteVon(Team team) {
+    return abgeschlossen(team).fold(0, (sum, b) {
+      if (b.heimTeam == team) {
+        return sum + b.ligapunkteHeim;
+      }
+      return sum + b.ligapunkteGast;
+    });
+  }
 
   int siegeVon(Team team) {
     int siege = 0;
@@ -447,7 +481,9 @@ class Liga {
     return gegen;
   }
 
-  int torDifferenzVon(Team team) => toreVon(team) - gegenToreVon(team);
+  int torDifferenzVon(Team team) {
+    return toreVon(team) - gegenToreVon(team);
+  }
 
   int punkteDifferenzVon(Team team) {
     int fuer = 0;
@@ -468,7 +504,10 @@ class Liga {
     return fuer - gegen;
   }
 
-  int _direkterVergleich(Team a, Team b) {
+  int _direkterVergleich(
+    Team a,
+    Team b,
+  ) {
     int punkteA = 0;
     int punkteB = 0;
     for (final beg in begegnungen) {
@@ -625,7 +664,9 @@ class Liga {
     }).toList(),
   };
 
-  factory Liga.fromJson(Map<String, dynamic> json) {
+  factory Liga.fromJson(
+    Map<String, dynamic> json,
+  ) {
     final teams = (json['teams'] as List<dynamic>).map((t) {
       return Team.fromJson(t as Map<String, dynamic>);
     }).toList();

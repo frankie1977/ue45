@@ -50,12 +50,20 @@ class Begegnung {
     required this.gastTeam,
     required this.istHinrunde,
     List<Spiel?>? spiele,
-  }) : spiele = spiele ?? List.filled(SpielSlot.values.length, null);
+  }) : spiele =
+           spiele ??
+           List.filled(
+             SpielSlot.values.length,
+             null,
+           );
 
   Spiel? spielAt(SpielSlot slot) => spiele[slot.index];
 
   /// Gibt eine neue [Begegnung] zurück, bei der [slot] mit [spiel] belegt ist.
-  Begegnung mitSpiel(SpielSlot slot, Spiel spiel) {
+  Begegnung mitSpiel(
+    SpielSlot slot,
+    Spiel spiel,
+  ) {
     final neueSpiele = List<Spiel?>.from(spiele);
     neueSpiele[slot.index] = spiel;
     return Begegnung(

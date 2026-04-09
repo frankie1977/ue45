@@ -18,13 +18,15 @@ class Team {
     }).toList(),
   };
 
-  factory Team.fromJson(Map<String, dynamic> json) => Team(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    spieler: (json['spieler'] as List<dynamic>).map((s) {
-      return Spieler.fromJson(s as Map<String, dynamic>);
-    }).toList(),
-  );
+  factory Team.fromJson(Map<String, dynamic> json) {
+    return Team(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      spieler: (json['spieler'] as List<dynamic>).map((s) {
+        return Spieler.fromJson(s as Map<String, dynamic>);
+      }).toList(),
+    );
+  }
 
   @override
   String toString() => name;

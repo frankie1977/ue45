@@ -62,17 +62,19 @@ class Einzel extends Spiel {
     'satz': satz?.toJson(),
   };
 
-  factory Einzel.fromJson(Map<String, dynamic> json) => Einzel(
-    heimSpieler: json['heimSpieler'] != null
-        ? Spieler.fromJson(json['heimSpieler'] as Map<String, dynamic>)
-        : null,
-    gastSpieler: json['gastSpieler'] != null
-        ? Spieler.fromJson(json['gastSpieler'] as Map<String, dynamic>)
-        : null,
-    satz: json['satz'] != null
-        ? Satz.fromJson(json['satz'] as Map<String, dynamic>)
-        : null,
-  );
+  factory Einzel.fromJson(Map<String, dynamic> json) {
+    return Einzel(
+      heimSpieler: json['heimSpieler'] != null
+          ? Spieler.fromJson(json['heimSpieler'] as Map<String, dynamic>)
+          : null,
+      gastSpieler: json['gastSpieler'] != null
+          ? Spieler.fromJson(json['gastSpieler'] as Map<String, dynamic>)
+          : null,
+      satz: json['satz'] != null
+          ? Satz.fromJson(json['satz'] as Map<String, dynamic>)
+          : null,
+    );
+  }
 }
 
 /// Doppel: 2 gegen 2, zwei Sätze.
@@ -122,15 +124,17 @@ class Doppel extends Spiel {
     }).toList(),
   };
 
-  factory Doppel.fromJson(Map<String, dynamic> json) => Doppel(
-    heimSpieler: (json['heimSpieler'] as List<dynamic>).map((s) {
-      return Spieler.fromJson(s as Map<String, dynamic>);
-    }).toList(),
-    gastSpieler: (json['gastSpieler'] as List<dynamic>).map((s) {
-      return Spieler.fromJson(s as Map<String, dynamic>);
-    }).toList(),
-    saetze: (json['saetze'] as List<dynamic>).map((s) {
-      return Satz.fromJson(s as Map<String, dynamic>);
-    }).toList(),
-  );
+  factory Doppel.fromJson(Map<String, dynamic> json) {
+    return Doppel(
+      heimSpieler: (json['heimSpieler'] as List<dynamic>).map((s) {
+        return Spieler.fromJson(s as Map<String, dynamic>);
+      }).toList(),
+      gastSpieler: (json['gastSpieler'] as List<dynamic>).map((s) {
+        return Spieler.fromJson(s as Map<String, dynamic>);
+      }).toList(),
+      saetze: (json['saetze'] as List<dynamic>).map((s) {
+        return Satz.fromJson(s as Map<String, dynamic>);
+      }).toList(),
+    );
+  }
 }

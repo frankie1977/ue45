@@ -4,7 +4,10 @@ class Satz {
   final int heimTore;
   final int gastTore;
 
-  const Satz({required this.heimTore, required this.gastTore});
+  const Satz({
+    required this.heimTore,
+    required this.gastTore,
+  });
 
   bool get istGueltig =>
       (heimTore == 6 && gastTore == 6) ||
@@ -39,7 +42,10 @@ class Satz {
     return 0;
   }
 
-  Map<String, dynamic> toJson() => {'heimTore': heimTore, 'gastTore': gastTore};
+  Map<String, dynamic> toJson() => {
+    'heimTore': heimTore,
+    'gastTore': gastTore,
+  };
 
   factory Satz.fromJson(Map<String, dynamic> json) => Satz(
     heimTore: json['heimTore'] as int,
