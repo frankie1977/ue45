@@ -307,6 +307,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                     ),
                   ),
                 ),
+                const SizedBox(width: 28),
               ],
             ),
           ),
@@ -346,7 +347,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
             padding: const .symmetric(horizontal: 16, vertical: 6),
             child: Row(
               children: [
-                const SizedBox(width: 24),
+                const SizedBox(width: 30),
                 Expanded(
                   child: SizedBox(),
                 ),
@@ -382,6 +383,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                   ),
                 ),
                 const Expanded(child: SizedBox()),
+                const SizedBox(width: 28),
               ],
             ),
           ),
