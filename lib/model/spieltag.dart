@@ -1,5 +1,6 @@
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/team.dart';
+import 'package:ue45x/model/tisch.dart';
 
 /// Ein Spieltag enthält alle Begegnungen einer Runde.
 /// Bei ungerader Teamanzahl hat ein Team ein Freilos.
@@ -48,6 +49,7 @@ class Spieltag {
   factory Spieltag.fromJson(
     Map<String, dynamic> json,
     Map<String, Team> teamsById,
+    Map<String, Tisch> tischeById,
   ) {
     final freilosId = json['freilosId'] as String?;
     return Spieltag(
@@ -55,7 +57,11 @@ class Spieltag {
       istHinrunde: json['istHinrunde'] as bool,
       freilos: freilosId != null ? teamsById[freilosId] : null,
       begegnungen: (json['begegnungen'] as List<dynamic>).map((b) {
-        return Begegnung.fromJson(b as Map<String, dynamic>, teamsById);
+        return Begegnung.fromJson(
+          b as Map<String, dynamic>,
+          teamsById,
+          tischeById,
+        );
       }).toList(),
     );
   }

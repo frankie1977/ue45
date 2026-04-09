@@ -5,18 +5,21 @@ import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/spieler_stats.dart';
 import 'package:ue45x/model/spieltag.dart';
 import 'package:ue45x/model/team.dart';
+import 'package:ue45x/model/tisch.dart';
 
 class Liga {
   final String name;
   final List<Team> teams;
   final List<Spieltag> hinrunde;
   final List<Spieltag> rueckrunde;
+  final List<Tisch> tische;
 
   const Liga({
     required this.name,
     required this.teams,
     required this.hinrunde,
     required this.rueckrunde,
+    this.tische = const [],
   });
 
   List<Spieltag> get alleSpieltage => [...hinrunde, ...rueckrunde];
@@ -30,6 +33,7 @@ class Liga {
   factory Liga.mitSpielplan({
     required String name,
     required List<Team> teams,
+    List<Tisch> tische = const [],
   }) {
     // Bei ungerader Anzahl: null als Platzhalter für Freilos einfügen
     final List<Team?> rot = teams.length.isOdd
@@ -108,10 +112,11 @@ class Liga {
       teams: teams,
       hinrunde: hinrunde,
       rueckrunde: rueckrunde,
+      tische: tische,
     );
   }
 
-  // ── Aufstellung ──────────────────────────────────────────────────
+  // ── Aufstellung ─────────────────────────────────────────────────
 
   /// IDs aller Spieler, die in mindestens einem Spiel aufgestellt sind.
   Set<String> get aufgestellteSpielerIds {
@@ -216,12 +221,14 @@ class Liga {
       }).toList(),
       hinrunde: hinrunde.map(aktualisiereTag).toList(),
       rueckrunde: rueckrunde.map(aktualisiereTag).toList(),
+      tische: tische,
     );
   }
 
   Liga mitTeamHinzugefuegt(Team neuesTeam) => Liga.mitSpielplan(
     name: name,
     teams: [...teams, neuesTeam],
+    tische: tische,
   );
 
   Liga mitSpielerUmbenennt(
@@ -312,6 +319,7 @@ class Liga {
           return tagMitSpiele(rueckrunde[i], rueckr[i]);
         },
       ),
+      tische: tische,
     );
   }
 
@@ -335,6 +343,7 @@ class Liga {
       }).toList(),
       hinrunde: hinr,
       rueckrunde: rueckr,
+      tische: tische,
     );
   }
 
@@ -360,6 +369,7 @@ class Liga {
       }).toList(),
       hinrunde: hinr,
       rueckrunde: rueckr,
+      tische: tische,
     );
   }
 
@@ -369,8 +379,42 @@ class Liga {
       teams: teams.where((t) {
         return t.id != teamId;
       }).toList(),
+      tische: tische,
     );
   }
+
+  // ── Tisch-Mutationen ─────────────────────────────────────────────
+
+  Liga mitTischHinzugefuegt(Tisch tisch) => Liga(
+    name: name,
+    teams: teams,
+    hinrunde: hinrunde,
+    rueckrunde: rueckrunde,
+    tische: [...tische, tisch],
+  );
+
+  Liga mitTischEntfernt(String tischId) => Liga(
+    name: name,
+    teams: teams,
+    hinrunde: hinrunde,
+    rueckrunde: rueckrunde,
+    tische: tische.where((t) {
+      return t.id != tischId;
+    }).toList(),
+  );
+
+  Liga mitTischUmbenennt(
+    String tischId,
+    String neuerName,
+  ) => Liga(
+    name: name,
+    teams: teams,
+    hinrunde: hinrunde,
+    rueckrunde: rueckrunde,
+    tische: tische.map((t) {
+      return t.id == tischId ? Tisch(id: t.id, name: neuerName) : t;
+    }).toList(),
+  );
 
   /// Gibt eine neue [Liga] zurück, bei der [begegnung] (per ID) ersetzt ist.
   Liga mitBegegnung(Begegnung begegnung) {
@@ -383,6 +427,7 @@ class Liga {
       rueckrunde: rueckrunde.map((st) {
         return st.mitBegegnung(begegnung);
       }).toList(),
+      tische: tische,
     );
   }
 
@@ -665,6 +710,9 @@ class Liga {
     'rueckrunde': rueckrunde.map((st) {
       return st.toJson();
     }).toList(),
+    'tische': tische.map((t) {
+      return t.toJson();
+    }).toList(),
   };
 
   factory Liga.fromJson(
@@ -675,6 +723,11 @@ class Liga {
     }).toList();
     final teamsById = {for (final t in teams) t.id: t};
 
+    final tische = ((json['tische'] as List<dynamic>?) ?? []).map((t) {
+      return Tisch.fromJson(t as Map<String, dynamic>);
+    }).toList();
+    final tischeById = {for (final t in tische) t.id: t};
+
     return Liga(
       name: json['name'] as String,
       teams: teams,
@@ -683,6 +736,7 @@ class Liga {
           return Spieltag.fromJson(
             st as Map<String, dynamic>,
             teamsById,
+            tischeById,
           );
         },
       ).toList(),
@@ -691,9 +745,11 @@ class Liga {
           return Spieltag.fromJson(
             st as Map<String, dynamic>,
             teamsById,
+            tischeById,
           );
         },
       ).toList(),
+      tische: tische,
     );
   }
 }

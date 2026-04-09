@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ue45x/model/liga.dart';
+import 'package:ue45x/widgets/tabelle/aktuelle_spiele.dart';
 import 'package:ue45x/widgets/tabelle/spieler_top_liste.dart';
 import 'package:ue45x/widgets/tabelle/tabelle_header.dart';
 import 'package:ue45x/widgets/tabelle/tabelle_row.dart';
@@ -16,8 +17,15 @@ class TabelleTab extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // AktuelleSpiele(liga: liga),
+          SizedBox(
+            height: 20,
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 20, 8, 0),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Card(
               clipBehavior: Clip.antiAlias,
               child: Column(
@@ -44,6 +52,7 @@ class TabelleTab extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
+
           SpielerTopListe(liga: liga),
         ],
       ),

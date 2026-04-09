@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/spieltag.dart';
+import 'package:ue45x/model/tisch.dart';
 import 'package:ue45x/widgets/begegnungen/begegnung_row.dart';
 import 'package:ue45x/widgets/begegnungen/freilos_row.dart';
 
@@ -8,6 +9,7 @@ class SpieltagSection extends StatelessWidget {
   const SpieltagSection({
     required this.spieltag,
     required this.startIndex,
+    required this.tische,
     required this.onBegegnungGeaendert,
     this.istAktiv = false,
     super.key,
@@ -15,6 +17,7 @@ class SpieltagSection extends StatelessWidget {
 
   final Spieltag spieltag;
   final int startIndex;
+  final List<Tisch> tische;
   final void Function(Begegnung) onBegegnungGeaendert;
   final bool istAktiv;
 
@@ -58,6 +61,7 @@ class SpieltagSection extends StatelessWidget {
               return BegegnungRow(
                 begegnung: e.$2,
                 heimLinks: (startIndex + e.$1).isEven,
+                tische: tische,
                 onBegegnungGeaendert: onBegegnungGeaendert,
               );
             },

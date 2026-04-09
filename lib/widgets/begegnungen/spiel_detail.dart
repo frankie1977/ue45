@@ -257,12 +257,12 @@ class SpielDetail extends StatelessWidget {
           child: Row(
             children: [
               SizedBox(
-                width: 30,
+                width: 150,
                 child: i == 0
                     ? Text(
                         slot.label,
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.outline,
+                          color: theme.colorScheme.primary,
                           fontWeight: .bold,
                         ),
                       )

@@ -5,6 +5,7 @@ import 'package:ue45x/sample_data.dart';
 import 'package:ue45x/screens/begegnungen_tab.dart';
 import 'package:ue45x/screens/tabelle_tab.dart';
 import 'package:ue45x/screens/teams_tab.dart';
+import 'package:ue45x/screens/tische_tab.dart';
 
 class LigaScreen extends StatefulWidget {
   const LigaScreen({super.key});
@@ -31,7 +32,7 @@ class _LigaScreenState extends State<LigaScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         body: Row(
           crossAxisAlignment: .start,
@@ -57,6 +58,10 @@ class _LigaScreenState extends State<LigaScreen> {
                         icon: Icon(Icons.groups, size: 32),
                         text: 'Anmeldung',
                       ),
+                      Tab(
+                        icon: Icon(Icons.table_restaurant, size: 32),
+                        text: 'Tische',
+                      ),
                     ],
                   ),
                   Expanded(
@@ -67,6 +72,10 @@ class _LigaScreenState extends State<LigaScreen> {
                           onBegegnungGeaendert: _begegnungGeaendert,
                         ),
                         TeamsTab(liga: _liga, onLigaGeaendert: _ligaGeaendert),
+                        TischeTab(
+                          liga: _liga,
+                          onLigaGeaendert: _ligaGeaendert,
+                        ),
                       ],
                     ),
                   ),

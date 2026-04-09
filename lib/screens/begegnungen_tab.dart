@@ -36,11 +36,13 @@ class _BegegnungenTabState extends State<BegegnungenTab>
         )
         .firstOrNull;
 
+    final tische = widget.liga.tische;
     int index = 0;
     final hinrundeWidgets = widget.liga.hinrunde.map((st) {
       final w = SpieltagSection(
         spieltag: st,
         startIndex: index,
+        tische: tische,
         onBegegnungGeaendert: widget.onBegegnungGeaendert,
         istAktiv: st == aktiverSpieltag,
       );
@@ -52,6 +54,7 @@ class _BegegnungenTabState extends State<BegegnungenTab>
       final w = SpieltagSection(
         spieltag: st,
         startIndex: index,
+        tische: tische,
         onBegegnungGeaendert: widget.onBegegnungGeaendert,
         istAktiv: st == aktiverSpieltag,
       );

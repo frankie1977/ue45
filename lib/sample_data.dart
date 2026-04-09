@@ -4,6 +4,7 @@ import 'package:ue45x/model/satz.dart';
 import 'package:ue45x/model/spiel.dart';
 import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
+import 'package:ue45x/model/tisch.dart';
 
 Liga buildSampleLiga() {
   // Team A – Bolzen Edel
@@ -91,10 +92,10 @@ Liga buildSampleLiga() {
     spieler: [g1, g2, g3, g4, g5],
   );
 
-  return Liga.mitSpielplan(
-    name: 'Testliga2',
-    teams: [teamB, teamC, teamD],
-  );
+  // return Liga.mitSpielplan(
+  //   name: 'Testliga2',
+  //   teams: [teamB, teamC, teamD],
+  // );
 
   Liga liga = Liga.mitSpielplan(
     name: 'Testliga',
@@ -109,112 +110,120 @@ Liga buildSampleLiga() {
     ],
   );
 
+  final Tisch tisch1 = Tisch(id: 't1', name: 'Tisch 1 (Leo)');
+  final Tisch tisch2 = Tisch(id: 't2', name: 'Tisch 2 (Leo)');
+  final Tisch tisch3 = Tisch(id: 't3', name: 'Tisch 3 (Leo)');
+
   final Begegnung alte = liga.begegnungen.first;
 
-  liga = liga.mitBegegnung(
-    alte
-        .mitSpiel(
-          SpielSlot.d1,
-          Doppel(
-            heimSpieler: [a1, a2],
-            gastSpieler: [b1, b2],
-            saetze: [
-              Satz(
-                heimTore: 6,
-                gastTore: 6,
+  liga = liga
+      .mitTischHinzugefuegt(tisch1)
+      .mitTischHinzugefuegt(tisch2)
+      .mitTischHinzugefuegt(tisch3)
+      .mitBegegnung(
+        alte
+            .mitSpiel(
+              SpielSlot.d1,
+              Doppel(
+                heimSpieler: [a1, a2],
+                gastSpieler: [b1, b2],
+                saetze: [
+                  Satz(
+                    heimTore: 6,
+                    gastTore: 6,
+                  ),
+                  Satz(
+                    heimTore: 7,
+                    gastTore: 2,
+                  ),
+                ],
               ),
-              Satz(
-                heimTore: 7,
-                gastTore: 2,
+            )
+            .mitSpiel(
+              SpielSlot.e1,
+              Einzel(
+                heimSpieler: a2,
+                gastSpieler: b2,
+                satz: Satz(
+                  heimTore: 7,
+                  gastTore: 3,
+                ),
               ),
-            ],
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.e1,
-          Einzel(
-            heimSpieler: a2,
-            gastSpieler: b2,
-            satz: Satz(
-              heimTore: 7,
-              gastTore: 3,
+            )
+            .mitSpiel(
+              SpielSlot.d2,
+              Doppel(
+                heimSpieler: [a2, a3],
+                gastSpieler: [b2, b3],
+                saetze: [
+                  Satz(
+                    heimTore: 7,
+                    gastTore: 3,
+                  ),
+                  Satz(
+                    heimTore: 7,
+                    gastTore: 5,
+                  ),
+                ],
+              ),
+            )
+            .mitSpiel(
+              SpielSlot.e2,
+              Einzel(
+                heimSpieler: a4,
+                gastSpieler: b4,
+                satz: Satz(
+                  heimTore: 7,
+                  gastTore: 5,
+                ),
+              ),
+            )
+            .mitSpiel(
+              SpielSlot.d3,
+              Doppel(
+                heimSpieler: [a4, a5],
+                gastSpieler: [b4, b5],
+                saetze: [
+                  Satz(
+                    heimTore: 7,
+                    gastTore: 2,
+                  ),
+                  Satz(
+                    heimTore: 4,
+                    gastTore: 7,
+                  ),
+                ],
+              ),
+            )
+            .mitSpiel(
+              SpielSlot.e3,
+              Einzel(
+                heimSpieler: a5,
+                gastSpieler: b5,
+                satz: Satz(
+                  heimTore: 3,
+                  gastTore: 7,
+                ),
+              ),
+            )
+            .mitSpiel(
+              SpielSlot.d4,
+              Doppel(
+                heimSpieler: [a3, a5],
+                gastSpieler: [b3, b5],
+                saetze: [
+                  Satz(
+                    heimTore: 6,
+                    gastTore: 6,
+                  ),
+                  Satz(
+                    heimTore: 7,
+                    gastTore: 0,
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.d2,
-          Doppel(
-            heimSpieler: [a2, a3],
-            gastSpieler: [b2, b3],
-            saetze: [
-              Satz(
-                heimTore: 7,
-                gastTore: 3,
-              ),
-              Satz(
-                heimTore: 7,
-                gastTore: 5,
-              ),
-            ],
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.e2,
-          Einzel(
-            heimSpieler: a4,
-            gastSpieler: b4,
-            satz: Satz(
-              heimTore: 7,
-              gastTore: 5,
-            ),
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.d3,
-          Doppel(
-            heimSpieler: [a4, a5],
-            gastSpieler: [b4, b5],
-            saetze: [
-              Satz(
-                heimTore: 7,
-                gastTore: 2,
-              ),
-              Satz(
-                heimTore: 4,
-                gastTore: 7,
-              ),
-            ],
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.e3,
-          Einzel(
-            heimSpieler: a5,
-            gastSpieler: b5,
-            satz: Satz(
-              heimTore: 3,
-              gastTore: 7,
-            ),
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.d4,
-          Doppel(
-            heimSpieler: [a3, a5],
-            gastSpieler: [b3, b5],
-            saetze: [
-              Satz(
-                heimTore: 6,
-                gastTore: 6,
-              ),
-              Satz(
-                heimTore: 7,
-                gastTore: 0,
-              ),
-            ],
-          ),
-        ),
-  );
+      );
   final Begegnung zweite = liga.begegnungen[1];
   liga = liga.mitBegegnung(
     zweite

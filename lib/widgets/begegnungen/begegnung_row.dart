@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/satz.dart';
 import 'package:ue45x/model/spiel.dart';
+import 'package:ue45x/model/tisch.dart';
 import 'package:ue45x/widgets/begegnungen/spiel_detail.dart';
 
 class BegegnungRow extends StatefulWidget {
   const BegegnungRow({
     required this.begegnung,
     required this.heimLinks,
+    required this.tische,
     required this.onBegegnungGeaendert,
     super.key,
   });
 
   final Begegnung begegnung;
   final bool heimLinks;
+  final List<Tisch> tische;
   final void Function(Begegnung) onBegegnungGeaendert;
 
   @override
@@ -113,12 +116,20 @@ class _BegegnungRowState extends State<BegegnungRow> {
       if (spiel.heimSpieler.length == 2) {
         final ids = [spiel.heimSpieler[0].id, spiel.heimSpieler[1].id]..sort();
         final key = 'heim:${ids[0]}:${ids[1]}';
-        paarungen.putIfAbsent(key, () { return <SpielSlot>[]; }).add(slot);
+        paarungen
+            .putIfAbsent(key, () {
+              return <SpielSlot>[];
+            })
+            .add(slot);
       }
       if (spiel.gastSpieler.length == 2) {
         final ids = [spiel.gastSpieler[0].id, spiel.gastSpieler[1].id]..sort();
         final key = 'gast:${ids[0]}:${ids[1]}';
-        paarungen.putIfAbsent(key, () { return <SpielSlot>[]; }).add(slot);
+        paarungen
+            .putIfAbsent(key, () {
+              return <SpielSlot>[];
+            })
+            .add(slot);
       }
     }
     final result = <SpielSlot>{};
@@ -142,10 +153,18 @@ class _BegegnungRowState extends State<BegegnungRow> {
         continue;
       }
       for (final s in spiel.heimSpieler) {
-        heim.putIfAbsent(s.id, () { return <SpielSlot>[]; }).add(slot);
+        heim
+            .putIfAbsent(s.id, () {
+              return <SpielSlot>[];
+            })
+            .add(slot);
       }
       for (final s in spiel.gastSpieler) {
-        gast.putIfAbsent(s.id, () { return <SpielSlot>[]; }).add(slot);
+        gast
+            .putIfAbsent(s.id, () {
+              return <SpielSlot>[];
+            })
+            .add(slot);
       }
     }
     final result = <SpielSlot>{};
@@ -171,10 +190,18 @@ class _BegegnungRowState extends State<BegegnungRow> {
         continue;
       }
       if (spiel.heimSpieler != null) {
-        heim.putIfAbsent(spiel.heimSpieler!.id, () { return <SpielSlot>[]; }).add(slot);
+        heim
+            .putIfAbsent(spiel.heimSpieler!.id, () {
+              return <SpielSlot>[];
+            })
+            .add(slot);
       }
       if (spiel.gastSpieler != null) {
-        gast.putIfAbsent(spiel.gastSpieler!.id, () { return <SpielSlot>[]; }).add(slot);
+        gast
+            .putIfAbsent(spiel.gastSpieler!.id, () {
+              return <SpielSlot>[];
+            })
+            .add(slot);
       }
     }
     final result = <SpielSlot>{};
@@ -199,6 +226,51 @@ class _BegegnungRowState extends State<BegegnungRow> {
       updated.add(neu);
     }
     return updated;
+  }
+
+  Future<void> _tischWaehlen() async {
+    if (widget.tische.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erst Tische im Reiter "Tische" anlegen.'),
+        ),
+      );
+      return;
+    }
+    final result = await showDialog<({Tisch? tisch})>(
+      context: context,
+      builder: (ctx) {
+        return SimpleDialog(
+          title: const Text('Tisch wählen'),
+          children: [
+            ...widget.tische.map((t) {
+              return SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(ctx, (tisch: t));
+                },
+                child: Text(t.name),
+              );
+            }),
+            if (widget.begegnung.tisch != null) ...[
+              const Divider(),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(ctx, (tisch: null));
+                },
+                child: const Text('Kein Tisch'),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+    if (result != null) {
+      widget.onBegegnungGeaendert(
+        widget.begegnung.mitTisch(
+          result.tisch,
+        ),
+      );
+    }
   }
 
   @override
@@ -235,14 +307,14 @@ class _BegegnungRowState extends State<BegegnungRow> {
       final spiel = widget.begegnung.spielAt(slot);
       return switch (spiel) {
         Doppel(:final heimSpieler, :final gastSpieler) =>
-          (heimSpieler.length == 2 &&
-              heimSpieler[0].id == heimSpieler[1].id) ||
-          (gastSpieler.length == 2 &&
-              gastSpieler[0].id == gastSpieler[1].id),
+          (heimSpieler.length == 2 && heimSpieler[0].id == heimSpieler[1].id) ||
+              (gastSpieler.length == 2 &&
+                  gastSpieler[0].id == gastSpieler[1].id),
         _ => false,
       };
     });
-    final hatWarnung = duplikatSlots.isNotEmpty ||
+    final hatWarnung =
+        duplikatSlots.isNotEmpty ||
         duplikatEinzelSlots.isNotEmpty ||
         zuvielDoppelSlots.isNotEmpty ||
         zuwenigSpielerWarnung ||
@@ -261,11 +333,34 @@ class _BegegnungRowState extends State<BegegnungRow> {
             child: Row(
               children: [
                 SizedBox(
-                  width: 30,
-                  child: Icon(
-                    _expanded ? Icons.expand_less : Icons.expand_more,
-                    size: 16,
-                    color: theme.colorScheme.outline,
+                  width: 150,
+                  child: Row(
+                    children: [
+                      Icon(
+                        _expanded
+                            ? Icons.keyboard_arrow_down
+                            : Icons.keyboard_arrow_right,
+                        size: 16,
+                        color: widget.begegnung.tisch == null
+                            ? theme.colorScheme.outline.withValues(alpha: 0.4)
+                            : theme.colorScheme.outline,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: _tischWaehlen,
+                        child: Text(
+                          widget.begegnung.tisch?.name ?? 'Tisch',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: widget.begegnung.tisch == null
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.outline,
+                            fontWeight: .bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
