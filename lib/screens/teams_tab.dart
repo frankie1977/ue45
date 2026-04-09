@@ -155,6 +155,7 @@ class TeamsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final kannLoeschen = !liga.hatErgebnisse;
+    final aufgestellt = liga.aufgestellteSpielerIds;
     return Scaffold(
       body: ListView.builder(
         itemCount: liga.teams.length,
@@ -163,6 +164,7 @@ class TeamsTab extends StatelessWidget {
           return TeamCard(
             team: team,
             kannLoeschen: kannLoeschen,
+            aufgestellteSpielerIds: aufgestellt,
             onUmbenennen: () => _teamUmbenennen(context, team),
             onLoeschen: () => _teamLoeschen(context, team),
             onSpielerUmbenennen: (s) => _spielerUmbenennen(context, team, s),

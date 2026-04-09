@@ -64,6 +64,28 @@ class SpielDetail extends StatelessWidget {
     }
   }
 
+  Spiel _spielerEntfernen(bool istHeim, int index) {
+    switch (spiel) {
+      case null:
+        return spiel!;
+      case Einzel(:final heimSpieler, :final gastSpieler, :final satz):
+        return Einzel(
+          heimSpieler: istHeim ? null : heimSpieler,
+          gastSpieler: istHeim ? gastSpieler : null,
+          satz: satz,
+        );
+      case Doppel(:final heimSpieler, :final gastSpieler, :final saetze):
+        final heim = List<Spieler>.from(heimSpieler);
+        final gast = List<Spieler>.from(gastSpieler);
+        (istHeim ? heim : gast).removeAt(index);
+        return Doppel(
+          heimSpieler: heim,
+          gastSpieler: gast,
+          saetze: saetze,
+        );
+    }
+  }
+
   Future<void> _spielerAuswaehlen(
     BuildContext context,
     Team team,
@@ -73,7 +95,13 @@ class SpielDetail extends StatelessWidget {
   ) async {
     final picked = await showDialog<Spieler>(
       context: context,
-      builder: (ctx) => SpielerPickerDialog(team: team, aktuell: aktuell),
+      builder: (ctx) => SpielerPickerDialog(
+        team: team,
+        aktuell: aktuell,
+        onEntfernen: aktuell != null
+            ? () => onSpielerGeandert(_spielerEntfernen(istHeim, index))
+            : null,
+      ),
     );
     if (picked != null) {
       onSpielerGeandert(_spielerAktualisieren(istHeim, index, picked));

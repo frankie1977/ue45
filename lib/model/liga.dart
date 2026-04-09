@@ -102,7 +102,55 @@ class Liga {
     );
   }
 
+  // ── Aufstellung ──────────────────────────────────────────────────
+
+  /// IDs aller Spieler, die in mindestens einem Spiel aufgestellt sind.
+  Set<String> get aufgestellteSpielerIds {
+    final ids = <String>{};
+    for (final beg in begegnungen) {
+      for (final spiel in beg.spiele.whereType<Spiel>()) {
+        switch (spiel) {
+          case Einzel(:final heimSpieler, :final gastSpieler):
+            if (heimSpieler != null) {
+              ids.add(heimSpieler.id);
+            }
+            if (gastSpieler != null) {
+              ids.add(gastSpieler.id);
+            }
+          case Doppel(:final heimSpieler, :final gastSpieler):
+            ids.addAll(heimSpieler.map((s) => s.id));
+            ids.addAll(gastSpieler.map((s) => s.id));
+        }
+      }
+    }
+    return ids;
+  }
+
   // ── Mutationen ───────────────────────────────────────────────────
+
+  /// Ersetzt in allen Spieltagen die Team-Referenz durch [neues].
+  (List<Spieltag>, List<Spieltag>) _tageMitTeam(Team neues) {
+    Spieltag aktualisieren(Spieltag st) => Spieltag(
+      nummer: st.nummer,
+      istHinrunde: st.istHinrunde,
+      freilos: st.freilos?.id == neues.id ? neues : st.freilos,
+      begegnungen: st.begegnungen
+          .map(
+            (b) => Begegnung(
+              id: b.id,
+              heimTeam: b.heimTeam.id == neues.id ? neues : b.heimTeam,
+              gastTeam: b.gastTeam.id == neues.id ? neues : b.gastTeam,
+              istHinrunde: b.istHinrunde,
+              spiele: b.spiele,
+            ),
+          )
+          .toList(),
+    );
+    return (
+      hinrunde.map(aktualisieren).toList(),
+      rueckrunde.map(aktualisieren).toList(),
+    );
+  }
 
   bool get hatErgebnisse => begegnungen.any(
     (b) => b.spiele.whereType<Spiel>().any((s) => s.saetze.isNotEmpty),
@@ -164,18 +212,29 @@ class Liga {
       ),
     };
 
-    Spieltag tagAktualisieren(Spieltag st) => Spieltag(
-      nummer: st.nummer,
-      istHinrunde: st.istHinrunde,
-      freilos: st.freilos,
-      begegnungen: st.begegnungen
+    final neuesTeam = Team(
+      id: teamId,
+      name: teams.firstWhere((t) => t.id == teamId).name,
+      spieler: teams
+          .firstWhere((t) => t.id == teamId)
+          .spieler
+          .map((s) => s.id == aktualisiert.id ? aktualisiert : s)
+          .toList(),
+    );
+    final (hinr, rueckr) = _tageMitTeam(neuesTeam);
+
+    Spieltag tagMitSpiele(Spieltag alt, Spieltag neu) => Spieltag(
+      nummer: neu.nummer,
+      istHinrunde: neu.istHinrunde,
+      freilos: neu.freilos,
+      begegnungen: neu.begegnungen.indexed
           .map(
-            (b) => Begegnung(
-              id: b.id,
-              heimTeam: b.heimTeam,
-              gastTeam: b.gastTeam,
-              istHinrunde: b.istHinrunde,
-              spiele: b.spiele
+            ((int, Begegnung) e) => Begegnung(
+              id: e.$2.id,
+              heimTeam: e.$2.heimTeam,
+              gastTeam: e.$2.gastTeam,
+              istHinrunde: e.$2.istHinrunde,
+              spiele: alt.begegnungen[e.$1].spiele
                   .map((s) => s != null ? spielerErsetzen(s) : null)
                   .toList(),
             ),
@@ -185,59 +244,49 @@ class Liga {
 
     return Liga(
       name: name,
-      teams: teams
-          .map(
-            (t) => t.id != teamId
-                ? t
-                : Team(
-                    id: t.id,
-                    name: t.name,
-                    spieler: t.spieler
-                        .map(
-                          (s) => s.id == aktualisiert.id ? aktualisiert : s,
-                        )
-                        .toList(),
-                  ),
-          )
-          .toList(),
-      hinrunde: hinrunde.map(tagAktualisieren).toList(),
-      rueckrunde: rueckrunde.map(tagAktualisieren).toList(),
+      teams: teams.map((t) => t.id == teamId ? neuesTeam : t).toList(),
+      hinrunde: List.generate(
+        hinr.length,
+        (i) => tagMitSpiele(hinrunde[i], hinr[i]),
+      ),
+      rueckrunde: List.generate(
+        rueckr.length,
+        (i) => tagMitSpiele(rueckrunde[i], rueckr[i]),
+      ),
     );
   }
 
-  Liga mitSpielerHinzugefuegt(String teamId, Spieler neuerSpieler) => Liga(
-    name: name,
-    teams: teams
-        .map(
-          (t) => t.id != teamId
-              ? t
-              : Team(
-                  id: t.id,
-                  name: t.name,
-                  spieler: [...t.spieler, neuerSpieler],
-                ),
-        )
-        .toList(),
-    hinrunde: hinrunde,
-    rueckrunde: rueckrunde,
-  );
+  Liga mitSpielerHinzugefuegt(String teamId, Spieler neuerSpieler) {
+    final altes = teams.firstWhere((t) => t.id == teamId);
+    final neues = Team(
+      id: altes.id,
+      name: altes.name,
+      spieler: [...altes.spieler, neuerSpieler],
+    );
+    final (hinr, rueckr) = _tageMitTeam(neues);
+    return Liga(
+      name: name,
+      teams: teams.map((t) => t.id == teamId ? neues : t).toList(),
+      hinrunde: hinr,
+      rueckrunde: rueckr,
+    );
+  }
 
-  Liga mitSpielerEntfernt(String teamId, String spielerId) => Liga(
-    name: name,
-    teams: teams
-        .map(
-          (t) => t.id != teamId
-              ? t
-              : Team(
-                  id: t.id,
-                  name: t.name,
-                  spieler: t.spieler.where((s) => s.id != spielerId).toList(),
-                ),
-        )
-        .toList(),
-    hinrunde: hinrunde,
-    rueckrunde: rueckrunde,
-  );
+  Liga mitSpielerEntfernt(String teamId, String spielerId) {
+    final altes = teams.firstWhere((t) => t.id == teamId);
+    final neues = Team(
+      id: altes.id,
+      name: altes.name,
+      spieler: altes.spieler.where((s) => s.id != spielerId).toList(),
+    );
+    final (hinr, rueckr) = _tageMitTeam(neues);
+    return Liga(
+      name: name,
+      teams: teams.map((t) => t.id == teamId ? neues : t).toList(),
+      hinrunde: hinr,
+      rueckrunde: rueckr,
+    );
+  }
 
   Liga mitTeamEntfernt(String teamId) => Liga.mitSpielplan(
     name: name,

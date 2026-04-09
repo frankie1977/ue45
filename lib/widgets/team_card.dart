@@ -6,6 +6,7 @@ class TeamCard extends StatelessWidget {
   const TeamCard({
     required this.team,
     required this.kannLoeschen,
+    required this.aufgestellteSpielerIds,
     required this.onUmbenennen,
     required this.onLoeschen,
     required this.onSpielerUmbenennen,
@@ -16,6 +17,7 @@ class TeamCard extends StatelessWidget {
 
   final Team team;
   final bool kannLoeschen;
+  final Set<String> aufgestellteSpielerIds;
   final VoidCallback onUmbenennen;
   final VoidCallback onLoeschen;
   final void Function(Spieler) onSpielerUmbenennen;
@@ -67,7 +69,8 @@ class TeamCard extends StatelessWidget {
                     onPressed: () => onSpielerUmbenennen(s),
                     tooltip: 'Umbenennen',
                   ),
-                  if (kannLoeschen)
+                  if (kannLoeschen &&
+                      !aufgestellteSpielerIds.contains(s.id))
                     IconButton(
                       icon: const Icon(Icons.person_remove_outlined),
                       color: theme.colorScheme.error,
