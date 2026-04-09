@@ -553,7 +553,7 @@ class Liga {
 
   /// Top 10 Spieler sortiert nach: Ligapunkte-Quote, dann Tordifferenz.
   /// Nur Spieler mit mindestens einem gespielten Satz.
-  List<SpielerStats> get spielerTopListe {
+  List<SpielerStats> spielerTopListe() {
     final Map<String, SpielerStats> map = {};
 
     void add(

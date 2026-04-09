@@ -93,7 +93,7 @@ Liga buildSampleLiga() {
 
   return Liga.mitSpielplan(
     name: 'Testliga2',
-    teams: [teamA, teamB, teamC],
+    teams: [teamB, teamC, teamD],
   );
 
   Liga liga = Liga.mitSpielplan(
@@ -117,7 +117,7 @@ Liga buildSampleLiga() {
           SpielSlot.d1,
           Doppel(
             heimSpieler: [a1, a2],
-            gastSpieler: [b4, b2],
+            gastSpieler: [b1, b2],
             saetze: [
               Satz(
                 heimTore: 6,
@@ -133,8 +133,8 @@ Liga buildSampleLiga() {
         .mitSpiel(
           SpielSlot.e1,
           Einzel(
-            heimSpieler: a1,
-            gastSpieler: b4,
+            heimSpieler: a2,
+            gastSpieler: b2,
             satz: Satz(
               heimTore: 7,
               gastTore: 3,
@@ -144,8 +144,8 @@ Liga buildSampleLiga() {
         .mitSpiel(
           SpielSlot.d2,
           Doppel(
-            heimSpieler: [a1, a2],
-            gastSpieler: [b4, b2],
+            heimSpieler: [a2, a3],
+            gastSpieler: [b2, b3],
             saetze: [
               Satz(
                 heimTore: 7,
@@ -161,7 +161,7 @@ Liga buildSampleLiga() {
         .mitSpiel(
           SpielSlot.e2,
           Einzel(
-            heimSpieler: a1,
+            heimSpieler: a4,
             gastSpieler: b4,
             satz: Satz(
               heimTore: 7,
@@ -172,8 +172,8 @@ Liga buildSampleLiga() {
         .mitSpiel(
           SpielSlot.d3,
           Doppel(
-            heimSpieler: [a1, a2],
-            gastSpieler: [b4, b2],
+            heimSpieler: [a4, a5],
+            gastSpieler: [b4, b5],
             saetze: [
               Satz(
                 heimTore: 7,
@@ -189,8 +189,8 @@ Liga buildSampleLiga() {
         .mitSpiel(
           SpielSlot.e3,
           Einzel(
-            heimSpieler: a1,
-            gastSpieler: b4,
+            heimSpieler: a5,
+            gastSpieler: b5,
             satz: Satz(
               heimTore: 3,
               gastTore: 7,
@@ -200,8 +200,8 @@ Liga buildSampleLiga() {
         .mitSpiel(
           SpielSlot.d4,
           Doppel(
-            heimSpieler: [a1, a2],
-            gastSpieler: [b4, b2],
+            heimSpieler: [a3, a5],
+            gastSpieler: [b3, b5],
             saetze: [
               Satz(
                 heimTore: 6,

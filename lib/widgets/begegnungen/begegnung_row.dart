@@ -231,6 +231,23 @@ class _BegegnungRowState extends State<BegegnungRow> {
     final zuvielDoppelSlots = _zuvielDoppelSlots();
     final zuwenigSpielerWarnung = _hatZuwenigSpieler();
 
+    final hatDoppelteSpielerInIrgendemSpiel = SpielSlot.values.any((slot) {
+      final spiel = widget.begegnung.spielAt(slot);
+      return switch (spiel) {
+        Doppel(:final heimSpieler, :final gastSpieler) =>
+          (heimSpieler.length == 2 &&
+              heimSpieler[0].id == heimSpieler[1].id) ||
+          (gastSpieler.length == 2 &&
+              gastSpieler[0].id == gastSpieler[1].id),
+        _ => false,
+      };
+    });
+    final hatWarnung = duplikatSlots.isNotEmpty ||
+        duplikatEinzelSlots.isNotEmpty ||
+        zuvielDoppelSlots.isNotEmpty ||
+        zuwenigSpielerWarnung ||
+        hatDoppelteSpielerInIrgendemSpiel;
+
     return Column(
       children: [
         InkWell(
@@ -340,7 +357,16 @@ class _BegegnungRowState extends State<BegegnungRow> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 28),
+                SizedBox(
+                  width: 28,
+                  child: hatWarnung
+                      ? const Icon(
+                          Icons.warning_rounded,
+                          size: 20,
+                          color: Colors.orange,
+                        )
+                      : null,
+                ),
               ],
             ),
           ),

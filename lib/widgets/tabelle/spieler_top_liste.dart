@@ -9,7 +9,7 @@ class SpielerTopListe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final liste = liga.spielerTopListe;
+    final liste = liga.spielerTopListe();
     if (liste.isEmpty) {
       return const SizedBox.shrink();
     }

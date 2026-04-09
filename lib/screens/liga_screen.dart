@@ -37,7 +37,7 @@ class _LigaScreenState extends State<LigaScreen> {
           crossAxisAlignment: .start,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width / 4,
+              width: MediaQuery.of(context).size.width / 3,
               child: TabelleTab(liga: _liga),
             ),
             const VerticalDivider(width: 1),
