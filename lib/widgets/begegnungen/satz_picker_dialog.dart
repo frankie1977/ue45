@@ -39,7 +39,9 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
     } else if (val < 7) {
       Navigator.pop(context, _satz(val, 7));
     } else {
-      setState(() => _siebenLinks = true);
+      setState(() {
+        _siebenLinks = true;
+      });
     }
   }
 
@@ -49,7 +51,9 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
     } else if (val < 7) {
       Navigator.pop(context, _satz(7, val));
     } else {
-      setState(() => _siebenLinks = false);
+      setState(() {
+        _siebenLinks = false;
+      });
     }
   }
 
@@ -63,9 +67,13 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
     return SizedBox(
       width: 60,
       child: FilledButton(
-        onPressed: () => istLinks
-            ? _onLinksGeklickt(context, val)
-            : _onRechtsGeklickt(context, val),
+        onPressed: () {
+          if (istLinks) {
+            _onLinksGeklickt(context, val);
+          } else {
+            _onRechtsGeklickt(context, val);
+          }
+        },
         style: FilledButton.styleFrom(
           padding: .zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -113,19 +121,19 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                   ),
                   const SizedBox(height: 6),
                   Row(
-                    children: [7, 6, 5, 4, 3, 2, 1, 0]
-                        .map(
-                          (v) => Padding(
-                            padding: const .symmetric(horizontal: 2),
-                            child: _zahlBtn(
-                              context,
-                              val: v,
-                              istLinks: true,
-                              hervorgehoben: v == 7 && _siebenLinks == true,
-                            ),
+                    children: [7, 6, 5, 4, 3, 2, 1, 0].map(
+                      (v) {
+                        return Padding(
+                          padding: const .symmetric(horizontal: 2),
+                          child: _zahlBtn(
+                            context,
+                            val: v,
+                            istLinks: true,
+                            hervorgehoben: v == 7 && _siebenLinks == true,
                           ),
-                        )
-                        .toList(),
+                        );
+                      },
+                    ).toList(),
                   ),
                 ],
               ),
@@ -155,19 +163,19 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                   ),
                   const SizedBox(height: 6),
                   Row(
-                    children: [0, 1, 2, 3, 4, 5, 6, 7]
-                        .map(
-                          (v) => Padding(
-                            padding: const .symmetric(horizontal: 2),
-                            child: _zahlBtn(
-                              context,
-                              val: v,
-                              istLinks: false,
-                              hervorgehoben: v == 7 && _siebenLinks == false,
-                            ),
+                    children: [0, 1, 2, 3, 4, 5, 6, 7].map(
+                      (v) {
+                        return Padding(
+                          padding: const .symmetric(horizontal: 2),
+                          child: _zahlBtn(
+                            context,
+                            val: v,
+                            istLinks: false,
+                            hervorgehoben: v == 7 && _siebenLinks == false,
                           ),
-                        )
-                        .toList(),
+                        );
+                      },
+                    ).toList(),
                   ),
                 ],
               ),

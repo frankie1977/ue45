@@ -49,11 +49,15 @@ class _NamenDialogState extends State<NamenDialog> {
         autofocus: true,
         decoration: const InputDecoration(hintText: 'Teamname'),
         textCapitalization: .words,
-        onSubmitted: (_) => _bestaetigen(),
+        onSubmitted: (_) {
+          _bestaetigen();
+        },
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: const Text('Abbrechen'),
         ),
         FilledButton(

@@ -111,9 +111,11 @@ class _BegegnungRowState extends State<BegegnungRow> {
     return Column(
       children: [
         InkWell(
-          onTap: () => setState(() {
-            _expanded = !_expanded;
-          }),
+          onTap: () {
+            setState(() {
+              _expanded = !_expanded;
+            });
+          },
           child: Padding(
             padding: const .symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -233,11 +235,15 @@ class _BegegnungRowState extends State<BegegnungRow> {
                 rechtsTeam: heimLinks
                     ? widget.begegnung.gastTeam
                     : widget.begegnung.heimTeam,
-                onSatzGesetzt: (satzIndex, satz) =>
-                    _satzSetzen(slot, satzIndex, satz),
-                onSatzGeloescht: (satzIndex) => _satzLoeschen(slot, satzIndex),
-                onSpielerGeandert: (neuesSpiel) =>
-                    _spielerSetzen(slot, neuesSpiel),
+                onSatzGesetzt: (satzIndex, satz) {
+                  _satzSetzen(slot, satzIndex, satz);
+                },
+                onSatzGeloescht: (satzIndex) {
+                  _satzLoeschen(slot, satzIndex);
+                },
+                onSpielerGeandert: (neuesSpiel) {
+                  _spielerSetzen(slot, neuesSpiel);
+                },
               ),
             ];
           }),

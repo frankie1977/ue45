@@ -30,8 +30,8 @@ class TabelleRow extends StatelessWidget {
     final diffColor = diff > 0
         ? theme.colorScheme.primary
         : diff < 0
-            ? theme.colorScheme.error
-            : theme.colorScheme.outline;
+        ? theme.colorScheme.error
+        : theme.colorScheme.outline;
 
     return Padding(
       padding: const .symmetric(horizontal: 16, vertical: 10),
@@ -42,16 +42,18 @@ class TabelleRow extends StatelessWidget {
             child: Text(
               '$rang',
               textAlign: TextAlign.right,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: theme.colorScheme.outline),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.outline,
+              ),
             ),
           ),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: Text(
               team.name,
-              style: theme.textTheme.bodyLarge
-                  ?.copyWith(fontWeight: .bold),
+              style: theme.textTheme.bodyLarge?.copyWith(fontWeight: .bold),
             ),
           ),
           SizedBox(
@@ -81,8 +83,8 @@ class TabelleRow extends StatelessWidget {
                 color: liga.torDifferenzVon(team) > 0
                     ? theme.colorScheme.primary
                     : liga.torDifferenzVon(team) < 0
-                        ? theme.colorScheme.error
-                        : theme.colorScheme.outline,
+                    ? theme.colorScheme.error
+                    : theme.colorScheme.outline,
               ),
             ),
           ),

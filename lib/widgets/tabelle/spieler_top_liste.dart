@@ -63,10 +63,12 @@ class SpielerTopListe extends StatelessWidget {
             ),
             const Divider(height: 1),
             ...liste.indexed.map(
-              ((int, SpielerStats) e) => _SpielerRow(
-                rang: e.$1 + 1,
-                stats: e.$2,
-              ),
+              ((int, SpielerStats) e) {
+                return _SpielerRow(
+                  rang: e.$1 + 1,
+                  stats: e.$2,
+                );
+              },
             ),
           ],
         ),

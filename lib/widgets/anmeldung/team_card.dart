@@ -28,7 +28,10 @@ class TeamCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Card(
-      margin: const .symmetric(horizontal: 12, vertical: 6),
+      margin: const .symmetric(
+        horizontal: 12,
+        vertical: 6,
+      ),
       child: ExpansionTile(
         leading: const Icon(Icons.groups),
         title: Text(
@@ -55,31 +58,36 @@ class TeamCard extends StatelessWidget {
         ),
         children: [
           ...team.spieler.map(
-            (s) => ListTile(
-              leading: const Icon(Icons.person),
-              title: Text(
-                s.name,
-                style: theme.textTheme.bodyLarge,
-              ),
-              trailing: Row(
-                mainAxisSize: .min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => onSpielerUmbenennen(s),
-                    tooltip: 'Umbenennen',
-                  ),
-                  if (kannLoeschen &&
-                      !aufgestellteSpielerIds.contains(s.id))
+            (s) {
+              return ListTile(
+                leading: const Icon(Icons.person),
+                title: Text(
+                  s.name,
+                  style: theme.textTheme.bodyLarge,
+                ),
+                trailing: Row(
+                  mainAxisSize: .min,
+                  children: [
                     IconButton(
-                      icon: const Icon(Icons.person_remove_outlined),
-                      color: theme.colorScheme.error,
-                      onPressed: () => onSpielerLoeschen(s),
-                      tooltip: 'Entfernen',
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () {
+                        onSpielerUmbenennen(s);
+                      },
+                      tooltip: 'Umbenennen',
                     ),
-                ],
-              ),
-            ),
+                    if (kannLoeschen && !aufgestellteSpielerIds.contains(s.id))
+                      IconButton(
+                        icon: const Icon(Icons.person_remove_outlined),
+                        color: theme.colorScheme.error,
+                        onPressed: () {
+                          onSpielerLoeschen(s);
+                        },
+                        tooltip: 'Entfernen',
+                      ),
+                  ],
+                ),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.person_add_outlined),

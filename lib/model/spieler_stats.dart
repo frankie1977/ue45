@@ -18,8 +18,7 @@ class SpielerStats {
   final int toreGeholt;
   final int toreKassiert;
 
-  double get quote =>
-      punkteMoeglich == 0 ? 0 : punkteGeholt / punkteMoeglich;
+  double get quote => punkteMoeglich == 0 ? 0 : punkteGeholt / punkteMoeglich;
 
   int get torDifferenz => toreGeholt - toreKassiert;
 

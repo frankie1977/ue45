@@ -93,31 +93,44 @@ class Doppel extends Spiel {
 
   @override
   bool get istAbgeschlossen =>
-      saetze.length == 2 && saetze.every((s) => s.istAbgeschlossen);
+      saetze.length == 2 &&
+      saetze.every((s) {
+        return s.istAbgeschlossen;
+      });
 
   @override
-  int get punkteHeim => saetze.fold(0, (sum, s) => sum + s.punkteHeim);
+  int get punkteHeim => saetze.fold(0, (sum, s) {
+    return sum + s.punkteHeim;
+  });
 
   @override
-  int get punkteGast => saetze.fold(0, (sum, s) => sum + s.punkteGast);
+  int get punkteGast => saetze.fold(0, (sum, s) {
+    return sum + s.punkteGast;
+  });
 
   @override
   Map<String, dynamic> toJson() => {
     'type': 'doppel',
-    'heimSpieler': heimSpieler.map((s) => s.toJson()).toList(),
-    'gastSpieler': gastSpieler.map((s) => s.toJson()).toList(),
-    'saetze': saetze.map((s) => s.toJson()).toList(),
+    'heimSpieler': heimSpieler.map((s) {
+      return s.toJson();
+    }).toList(),
+    'gastSpieler': gastSpieler.map((s) {
+      return s.toJson();
+    }).toList(),
+    'saetze': saetze.map((s) {
+      return s.toJson();
+    }).toList(),
   };
 
   factory Doppel.fromJson(Map<String, dynamic> json) => Doppel(
-    heimSpieler: (json['heimSpieler'] as List<dynamic>)
-        .map((s) => Spieler.fromJson(s as Map<String, dynamic>))
-        .toList(),
-    gastSpieler: (json['gastSpieler'] as List<dynamic>)
-        .map((s) => Spieler.fromJson(s as Map<String, dynamic>))
-        .toList(),
-    saetze: (json['saetze'] as List<dynamic>)
-        .map((s) => Satz.fromJson(s as Map<String, dynamic>))
-        .toList(),
+    heimSpieler: (json['heimSpieler'] as List<dynamic>).map((s) {
+      return Spieler.fromJson(s as Map<String, dynamic>);
+    }).toList(),
+    gastSpieler: (json['gastSpieler'] as List<dynamic>).map((s) {
+      return Spieler.fromJson(s as Map<String, dynamic>);
+    }).toList(),
+    saetze: (json['saetze'] as List<dynamic>).map((s) {
+      return Satz.fromJson(s as Map<String, dynamic>);
+    }).toList(),
   );
 }

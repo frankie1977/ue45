@@ -19,11 +19,13 @@ class TeamsTab extends StatelessWidget {
   Future<void> _teamUmbenennen(BuildContext context, Team team) async {
     final neuerName = await showDialog<String>(
       context: context,
-      builder: (ctx) => NamenDialog(
-        titel: 'Team umbenennen',
-        initialText: team.name,
-        bestaetigenText: 'Umbenennen',
-      ),
+      builder: (ctx) {
+        return NamenDialog(
+          titel: 'Team umbenennen',
+          initialText: team.name,
+          bestaetigenText: 'Umbenennen',
+        );
+      },
     );
     if (neuerName != null && neuerName.isNotEmpty) {
       onLigaGeaendert(liga.mitTeamUmbenennt(team.id, neuerName));
@@ -33,16 +35,24 @@ class TeamsTab extends StatelessWidget {
   Future<void> _teamHinzufuegen(BuildContext context) async {
     final name = await showDialog<String>(
       context: context,
-      builder: (ctx) => NamenDialog(
-        titel: 'Team hinzufügen',
-        initialText: '',
-        bestaetigenText: 'Hinzufügen',
-      ),
+      builder: (ctx) {
+        return NamenDialog(
+          titel: 'Team hinzufügen',
+          initialText: '',
+          bestaetigenText: 'Hinzufügen',
+        );
+      },
     );
     if (name != null && name.isNotEmpty) {
       final id = 't${DateTime.now().millisecondsSinceEpoch}';
       onLigaGeaendert(
-        liga.mitTeamHinzugefuegt(Team(id: id, name: name, spieler: [])),
+        liga.mitTeamHinzugefuegt(
+          Team(
+            id: id,
+            name: name,
+            spieler: [],
+          ),
+        ),
       );
     }
   }
@@ -50,23 +60,29 @@ class TeamsTab extends StatelessWidget {
   Future<void> _teamLoeschen(BuildContext context, Team team) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Team löschen'),
-        content: Text('${team.name} wirklich löschen?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Abbrechen'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(ctx).colorScheme.error,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('Team löschen'),
+          content: Text('${team.name} wirklich löschen?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx, false);
+              },
+              child: const Text('Abbrechen'),
             ),
-            child: const Text('Löschen'),
-          ),
-        ],
-      ),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(ctx, true);
+              },
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(ctx).colorScheme.error,
+              ),
+              child: const Text('Löschen'),
+            ),
+          ],
+        );
+      },
     );
     if (confirmed == true) {
       onLigaGeaendert(liga.mitTeamEntfernt(team.id));
@@ -80,12 +96,14 @@ class TeamsTab extends StatelessWidget {
   ) async {
     final result = await showDialog<({String vorname, String nachname})>(
       context: context,
-      builder: (ctx) => SpielerDialog(
-        titel: 'Spieler:in umbenennen',
-        initialVorname: spieler.vorname,
-        initialNachname: spieler.nachname,
-        bestaetigenText: 'Umbenennen',
-      ),
+      builder: (ctx) {
+        return SpielerDialog(
+          titel: 'Spieler:in umbenennen',
+          initialVorname: spieler.vorname,
+          initialNachname: spieler.nachname,
+          bestaetigenText: 'Umbenennen',
+        );
+      },
     );
     if (result != null) {
       onLigaGeaendert(
@@ -108,23 +126,29 @@ class TeamsTab extends StatelessWidget {
   ) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Spieler:in entfernen'),
-        content: Text('${spieler.name} aus ${team.name} entfernen?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Abbrechen'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(ctx).colorScheme.error,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('Spieler:in entfernen'),
+          content: Text('${spieler.name} aus ${team.name} entfernen?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx, false);
+              },
+              child: const Text('Abbrechen'),
             ),
-            child: const Text('Entfernen'),
-          ),
-        ],
-      ),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(ctx, true);
+              },
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(ctx).colorScheme.error,
+              ),
+              child: const Text('Entfernen'),
+            ),
+          ],
+        );
+      },
     );
     if (confirmed == true) {
       onLigaGeaendert(liga.mitSpielerEntfernt(team.id, spieler.id));
@@ -134,12 +158,14 @@ class TeamsTab extends StatelessWidget {
   Future<void> _spielerHinzufuegen(BuildContext context, Team team) async {
     final result = await showDialog<({String vorname, String nachname})>(
       context: context,
-      builder: (ctx) => SpielerDialog(
-        titel: 'Spieler:in hinzufügen',
-        initialVorname: '',
-        initialNachname: '',
-        bestaetigenText: 'Hinzufügen',
-      ),
+      builder: (ctx) {
+        return SpielerDialog(
+          titel: 'Spieler:in hinzufügen',
+          initialVorname: '',
+          initialNachname: '',
+          bestaetigenText: 'Hinzufügen',
+        );
+      },
     );
     if (result != null) {
       final id = '${team.id}_s${DateTime.now().millisecondsSinceEpoch}';
@@ -165,17 +191,29 @@ class TeamsTab extends StatelessWidget {
             team: team,
             kannLoeschen: kannLoeschen,
             aufgestellteSpielerIds: aufgestellt,
-            onUmbenennen: () => _teamUmbenennen(context, team),
-            onLoeschen: () => _teamLoeschen(context, team),
-            onSpielerUmbenennen: (s) => _spielerUmbenennen(context, team, s),
-            onSpielerLoeschen: (s) => _spielerLoeschen(context, team, s),
-            onSpielerHinzufuegen: () => _spielerHinzufuegen(context, team),
+            onUmbenennen: () {
+              _teamUmbenennen(context, team);
+            },
+            onLoeschen: () {
+              _teamLoeschen(context, team);
+            },
+            onSpielerUmbenennen: (s) {
+              _spielerUmbenennen(context, team, s);
+            },
+            onSpielerLoeschen: (s) {
+              _spielerLoeschen(context, team, s);
+            },
+            onSpielerHinzufuegen: () {
+              _spielerHinzufuegen(context, team);
+            },
           );
         },
       ),
       floatingActionButton: kannLoeschen
           ? FloatingActionButton(
-              onPressed: () => _teamHinzufuegen(context),
+              onPressed: () {
+                _teamHinzufuegen(context);
+              },
               child: const Icon(Icons.add),
             )
           : null,

@@ -95,13 +95,17 @@ class SpielDetail extends StatelessWidget {
   ) async {
     final picked = await showDialog<Spieler>(
       context: context,
-      builder: (ctx) => SpielerPickerDialog(
-        team: team,
-        aktuell: aktuell,
-        onEntfernen: aktuell != null
-            ? () => onSpielerGeandert(_spielerEntfernen(istHeim, index))
-            : null,
-      ),
+      builder: (ctx) {
+        return SpielerPickerDialog(
+          team: team,
+          aktuell: aktuell,
+          onEntfernen: aktuell != null
+              ? () {
+                  onSpielerGeandert(_spielerEntfernen(istHeim, index));
+                }
+              : null,
+        );
+      },
     );
     if (picked != null) {
       onSpielerGeandert(_spielerAktualisieren(istHeim, index, picked));
@@ -119,7 +123,9 @@ class SpielDetail extends StatelessWidget {
     final theme = Theme.of(context);
     if (spieler != null) {
       return InkWell(
-        onTap: () => _spielerAuswaehlen(context, team, istHeim, index, spieler),
+        onTap: () {
+          _spielerAuswaehlen(context, team, istHeim, index, spieler);
+        },
         borderRadius: BorderRadius.circular(4),
         child: Text(
           spieler.name,
@@ -131,7 +137,9 @@ class SpielDetail extends StatelessWidget {
     return Align(
       alignment: align == .end ? Alignment.centerRight : Alignment.centerLeft,
       child: InkWell(
-        onTap: () => _spielerAuswaehlen(context, team, istHeim, index, null),
+        onTap: () {
+          _spielerAuswaehlen(context, team, istHeim, index, null);
+        },
         borderRadius: BorderRadius.circular(12),
         child: Icon(
           Icons.person_add_outlined,
@@ -152,8 +160,13 @@ class SpielDetail extends StatelessWidget {
       Doppel(:final saetze) => saetze,
     };
 
-    String seitenNames(List<Spieler> spieler) =>
-        spieler.map((s) => s.name).join(' & ');
+    String seitenNames(List<Spieler> spieler) {
+      return spieler
+          .map((s) {
+            return s.name;
+          })
+          .join(' & ');
+    }
 
     final linksSpielerAll = switch (spiel) {
       null => '–',
@@ -247,18 +260,20 @@ class SpielDetail extends StatelessWidget {
                           bool loeschen = false;
                           final picked = await showDialog<Satz>(
                             context: context,
-                            builder: (ctx) => SatzPickerDialog(
-                              titel: '${slot.label}$titelSuffix',
-                              linksTeamName: linksTeam.name,
-                              rechtsTeamName: rechtsTeam.name,
-                              linksSpielerName: linksSpielerAll,
-                              rechtsSpielerName: rechtsSpielerAll,
-                              heimLinks: heimLinks,
-                              onLoeschen: () {
-                                loeschen = true;
-                                Navigator.pop(ctx);
-                              },
-                            ),
+                            builder: (ctx) {
+                              return SatzPickerDialog(
+                                titel: '${slot.label}$titelSuffix',
+                                linksTeamName: linksTeam.name,
+                                rechtsTeamName: rechtsTeam.name,
+                                linksSpielerName: linksSpielerAll,
+                                rechtsSpielerName: rechtsSpielerAll,
+                                heimLinks: heimLinks,
+                                onLoeschen: () {
+                                  loeschen = true;
+                                  Navigator.pop(ctx);
+                                },
+                              );
+                            },
                           );
                           if (loeschen) {
                             onSatzGeloescht(i);

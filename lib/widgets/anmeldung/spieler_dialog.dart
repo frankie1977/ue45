@@ -58,7 +58,9 @@ class _SpielerDialogState extends State<SpielerDialog> {
             autofocus: true,
             decoration: const InputDecoration(labelText: 'Vorname'),
             textCapitalization: .words,
-            onSubmitted: (_) => _nachnameFocus.requestFocus(),
+            onSubmitted: (_) {
+              _nachnameFocus.requestFocus();
+            },
           ),
           const SizedBox(height: 8),
           TextField(
@@ -66,13 +68,17 @@ class _SpielerDialogState extends State<SpielerDialog> {
             focusNode: _nachnameFocus,
             decoration: const InputDecoration(labelText: 'Nachname'),
             textCapitalization: .words,
-            onSubmitted: (_) => _bestaetigen(),
+            onSubmitted: (_) {
+              _bestaetigen();
+            },
           ),
         ],
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: const Text('Abbrechen'),
         ),
         FilledButton(

@@ -21,8 +21,9 @@ class Liga {
 
   List<Spieltag> get alleSpieltage => [...hinrunde, ...rueckrunde];
 
-  List<Begegnung> get begegnungen =>
-      alleSpieltage.expand((st) => st.begegnungen).toList();
+  List<Begegnung> get begegnungen => alleSpieltage.expand((st) {
+    return st.begegnungen;
+  }).toList();
 
   /// Erstellt den Spielplan per Round-Robin.
   /// Bei ungerader Teamanzahl erhält ein Team pro Spieltag ein Freilos.
@@ -59,32 +60,40 @@ class Liga {
           continue;
         }
 
-        hinBeg.add(Begegnung(
-          id: 'b${begId++}',
-          heimTeam: heim,
-          gastTeam: gast,
-          istHinrunde: true,
-        ),);
-        rueckBeg.add(Begegnung(
-          id: 'b${begId++}',
-          heimTeam: gast,
-          gastTeam: heim,
-          istHinrunde: false,
-        ),);
+        hinBeg.add(
+          Begegnung(
+            id: 'b${begId++}',
+            heimTeam: heim,
+            gastTeam: gast,
+            istHinrunde: true,
+          ),
+        );
+        rueckBeg.add(
+          Begegnung(
+            id: 'b${begId++}',
+            heimTeam: gast,
+            gastTeam: heim,
+            istHinrunde: false,
+          ),
+        );
       }
 
-      hinrunde.add(Spieltag(
-        nummer: round + 1,
-        istHinrunde: true,
-        freilos: freilos,
-        begegnungen: hinBeg,
-      ),);
-      rueckrunde.add(Spieltag(
-        nummer: rounds + round + 1,
-        istHinrunde: false,
-        freilos: freilos,
-        begegnungen: rueckBeg,
-      ),);
+      hinrunde.add(
+        Spieltag(
+          nummer: round + 1,
+          istHinrunde: true,
+          freilos: freilos,
+          begegnungen: hinBeg,
+        ),
+      );
+      rueckrunde.add(
+        Spieltag(
+          nummer: rounds + round + 1,
+          istHinrunde: false,
+          freilos: freilos,
+          begegnungen: rueckBeg,
+        ),
+      );
 
       // Rotation: Position 0 fix, letztes Element rückt auf Position 1
       final last = rot[m - 1];
@@ -118,8 +127,16 @@ class Liga {
               ids.add(gastSpieler.id);
             }
           case Doppel(:final heimSpieler, :final gastSpieler):
-            ids.addAll(heimSpieler.map((s) => s.id));
-            ids.addAll(gastSpieler.map((s) => s.id));
+            ids.addAll(
+              heimSpieler.map((s) {
+                return s.id;
+              }),
+            );
+            ids.addAll(
+              gastSpieler.map((s) {
+                return s.id;
+              }),
+            );
         }
       }
     }
@@ -134,17 +151,17 @@ class Liga {
       nummer: st.nummer,
       istHinrunde: st.istHinrunde,
       freilos: st.freilos?.id == neues.id ? neues : st.freilos,
-      begegnungen: st.begegnungen
-          .map(
-            (b) => Begegnung(
-              id: b.id,
-              heimTeam: b.heimTeam.id == neues.id ? neues : b.heimTeam,
-              gastTeam: b.gastTeam.id == neues.id ? neues : b.gastTeam,
-              istHinrunde: b.istHinrunde,
-              spiele: b.spiele,
-            ),
-          )
-          .toList(),
+      begegnungen: st.begegnungen.map(
+        (b) {
+          return Begegnung(
+            id: b.id,
+            heimTeam: b.heimTeam.id == neues.id ? neues : b.heimTeam,
+            gastTeam: b.gastTeam.id == neues.id ? neues : b.gastTeam,
+            istHinrunde: b.istHinrunde,
+            spiele: b.spiele,
+          );
+        },
+      ).toList(),
     );
     return (
       hinrunde.map(aktualisieren).toList(),
@@ -153,33 +170,41 @@ class Liga {
   }
 
   bool get hatErgebnisse => begegnungen.any(
-    (b) => b.spiele.whereType<Spiel>().any((s) => s.saetze.isNotEmpty),
+    (b) {
+      return b.spiele.whereType<Spiel>().any((s) {
+        return s.saetze.isNotEmpty;
+      });
+    },
   );
 
   Liga mitTeamUmbenennt(String teamId, String neuerName) {
-    final altes = teams.firstWhere((t) => t.id == teamId);
+    final altes = teams.firstWhere((t) {
+      return t.id == teamId;
+    });
     final neues = Team(id: altes.id, name: neuerName, spieler: altes.spieler);
 
     Spieltag aktualisiereTag(Spieltag st) => Spieltag(
       nummer: st.nummer,
       istHinrunde: st.istHinrunde,
       freilos: st.freilos?.id == teamId ? neues : st.freilos,
-      begegnungen: st.begegnungen
-          .map(
-            (b) => Begegnung(
-              id: b.id,
-              heimTeam: b.heimTeam.id == teamId ? neues : b.heimTeam,
-              gastTeam: b.gastTeam.id == teamId ? neues : b.gastTeam,
-              istHinrunde: b.istHinrunde,
-              spiele: b.spiele,
-            ),
-          )
-          .toList(),
+      begegnungen: st.begegnungen.map(
+        (b) {
+          return Begegnung(
+            id: b.id,
+            heimTeam: b.heimTeam.id == teamId ? neues : b.heimTeam,
+            gastTeam: b.gastTeam.id == teamId ? neues : b.gastTeam,
+            istHinrunde: b.istHinrunde,
+            spiele: b.spiele,
+          );
+        },
+      ).toList(),
     );
 
     return Liga(
       name: name,
-      teams: teams.map((t) => t.id == teamId ? neues : t).toList(),
+      teams: teams.map((t) {
+        return t.id == teamId ? neues : t;
+      }).toList(),
       hinrunde: hinrunde.map(aktualisiereTag).toList(),
       rueckrunde: rueckrunde.map(aktualisiereTag).toList(),
     );
@@ -202,23 +227,29 @@ class Liga {
         satz: satz,
       ),
       Doppel(:final heimSpieler, :final gastSpieler, :final saetze) => Doppel(
-        heimSpieler: heimSpieler
-            .map((s) => s.id == aktualisiert.id ? aktualisiert : s)
-            .toList(),
-        gastSpieler: gastSpieler
-            .map((s) => s.id == aktualisiert.id ? aktualisiert : s)
-            .toList(),
+        heimSpieler: heimSpieler.map((s) {
+          return s.id == aktualisiert.id ? aktualisiert : s;
+        }).toList(),
+        gastSpieler: gastSpieler.map((s) {
+          return s.id == aktualisiert.id ? aktualisiert : s;
+        }).toList(),
         saetze: saetze,
       ),
     };
 
     final neuesTeam = Team(
       id: teamId,
-      name: teams.firstWhere((t) => t.id == teamId).name,
+      name: teams.firstWhere((t) {
+        return t.id == teamId;
+      }).name,
       spieler: teams
-          .firstWhere((t) => t.id == teamId)
+          .firstWhere((t) {
+            return t.id == teamId;
+          })
           .spieler
-          .map((s) => s.id == aktualisiert.id ? aktualisiert : s)
+          .map((s) {
+            return s.id == aktualisiert.id ? aktualisiert : s;
+          })
           .toList(),
     );
     final (hinr, rueckr) = _tageMitTeam(neuesTeam);
@@ -227,37 +258,45 @@ class Liga {
       nummer: neu.nummer,
       istHinrunde: neu.istHinrunde,
       freilos: neu.freilos,
-      begegnungen: neu.begegnungen.indexed
-          .map(
-            ((int, Begegnung) e) => Begegnung(
-              id: e.$2.id,
-              heimTeam: e.$2.heimTeam,
-              gastTeam: e.$2.gastTeam,
-              istHinrunde: e.$2.istHinrunde,
-              spiele: alt.begegnungen[e.$1].spiele
-                  .map((s) => s != null ? spielerErsetzen(s) : null)
-                  .toList(),
-            ),
-          )
-          .toList(),
+      begegnungen: neu.begegnungen.indexed.map(
+        ((int, Begegnung) e) {
+          return Begegnung(
+            id: e.$2.id,
+            heimTeam: e.$2.heimTeam,
+            gastTeam: e.$2.gastTeam,
+            istHinrunde: e.$2.istHinrunde,
+            spiele: alt.begegnungen[e.$1].spiele.map((s) {
+              return s != null ? spielerErsetzen(s) : null;
+            }).toList(),
+          );
+        },
+      ).toList(),
     );
 
     return Liga(
       name: name,
-      teams: teams.map((t) => t.id == teamId ? neuesTeam : t).toList(),
+      teams: teams.map((t) {
+        return t.id == teamId ? neuesTeam : t;
+      }).toList(),
       hinrunde: List.generate(
         hinr.length,
-        (i) => tagMitSpiele(hinrunde[i], hinr[i]),
+        (i) {
+          return tagMitSpiele(hinrunde[i], hinr[i]);
+        },
       ),
       rueckrunde: List.generate(
         rueckr.length,
-        (i) => tagMitSpiele(rueckrunde[i], rueckr[i]),
+        (i) {
+          return tagMitSpiele(rueckrunde[i], rueckr[i]);
+        },
       ),
     );
   }
 
   Liga mitSpielerHinzugefuegt(String teamId, Spieler neuerSpieler) {
-    final altes = teams.firstWhere((t) => t.id == teamId);
+    final altes = teams.firstWhere((t) {
+      return t.id == teamId;
+    });
     final neues = Team(
       id: altes.id,
       name: altes.name,
@@ -266,23 +305,31 @@ class Liga {
     final (hinr, rueckr) = _tageMitTeam(neues);
     return Liga(
       name: name,
-      teams: teams.map((t) => t.id == teamId ? neues : t).toList(),
+      teams: teams.map((t) {
+        return t.id == teamId ? neues : t;
+      }).toList(),
       hinrunde: hinr,
       rueckrunde: rueckr,
     );
   }
 
   Liga mitSpielerEntfernt(String teamId, String spielerId) {
-    final altes = teams.firstWhere((t) => t.id == teamId);
+    final altes = teams.firstWhere((t) {
+      return t.id == teamId;
+    });
     final neues = Team(
       id: altes.id,
       name: altes.name,
-      spieler: altes.spieler.where((s) => s.id != spielerId).toList(),
+      spieler: altes.spieler.where((s) {
+        return s.id != spielerId;
+      }).toList(),
     );
     final (hinr, rueckr) = _tageMitTeam(neues);
     return Liga(
       name: name,
-      teams: teams.map((t) => t.id == teamId ? neues : t).toList(),
+      teams: teams.map((t) {
+        return t.id == teamId ? neues : t;
+      }).toList(),
       hinrunde: hinr,
       rueckrunde: rueckr,
     );
@@ -290,24 +337,29 @@ class Liga {
 
   Liga mitTeamEntfernt(String teamId) => Liga.mitSpielplan(
     name: name,
-    teams: teams.where((t) => t.id != teamId).toList(),
+    teams: teams.where((t) {
+      return t.id != teamId;
+    }).toList(),
   );
 
   /// Gibt eine neue [Liga] zurück, bei der [begegnung] (per ID) ersetzt ist.
   Liga mitBegegnung(Begegnung begegnung) => Liga(
     name: name,
     teams: teams,
-    hinrunde:
-        hinrunde.map((st) => st.mitBegegnung(begegnung)).toList(),
-    rueckrunde:
-        rueckrunde.map((st) => st.mitBegegnung(begegnung)).toList(),
+    hinrunde: hinrunde.map((st) {
+      return st.mitBegegnung(begegnung);
+    }).toList(),
+    rueckrunde: rueckrunde.map((st) {
+      return st.mitBegegnung(begegnung);
+    }).toList(),
   );
 
   // ── Statistiken pro Team ─────────────────────────────────────────
 
   Iterable<Begegnung> abgeschlossen(Team team) => begegnungen.where(
-    (b) =>
-        b.istAbgeschlossen && (b.heimTeam == team || b.gastTeam == team),
+    (b) {
+      return b.istAbgeschlossen && (b.heimTeam == team || b.gastTeam == team);
+    },
   );
 
   int ligapunkteVon(Team team) => abgeschlossen(team).fold(0, (sum, b) {
@@ -480,39 +532,65 @@ class Liga {
         toreGeholt: toreGeholt,
         toreKassiert: toreKassiert,
       );
-      map[spieler.id] =
-          map.containsKey(spieler.id) ? map[spieler.id]! + neu : neu;
+      map[spieler.id] = map.containsKey(spieler.id)
+          ? map[spieler.id]! + neu
+          : neu;
     }
 
     for (final beg in begegnungen) {
       for (final slot in SpielSlot.values) {
         switch (beg.spielAt(slot)) {
           case Einzel(
-            :final heimSpieler,
-            :final gastSpieler,
-            satz: final Satz satz,
-          ) when satz.istAbgeschlossen:
+                :final heimSpieler,
+                :final gastSpieler,
+                satz: final Satz satz,
+              )
+              when satz.istAbgeschlossen:
             if (heimSpieler != null) {
-              add(heimSpieler, beg.heimTeam,
-                  satz.punkteHeim, satz.heimTore, satz.gastTore);
+              add(
+                heimSpieler,
+                beg.heimTeam,
+                satz.punkteHeim,
+                satz.heimTore,
+                satz.gastTore,
+              );
             }
             if (gastSpieler != null) {
-              add(gastSpieler, beg.gastTeam,
-                  satz.punkteGast, satz.gastTore, satz.heimTore);
+              add(
+                gastSpieler,
+                beg.gastTeam,
+                satz.punkteGast,
+                satz.gastTore,
+                satz.heimTore,
+              );
             }
           case Doppel(
             :final heimSpieler,
             :final gastSpieler,
             :final saetze,
           ):
-            for (final satz in saetze.where((s) => s.istAbgeschlossen)) {
+            for (final satz in saetze.where(
+              (s) {
+                return s.istAbgeschlossen;
+              },
+            )) {
               for (final sp in heimSpieler) {
-                add(sp, beg.heimTeam,
-                    satz.punkteHeim, satz.heimTore, satz.gastTore);
+                add(
+                  sp,
+                  beg.heimTeam,
+                  satz.punkteHeim,
+                  satz.heimTore,
+                  satz.gastTore,
+                );
               }
               for (final sp in gastSpieler) {
-                add(sp, beg.gastTeam,
-                    satz.punkteGast, satz.gastTore, satz.heimTore);
+                add(
+                  sp,
+                  beg.gastTeam,
+                  satz.punkteGast,
+                  satz.gastTore,
+                  satz.heimTore,
+                );
               }
             }
           default:
@@ -521,14 +599,13 @@ class Liga {
       }
     }
 
-    return (map.values.toList()
-          ..sort((a, b) {
-            final q = b.quote.compareTo(a.quote);
-            if (q != 0) {
-              return q;
-            }
-            return b.torDifferenz.compareTo(a.torDifferenz);
-          }))
+    return (map.values.toList()..sort((a, b) {
+          final q = b.quote.compareTo(a.quote);
+          if (q != 0) {
+            return q;
+          }
+          return b.torDifferenz.compareTo(a.torDifferenz);
+        }))
         .take(10)
         .toList();
   }
@@ -537,36 +614,42 @@ class Liga {
 
   Map<String, dynamic> toJson() => {
     'name': name,
-    'teams': teams.map((t) => t.toJson()).toList(),
-    'hinrunde': hinrunde.map((st) => st.toJson()).toList(),
-    'rueckrunde': rueckrunde.map((st) => st.toJson()).toList(),
+    'teams': teams.map((t) {
+      return t.toJson();
+    }).toList(),
+    'hinrunde': hinrunde.map((st) {
+      return st.toJson();
+    }).toList(),
+    'rueckrunde': rueckrunde.map((st) {
+      return st.toJson();
+    }).toList(),
   };
 
   factory Liga.fromJson(Map<String, dynamic> json) {
-    final teams = (json['teams'] as List<dynamic>)
-        .map((t) => Team.fromJson(t as Map<String, dynamic>))
-        .toList();
+    final teams = (json['teams'] as List<dynamic>).map((t) {
+      return Team.fromJson(t as Map<String, dynamic>);
+    }).toList();
     final teamsById = {for (final t in teams) t.id: t};
 
     return Liga(
       name: json['name'] as String,
       teams: teams,
-      hinrunde: (json['hinrunde'] as List<dynamic>)
-          .map(
-            (st) => Spieltag.fromJson(
-              st as Map<String, dynamic>,
-              teamsById,
-            ),
-          )
-          .toList(),
-      rueckrunde: (json['rueckrunde'] as List<dynamic>)
-          .map(
-            (st) => Spieltag.fromJson(
-              st as Map<String, dynamic>,
-              teamsById,
-            ),
-          )
-          .toList(),
+      hinrunde: (json['hinrunde'] as List<dynamic>).map(
+        (st) {
+          return Spieltag.fromJson(
+            st as Map<String, dynamic>,
+            teamsById,
+          );
+        },
+      ).toList(),
+      rueckrunde: (json['rueckrunde'] as List<dynamic>).map(
+        (st) {
+          return Spieltag.fromJson(
+            st as Map<String, dynamic>,
+            teamsById,
+          );
+        },
+      ).toList(),
     );
   }
 }

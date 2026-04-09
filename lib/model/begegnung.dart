@@ -69,14 +69,17 @@ class Begegnung {
 
   // ── Satzpunkte ───────────────────────────────────────────────────
 
-  int get satzpunkteHeim =>
-      spiele.whereType<Spiel>().fold(0, (s, sp) => s + sp.punkteHeim);
+  int get satzpunkteHeim => spiele.whereType<Spiel>().fold(0, (s, sp) {
+    return s + sp.punkteHeim;
+  });
 
-  int get satzpunkteGast =>
-      spiele.whereType<Spiel>().fold(0, (s, sp) => s + sp.punkteGast);
+  int get satzpunkteGast => spiele.whereType<Spiel>().fold(0, (s, sp) {
+    return s + sp.punkteGast;
+  });
 
-  bool get istAbgeschlossen =>
-      spiele.every((s) => s != null && s.istAbgeschlossen);
+  bool get istAbgeschlossen => spiele.every((s) {
+    return s != null && s.istAbgeschlossen;
+  });
 
   // ── Ligapunkte ───────────────────────────────────────────────────
 
@@ -110,13 +113,21 @@ class Begegnung {
 
   int get toreHeim => spiele
       .whereType<Spiel>()
-      .expand((sp) => sp.saetze)
-      .fold(0, (sum, s) => sum + s.heimTore);
+      .expand((sp) {
+        return sp.saetze;
+      })
+      .fold(0, (sum, s) {
+        return sum + s.heimTore;
+      });
 
   int get toreGast => spiele
       .whereType<Spiel>()
-      .expand((sp) => sp.saetze)
-      .fold(0, (sum, s) => sum + s.gastTore);
+      .expand((sp) {
+        return sp.saetze;
+      })
+      .fold(0, (sum, s) {
+        return sum + s.gastTore;
+      });
 
   // ── JSON ─────────────────────────────────────────────────────────
 
@@ -125,7 +136,9 @@ class Begegnung {
     'heimTeamId': heimTeam.id,
     'gastTeamId': gastTeam.id,
     'istHinrunde': istHinrunde,
-    'spiele': spiele.map((s) => s?.toJson()).toList(),
+    'spiele': spiele.map((s) {
+      return s?.toJson();
+    }).toList(),
   };
 
   factory Begegnung.fromJson(
@@ -137,11 +150,9 @@ class Begegnung {
       heimTeam: teamsById[json['heimTeamId']]!,
       gastTeam: teamsById[json['gastTeamId']]!,
       istHinrunde: json['istHinrunde'] as bool,
-      spiele: (json['spiele'] as List<dynamic>)
-          .map(
-            (s) => s != null ? Spiel.fromJson(s as Map<String, dynamic>) : null,
-          )
-          .toList(),
+      spiele: (json['spiele'] as List<dynamic>).map((s) {
+        return s != null ? Spiel.fromJson(s as Map<String, dynamic>) : null;
+      }).toList(),
     );
   }
 

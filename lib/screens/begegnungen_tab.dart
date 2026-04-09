@@ -30,9 +30,11 @@ class _BegegnungenTabState extends State<BegegnungenTab>
       ...widget.liga.hinrunde,
       ...widget.liga.rueckrunde,
     ];
-    final aktiverSpieltag = alleSpieltage.where(
-      (st) => !st.begegnungen.every((b) => b.istAbgeschlossen),
-    ).firstOrNull;
+    final aktiverSpieltag = alleSpieltage
+        .where(
+          (st) => !st.begegnungen.every((b) => b.istAbgeschlossen),
+        )
+        .firstOrNull;
 
     int index = 0;
     final hinrundeWidgets = widget.liga.hinrunde.map((st) {

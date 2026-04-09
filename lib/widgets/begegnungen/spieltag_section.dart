@@ -20,7 +20,9 @@ class SpieltagSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final abgeschlossen = spieltag.begegnungen.every((b) => b.istAbgeschlossen);
+    final abgeschlossen = spieltag.begegnungen.every((b) {
+      return b.istAbgeschlossen;
+    });
 
     return Card(
       elevation: istAktiv ? 4 : null,
@@ -52,11 +54,13 @@ class SpieltagSection extends StatelessWidget {
           ),
           const Divider(height: 1),
           ...spieltag.begegnungen.indexed.map(
-            ((int, Begegnung) e) => BegegnungRow(
-              begegnung: e.$2,
-              heimLinks: (startIndex + e.$1).isEven,
-              onBegegnungGeaendert: onBegegnungGeaendert,
-            ),
+            ((int, Begegnung) e) {
+              return BegegnungRow(
+                begegnung: e.$2,
+                heimLinks: (startIndex + e.$1).isEven,
+                onBegegnungGeaendert: onBegegnungGeaendert,
+              );
+            },
           ),
           if (spieltag.freilos != null) FreilosRow(team: spieltag.freilos!),
           const SizedBox(height: 4),

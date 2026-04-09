@@ -13,15 +13,17 @@ class Team {
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
-    'spieler': spieler.map((s) => s.toJson()).toList(),
+    'spieler': spieler.map((s) {
+      return s.toJson();
+    }).toList(),
   };
 
   factory Team.fromJson(Map<String, dynamic> json) => Team(
     id: json['id'] as String,
     name: json['name'] as String,
-    spieler: (json['spieler'] as List<dynamic>)
-        .map((s) => Spieler.fromJson(s as Map<String, dynamic>))
-        .toList(),
+    spieler: (json['spieler'] as List<dynamic>).map((s) {
+      return Spieler.fromJson(s as Map<String, dynamic>);
+    }).toList(),
   );
 
   @override

@@ -44,7 +44,9 @@ class _LigaScreenState extends State<LigaScreen> {
             Expanded(
               child: Column(
                 children: [
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   const TabBar(
                     tabs: [
                       Tab(

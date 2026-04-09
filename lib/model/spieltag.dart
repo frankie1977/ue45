@@ -20,7 +20,9 @@ class Spieltag {
 
   /// Gibt einen neuen [Spieltag] zurück, bei dem [begegnung] ersetzt ist.
   Spieltag mitBegegnung(Begegnung begegnung) {
-    if (!begegnungen.any((b) => b.id == begegnung.id)) {
+    if (!begegnungen.any((b) {
+      return b.id == begegnung.id;
+    })) {
       return this;
     }
     return Spieltag(
@@ -38,7 +40,9 @@ class Spieltag {
     'nummer': nummer,
     'istHinrunde': istHinrunde,
     'freilosId': freilos?.id,
-    'begegnungen': begegnungen.map((b) => b.toJson()).toList(),
+    'begegnungen': begegnungen.map((b) {
+      return b.toJson();
+    }).toList(),
   };
 
   factory Spieltag.fromJson(
@@ -50,9 +54,9 @@ class Spieltag {
       nummer: json['nummer'] as int,
       istHinrunde: json['istHinrunde'] as bool,
       freilos: freilosId != null ? teamsById[freilosId] : null,
-      begegnungen: (json['begegnungen'] as List<dynamic>)
-          .map((b) => Begegnung.fromJson(b as Map<String, dynamic>, teamsById))
-          .toList(),
+      begegnungen: (json['begegnungen'] as List<dynamic>).map((b) {
+        return Begegnung.fromJson(b as Map<String, dynamic>, teamsById);
+      }).toList(),
     );
   }
 }
