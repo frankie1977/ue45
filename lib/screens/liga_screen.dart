@@ -105,7 +105,7 @@ class _LigaScreenState extends State<LigaScreen> {
                 Padding(
                   padding: .only(left: 20, top: 20, bottom: 10),
                   child: Text(
-                    'Ü45-Liga 2026',
+                    _liga.name,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: .bold,
