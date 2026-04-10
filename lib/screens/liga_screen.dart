@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/liga.dart';
-import 'package:ue45x/sample_data.dart';
 import 'package:ue45x/screens/begegnungen_tab.dart';
 import 'package:ue45x/screens/tabelle_tab.dart';
 import 'package:ue45x/screens/teams_tab.dart';
@@ -11,17 +10,25 @@ import 'package:ue45x/services/liga_speicher.dart';
 class LigaScreen extends StatefulWidget {
   const LigaScreen({
     required this.speicher,
+    required this.liga,
     super.key,
   });
 
   final LigaSpeicher speicher;
+  final Liga liga;
 
   @override
   State<LigaScreen> createState() => _LigaScreenState();
 }
 
 class _LigaScreenState extends State<LigaScreen> {
-  Liga _liga = buildSampleLiga();
+  late Liga _liga;
+
+  @override
+  void initState() {
+    super.initState();
+    _liga = widget.liga;
+  }
 
   void _begegnungGeaendert(Begegnung begegnung) {
     setState(() {

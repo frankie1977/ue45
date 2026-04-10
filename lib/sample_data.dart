@@ -94,10 +94,10 @@ Liga buildSampleLiga() {
     spieler: [g1, g2, g3, g4, g5],
   );
 
-  // return Liga.mitSpielplan(
-  //   name: 'Testliga2',
-  //   teams: [],
-  // );
+  return Liga.mitSpielplan(
+    name: 'Ü45-Liga 2026',
+    teams: [],
+  );
 
   // return Liga.mitSpielplan(
   //   name: 'Ü45-Liga 2026',

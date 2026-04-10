@@ -3,14 +3,24 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:ue45x/model/liga.dart';
+import 'package:ue45x/sample_data.dart';
 import 'package:ue45x/screens/liga_screen.dart';
 import 'package:ue45x/screens/login_screen.dart';
-import 'package:ue45x/services/liga_speicher.dart';
-import 'package:window_manager/window_manager.dart';
+import 'package:ue45x/services/liga_speicher_supabase.dart';
+
+const String _supabaseUrl = 'https://xnbdjjhzijorxijffron.supabase.co';
+const String _supabaseAnonKey =
+    'sb_publishable_8rlkviw-eypT8ejMyize3A_lpPaxtSy';
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: _supabaseUrl,
+    anonKey: _supabaseAnonKey,
+  );
 
   // if (isDesktop()) {
   //   await windowManager.ensureInitialized();
@@ -114,19 +124,50 @@ class _AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<_AppRoot> {
   bool _angemeldet = true;
-  final LigaSpeicher _speicher = LigaSpeicherStub();
+  final LigaSpeicherSupabase _speicher =
+      LigaSpeicherSupabase(Supabase.instance.client,);
+  Liga? _liga;
+
+  @override
+  void initState() {
+    super.initState();
+    _ligaLaden();
+  }
+
+  Future<void> _ligaLaden() async {
+    final Liga? geladen = await _speicher.laden('Ü45-Liga 2026');
+    final Liga liga = geladen ?? buildSampleLiga();
+    if (geladen == null) {
+      await _speicher.speichern(liga,);
+    }
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _liga = liga;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (_angemeldet) {
-      return LigaScreen(speicher: _speicher,);
+    if (!_angemeldet) {
+      return LoginScreen(
+        onAuthenticated: () {
+          setState(() {
+            _angemeldet = true;
+          });
+        },
+      );
     }
-    return LoginScreen(
-      onAuthenticated: () {
-        setState(() {
-          _angemeldet = true;
-        });
-      },
+    final Liga? liga = _liga;
+    if (liga == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator(),),
+      );
+    }
+    return LigaScreen(
+      speicher: _speicher,
+      liga: liga,
     );
   }
 }
