@@ -313,234 +313,231 @@ class _BegegnungRowState extends State<BegegnungRow> {
     final zuvielDoppelSlots = _zuvielDoppelSlots();
     final zuwenigSpielerWarnung = _hatZuwenigSpieler();
 
-    final hatDoppelteSpielerInIrgendemSpiel = SpielSlot.values.any((slot) {
-      final spiel = widget.begegnung.spielAt(slot);
-      return switch (spiel) {
-        Doppel(:final heimSpieler, :final gastSpieler) =>
-          (heimSpieler.length == 2 && heimSpieler[0].id == heimSpieler[1].id) ||
-              (gastSpieler.length == 2 &&
-                  gastSpieler[0].id == gastSpieler[1].id),
-        _ => false,
-      };
-    });
-    final hatWarnung =
-        duplikatSlots.isNotEmpty ||
-        duplikatEinzelSlots.isNotEmpty ||
-        zuvielDoppelSlots.isNotEmpty ||
-        zuwenigSpielerWarnung ||
-        hatDoppelteSpielerInIrgendemSpiel;
-
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              _expanded = !_expanded;
-            });
-          },
-          child: Padding(
-            padding: const .symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 150,
-                  child: Row(
-                    children: [
-                      Icon(
-                        _expanded
-                            ? Icons.keyboard_arrow_down
-                            : Icons.keyboard_arrow_right,
-                        size: 16,
-                        color: widget.begegnung.tisch == null
-                            ? theme.colorScheme.outline.withValues(alpha: 0.4)
-                            : theme.colorScheme.outline,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: .end,
-                    children: [
-                      Text(
-                        linksName,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: .bold,
+    return Material(
+      color: _expanded ? theme.colorScheme.surfaceContainerLow : Colors.transparent,
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                _expanded = !_expanded;
+              });
+            },
+            child: Padding(
+              padding: const .symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    child: Row(
+                      children: [
+                        Icon(
+                          _expanded
+                              ? Icons.arrow_drop_down
+                              : Icons.arrow_right,
+                          size: 30,
+                          color: theme.colorScheme.primary,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisAlignment: .center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          scoreLinks == 0 && scoreRechts == 0 && !done
-                              ? '–'
-                              : '$scoreLinks',
-                          textAlign: .right,
-                          style: done
-                              ? theme.textTheme.titleSmall?.copyWith(
-                                  fontWeight: .bold,
-                                  color: theme.colorScheme.primary,
-                                )
-                              : theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.outline,
-                                ),
-                        ),
-                      ),
-                      Text(
-                        ' : ',
-                        style: done
-                            ? theme.textTheme.titleSmall?.copyWith(
-                                fontWeight: .bold,
-                                color: theme.colorScheme.primary,
-                              )
-                            : theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.outline,
-                              ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          scoreLinks == 0 && scoreRechts == 0 && !done
-                              ? '–'
-                              : '$scoreRechts',
-                          style: done
-                              ? theme.textTheme.titleSmall?.copyWith(
-                                  fontWeight: .bold,
-                                  color: theme.colorScheme.primary,
-                                )
-                              : theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.outline,
-                                ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    rechtsName,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: .bold,
+                      ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 150,
-                  child: Row(
-                    mainAxisAlignment: .end,
-                    children: [
-                      InkWell(
-                        onTap: _tischWaehlen,
-                        child: widget.begegnung.tisch == null
-                            ? Text(
-                                'Tisch',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.primary,
-                                ),
-                              )
-                            : Chip(
-                                backgroundColor: theme.colorScheme.primary,
-                                shape: StadiumBorder(),
-                                label: Text(
-                                  widget.begegnung.tisch!.name,
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    color: Colors.white,
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: .end,
+                      children: [
+                        Text(
+                          linksName,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: .bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: .center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            scoreLinks == 0 && scoreRechts == 0 && !done
+                                ? '–'
+                                : '$scoreLinks',
+                            textAlign: .right,
+                            style: done
+                                ? theme.textTheme.titleSmall?.copyWith(
                                     fontWeight: .bold,
+                                    color: theme.colorScheme.primary,
+                                  )
+                                : theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.outline,
+                                  ),
+                          ),
+                        ),
+                        Text(
+                          ' : ',
+                          style: done
+                              ? theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: .bold,
+                                  color: theme.colorScheme.primary,
+                                )
+                              : theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.outline,
+                                ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            scoreLinks == 0 && scoreRechts == 0 && !done
+                                ? '–'
+                                : '$scoreRechts',
+                            style: done
+                                ? theme.textTheme.titleSmall?.copyWith(
+                                    fontWeight: .bold,
+                                    color: theme.colorScheme.primary,
+                                  )
+                                : theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.outline,
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      rechtsName,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: .bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 150,
+                    child: Row(
+                      mainAxisAlignment: .end,
+                      children: [
+                        InkWell(
+                          onTap: _tischWaehlen,
+                          child: widget.begegnung.tisch == null
+                              ? Text(
+                                  'Tisch',
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                )
+                              : Chip(
+                                  backgroundColor: theme.colorScheme.primary,
+                                  shape: StadiumBorder(),
+                                  label: Text(
+                                    widget.begegnung.tisch!.name,
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: .bold,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_expanded)
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  left: BorderSide(
+                    color: theme.colorScheme.primary,
+                    width: 3,
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  ...SpielSlot.values.expand((slot) {
+                    return [
+                      const Divider(height: 1, indent: 16, endIndent: 16),
+                      SpielDetail(
+                        slot: slot,
+                        spiel: widget.begegnung.spielAt(slot),
+                        heimLinks: heimLinks,
+                        linksTeam: heimLinks
+                            ? widget.begegnung.heimTeam
+                            : widget.begegnung.gastTeam,
+                        rechtsTeam: heimLinks
+                            ? widget.begegnung.gastTeam
+                            : widget.begegnung.heimTeam,
+                        onSatzGesetzt: (satzIndex, satz) {
+                          _satzSetzen(slot, satzIndex, satz);
+                        },
+                        onSatzGeloescht: (satzIndex) {
+                          _satzLoeschen(slot, satzIndex);
+                        },
+                        onSpielerGeandert: (neuesSpiel) {
+                          _spielerSetzen(slot, neuesSpiel);
+                        },
+                        hatDoppeltePaarung: duplikatSlots.contains(slot),
+                        hatDuplikatEinzel: duplikatEinzelSlots.contains(slot),
+                        hatZuvielDoppel: zuvielDoppelSlots.contains(slot),
+                        hatZuwenigSpieler:
+                            slot == SpielSlot.d4 && zuwenigSpielerWarnung,
+                      ),
+                    ];
+                  }),
+                  const Divider(height: 1, indent: 16, endIndent: 16),
+                  Padding(
+                    padding: const .symmetric(horizontal: 16, vertical: 6),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 30),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: Row(
+                            mainAxisAlignment: .center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  '$toreLinks',
+                                  textAlign: .right,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.outline,
                                   ),
                                 ),
                               ),
-                      ),
-                    ],
+                              Text(
+                                ' : ',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.outline,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '$toreRechts',
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.outline,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Expanded(child: SizedBox()),
+                        const SizedBox(width: 28),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (_expanded) ...[
-          ...SpielSlot.values.expand((slot) {
-            return [
-              const Divider(height: 1, indent: 16, endIndent: 16),
-              SpielDetail(
-                slot: slot,
-                spiel: widget.begegnung.spielAt(slot),
-                heimLinks: heimLinks,
-                linksTeam: heimLinks
-                    ? widget.begegnung.heimTeam
-                    : widget.begegnung.gastTeam,
-                rechtsTeam: heimLinks
-                    ? widget.begegnung.gastTeam
-                    : widget.begegnung.heimTeam,
-                onSatzGesetzt: (satzIndex, satz) {
-                  _satzSetzen(slot, satzIndex, satz);
-                },
-                onSatzGeloescht: (satzIndex) {
-                  _satzLoeschen(slot, satzIndex);
-                },
-                onSpielerGeandert: (neuesSpiel) {
-                  _spielerSetzen(slot, neuesSpiel);
-                },
-                hatDoppeltePaarung: duplikatSlots.contains(slot),
-                hatDuplikatEinzel: duplikatEinzelSlots.contains(slot),
-                hatZuvielDoppel: zuvielDoppelSlots.contains(slot),
-                hatZuwenigSpieler:
-                    slot == SpielSlot.d4 && zuwenigSpielerWarnung,
+                  const SizedBox(height: 16),
+                ],
               ),
-            ];
-          }),
-          const Divider(height: 1, indent: 16, endIndent: 16),
-          Padding(
-            padding: const .symmetric(horizontal: 16, vertical: 6),
-            child: Row(
-              children: [
-                const SizedBox(width: 30),
-                Expanded(
-                  child: SizedBox(),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisAlignment: .center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '$toreLinks',
-                          textAlign: .right,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.outline,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        ' : ',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.outline,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          '$toreRechts',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.outline,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Expanded(child: SizedBox()),
-                const SizedBox(width: 28),
-              ],
             ),
-          ),
-          const SizedBox(height: 16),
         ],
-      ],
+      ),
     );
   }
 }

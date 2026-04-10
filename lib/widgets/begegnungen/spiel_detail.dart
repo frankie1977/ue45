@@ -196,19 +196,23 @@ class SpielDetail extends StatelessWidget {
 
     final bool hatDoppelteSpieler = switch (spiel) {
       Doppel(:final heimSpieler, :final gastSpieler) =>
-        (heimSpieler.length == 2 &&
-            heimSpieler[0].id == heimSpieler[1].id) ||
-        (gastSpieler.length == 2 &&
-            gastSpieler[0].id == gastSpieler[1].id),
+        (heimSpieler.length == 2 && heimSpieler[0].id == heimSpieler[1].id) ||
+            (gastSpieler.length == 2 && gastSpieler[0].id == gastSpieler[1].id),
       _ => false,
     };
-    final bool zeigeWarnung = hatDoppelteSpieler || hatDoppeltePaarung || hatDuplikatEinzel || hatZuwenigSpieler || hatZuvielDoppel;
+    final bool zeigeWarnung =
+        hatDoppelteSpieler ||
+        hatDoppeltePaarung ||
+        hatDuplikatEinzel ||
+        hatZuwenigSpieler ||
+        hatZuvielDoppel;
 
     final List<String> warnTexte = [
       if (hatDoppelteSpieler) 'Gleiche/r Spieler:in zweimal im Doppel!',
       if (hatDoppeltePaarung) 'Paarung kommt mehrfach vor!',
       if (hatDuplikatEinzel) 'Spieler:in in mehr als 1 Einzel!',
-      if (hatZuwenigSpieler) 'Weniger als 5 verschiedene Spieler:innen pro Seite!',
+      if (hatZuwenigSpieler)
+        'Weniger als 5 verschiedene Spieler:innen pro Seite!',
       if (hatZuvielDoppel) 'Spieler:in in mehr als 2 Doppeln!',
     ];
 
@@ -347,44 +351,47 @@ class SpielDetail extends StatelessWidget {
                   children: [
                     i == 0 && zeigeWarnung
                         ? GestureDetector(
-                      onTap: () {
-                        showDialog<void>(
-                          context: context,
-                          builder: (ctx) {
-                            return AlertDialog(
-                              title: const Text(
-                                'Aufstellungsfehler',
-                              ),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  for (final text in warnTexte)
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 4,),
-                                      child: Text(text),
+                            onTap: () {
+                              showDialog<void>(
+                                context: context,
+                                builder: (ctx) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      'Aufstellungsfehler',
                                     ),
-                                ],
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(ctx);
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: const Icon(
-                        Icons.warning_rounded,
-                        size: 20,
-                        color: Colors.orange,
-                      ),
-                    )
-                        : Container()
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        for (final text in warnTexte)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 4,
+                                            ),
+                                            child: Text(text),
+                                          ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(ctx);
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: const Icon(
+                              Icons.warning_rounded,
+                              size: 20,
+                              color: Colors.orange,
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),

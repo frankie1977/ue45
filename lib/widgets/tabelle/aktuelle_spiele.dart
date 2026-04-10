@@ -63,9 +63,11 @@ class AktuelleSpiele extends StatelessWidget {
     if (spieler.isEmpty) {
       return '–';
     }
-    return spieler.map((s) {
-      return s.name;
-    }).join(' & ');
+    return spieler
+        .map((s) {
+          return s.name;
+        })
+        .join(' & ');
   }
 
   (String links, String rechts) _spielerTexte(
@@ -74,12 +76,14 @@ class AktuelleSpiele extends StatelessWidget {
   ) {
     return switch (spiel) {
       null => ('–', '–'),
-      Einzel(:final heimSpieler, :final gastSpieler) => heimLinks
-          ? (_einzelName(heimSpieler), _einzelName(gastSpieler))
-          : (_einzelName(gastSpieler), _einzelName(heimSpieler)),
-      Doppel(:final heimSpieler, :final gastSpieler) => heimLinks
-          ? (_doppelNamen(heimSpieler), _doppelNamen(gastSpieler))
-          : (_doppelNamen(gastSpieler), _doppelNamen(heimSpieler)),
+      Einzel(:final heimSpieler, :final gastSpieler) =>
+        heimLinks
+            ? (_einzelName(heimSpieler), _einzelName(gastSpieler))
+            : (_einzelName(gastSpieler), _einzelName(heimSpieler)),
+      Doppel(:final heimSpieler, :final gastSpieler) =>
+        heimLinks
+            ? (_doppelNamen(heimSpieler), _doppelNamen(gastSpieler))
+            : (_doppelNamen(gastSpieler), _doppelNamen(heimSpieler)),
     };
   }
 
@@ -103,7 +107,10 @@ class AktuelleSpiele extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10,),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
               child: Text(
                 'Aktuelle Spiele',
                 style: labelStyle,
@@ -180,4 +187,3 @@ class AktuelleSpiele extends StatelessWidget {
     );
   }
 }
-
