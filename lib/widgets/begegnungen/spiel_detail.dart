@@ -294,6 +294,7 @@ class SpielDetail extends StatelessWidget {
                                 linksSpielerName: linksSpielerAll,
                                 rechtsSpielerName: rechtsSpielerAll,
                                 heimLinks: heimLinks,
+                                initialSatz: satz,
                                 onLoeschen: () {
                                   loeschen = true;
                                   Navigator.pop(ctx);
@@ -340,47 +341,52 @@ class SpielDetail extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 28,
-                child: i == 0 && zeigeWarnung
-                    ? GestureDetector(
-                        onTap: () {
-                          showDialog<void>(
-                            context: context,
-                            builder: (ctx) {
-                              return AlertDialog(
-                                title: const Text(
-                                  'Aufstellungsfehler',
-                                ),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (final text in warnTexte)
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom: 4,),
-                                        child: Text(text),
-                                      ),
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(ctx);
-                                    },
-                                    child: const Text('OK'),
-                                  ),
+                width: 150,
+                child: Row(
+                  mainAxisAlignment: .end,
+                  children: [
+                    i == 0 && zeigeWarnung
+                        ? GestureDetector(
+                      onTap: () {
+                        showDialog<void>(
+                          context: context,
+                          builder: (ctx) {
+                            return AlertDialog(
+                              title: const Text(
+                                'Aufstellungsfehler',
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  for (final text in warnTexte)
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 4,),
+                                      child: Text(text),
+                                    ),
                                 ],
-                              );
-                            },
-                          );
-                        },
-                        child: const Icon(
-                          Icons.warning_rounded,
-                          size: 20,
-                          color: Colors.orange,
-                        ),
-                      )
-                    : null,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(ctx);
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(
+                        Icons.warning_rounded,
+                        size: 20,
+                        color: Colors.orange,
+                      ),
+                    )
+                        : Container()
+                  ],
+                ),
               ),
             ],
           ),

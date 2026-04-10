@@ -110,9 +110,9 @@ Liga buildSampleLiga() {
     ],
   );
 
-  final Tisch tisch1 = Tisch(id: 't1', name: 'Tisch 1 (Leo)');
-  final Tisch tisch2 = Tisch(id: 't2', name: 'Tisch 2 (Leo)');
-  final Tisch tisch3 = Tisch(id: 't3', name: 'Tisch 3 (Leo)');
+  final Tisch tisch1 = Tisch(id: 't1', name: 'Tisch 1');
+  final Tisch tisch2 = Tisch(id: 't2', name: 'Tisch 2');
+  final Tisch tisch3 = Tisch(id: 't3', name: 'Tisch 3');
 
   final Begegnung alte = liga.begegnungen.first;
 
@@ -122,6 +122,7 @@ Liga buildSampleLiga() {
       .mitTischHinzugefuegt(tisch3)
       .mitBegegnung(
         alte
+        .mitTisch(tisch1)
             .mitSpiel(
               SpielSlot.d1,
               Doppel(
@@ -216,10 +217,10 @@ Liga buildSampleLiga() {
                     heimTore: 6,
                     gastTore: 6,
                   ),
-                  Satz(
-                    heimTore: 7,
-                    gastTore: 0,
-                  ),
+                  // Satz(
+                  //   heimTore: 7,
+                  //   gastTore: 0,
+                  // ),
                 ],
               ),
             ),

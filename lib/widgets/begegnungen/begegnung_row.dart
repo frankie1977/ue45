@@ -248,7 +248,12 @@ class _BegegnungRowState extends State<BegegnungRow> {
                 onPressed: () {
                   Navigator.pop(ctx, (tisch: t));
                 },
-                child: Text(t.name),
+                child: Text(
+                  t.name,
+                  style: widget.begegnung.tisch == t
+                      ? const TextStyle(fontWeight: FontWeight.bold)
+                      : null,
+                ),
               );
             }),
             if (widget.begegnung.tisch != null) ...[
@@ -257,7 +262,12 @@ class _BegegnungRowState extends State<BegegnungRow> {
                 onPressed: () {
                   Navigator.pop(ctx, (tisch: null));
                 },
-                child: const Text('Kein Tisch'),
+                child: Text(
+                  'Kein Tisch',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
               ),
             ],
           ],
@@ -345,21 +355,6 @@ class _BegegnungRowState extends State<BegegnungRow> {
                             ? theme.colorScheme.outline.withValues(alpha: 0.4)
                             : theme.colorScheme.outline,
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: _tischWaehlen,
-                        child: Text(
-                          widget.begegnung.tisch?.name ?? 'Tisch',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: widget.begegnung.tisch == null
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.outline,
-                            fontWeight: .bold,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -367,10 +362,6 @@ class _BegegnungRowState extends State<BegegnungRow> {
                   child: Row(
                     mainAxisAlignment: .end,
                     children: [
-                      // Text(
-                      //   'Begegnung',
-                      //   style: theme.textTheme.bodyMedium,
-                      // ),
                       Text(
                         linksName,
                         style: theme.textTheme.bodyMedium?.copyWith(
@@ -429,20 +420,6 @@ class _BegegnungRowState extends State<BegegnungRow> {
                       ),
                     ],
                   ),
-                  // child: Text(
-                  //   scoreLinks == 0 && scoreRechts == 0 && !done
-                  //       ? '– : –'
-                  //       : '$scoreLinks : $scoreRechts',
-                  //   textAlign: .center,
-                  //   style: done
-                  //       ? theme.textTheme.titleSmall?.copyWith(
-                  //           fontWeight: .bold,
-                  //           color: theme.colorScheme.primary,
-                  //         )
-                  //       : theme.textTheme.bodyMedium?.copyWith(
-                  //           color: theme.colorScheme.outline,
-                  //         ),
-                  // ),
                 ),
                 Expanded(
                   child: Text(
@@ -453,14 +430,33 @@ class _BegegnungRowState extends State<BegegnungRow> {
                   ),
                 ),
                 SizedBox(
-                  width: 28,
-                  child: hatWarnung
-                      ? const Icon(
-                          Icons.warning_rounded,
-                          size: 20,
-                          color: Colors.orange,
-                        )
-                      : null,
+                  width: 150,
+                  child: Row(
+                    mainAxisAlignment: .end,
+                    children: [
+                      InkWell(
+                        onTap: _tischWaehlen,
+                        child: widget.begegnung.tisch == null
+                            ? Text(
+                                'Tisch',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.primary,
+                                ),
+                              )
+                            : Chip(
+                                backgroundColor: theme.colorScheme.primary,
+                                shape: StadiumBorder(),
+                                label: Text(
+                                  widget.begegnung.tisch!.name,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: .bold,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

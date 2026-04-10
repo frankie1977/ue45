@@ -3,6 +3,8 @@ import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/liga.dart';
 import 'package:ue45x/model/spiel.dart';
 import 'package:ue45x/model/spieler.dart';
+import 'package:ue45x/model/spieltag.dart';
+import 'package:ue45x/model/tisch.dart';
 
 class AktuelleSpiele extends StatelessWidget {
   const AktuelleSpiele({
@@ -31,43 +33,32 @@ class AktuelleSpiele extends StatelessWidget {
     return result;
   }
 
-  List<({Begegnung beg, SpielSlot slot})> _aktuelleGames() {
-    final seen = <String>{};
-    final result = <({Begegnung beg, SpielSlot slot})>[];
-    for (final team in liga.teams) {
-      bool gefunden = false;
-      for (final spieltag in liga.alleSpieltage) {
-        if (gefunden) {
-          break;
+  ({Begegnung? beg, SpielSlot? slot, Spieltag? spieltag}) _aktivFuerTisch(
+    Tisch tisch,
+  ) {
+    for (final st in liga.alleSpieltage) {
+      for (final beg in st.begegnungen) {
+        if (beg.tisch?.id != tisch.id) {
+          continue;
         }
-        for (final beg in spieltag.begegnungen) {
-          if (beg.heimTeam.id == team.id || beg.gastTeam.id == team.id) {
-            if (!beg.istAbgeschlossen) {
-              gefunden = true;
-              if (!seen.contains(beg.id)) {
-                seen.add(beg.id);
-                for (final slot in SpielSlot.values) {
-                  final spiel = beg.spielAt(slot);
-                  if (spiel == null || !spiel.istAbgeschlossen) {
-                    result.add((beg: beg, slot: slot));
-                    break;
-                  }
-                }
-              }
-            }
-            break;
+        if (beg.istAbgeschlossen) {
+          continue;
+        }
+        for (final slot in SpielSlot.values) {
+          final spiel = beg.spielAt(slot);
+          if (spiel == null || !spiel.istAbgeschlossen) {
+            return (beg: beg, slot: slot, spieltag: st);
           }
         }
+        return (beg: beg, slot: null, spieltag: st);
       }
     }
-    return result;
+    return (beg: null, slot: null, spieltag: null);
   }
 
-  String _spielerName(Spieler? spieler) {
-    return spieler?.name ?? '–';
-  }
+  String _einzelName(Spieler? spieler) => spieler?.name ?? '–';
 
-  String _spielerNamen(List<Spieler> spieler) {
+  String _doppelNamen(List<Spieler> spieler) {
     if (spieler.isEmpty) {
       return '–';
     }
@@ -76,15 +67,32 @@ class AktuelleSpiele extends StatelessWidget {
     }).join(' & ');
   }
 
+  (String links, String rechts) _spielerTexte(
+    Spiel? spiel,
+    bool heimLinks,
+  ) {
+    return switch (spiel) {
+      null => ('–', '–'),
+      Einzel(:final heimSpieler, :final gastSpieler) => heimLinks
+          ? (_einzelName(heimSpieler), _einzelName(gastSpieler))
+          : (_einzelName(gastSpieler), _einzelName(heimSpieler)),
+      Doppel(:final heimSpieler, :final gastSpieler) => heimLinks
+          ? (_doppelNamen(heimSpieler), _doppelNamen(gastSpieler))
+          : (_doppelNamen(gastSpieler), _doppelNamen(heimSpieler)),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
-    final spiele = _aktuelleGames();
-    if (spiele.isEmpty) {
+    if (liga.tische.isEmpty) {
       return const SizedBox.shrink();
     }
 
     final theme = Theme.of(context);
     final heimLinksMap = _heimLinksMap();
+    final labelStyle = theme.textTheme.labelSmall?.copyWith(
+      color: theme.colorScheme.outline,
+    );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -94,126 +102,71 @@ class AktuelleSpiele extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10,),
               child: Text(
-                'Nächste Spiele',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.outline,
-                ),
+                'Aktuelle Spiele',
+                style: labelStyle,
               ),
             ),
             const Divider(height: 1),
-            ...spiele.indexed.expand(
-              ((int, ({Begegnung beg, SpielSlot slot})) e) {
-                final idx = e.$1;
-                final beg = e.$2.beg;
-                final slot = e.$2.slot;
-                final heimLinks = heimLinksMap[beg.id] ?? true;
-                final spiel = beg.spielAt(slot);
-
-                final linksTeamName = heimLinks
-                    ? beg.heimTeam.name
-                    : beg.gastTeam.name;
-                final rechtsTeamName = heimLinks
-                    ? beg.gastTeam.name
-                    : beg.heimTeam.name;
-
-                final String linksText;
-                final String rechtsText;
-                switch (spiel) {
-                  case null:
-                    linksText = '–';
-                    rechtsText = '–';
-                  case Einzel(:final heimSpieler, :final gastSpieler):
-                    linksText = heimLinks
-                        ? _spielerName(heimSpieler)
-                        : _spielerName(gastSpieler);
-                    rechtsText = heimLinks
-                        ? _spielerName(gastSpieler)
-                        : _spielerName(heimSpieler);
-                  case Doppel(:final heimSpieler, :final gastSpieler):
-                    linksText = heimLinks
-                        ? _spielerNamen(heimSpieler)
-                        : _spielerNamen(gastSpieler);
-                    rechtsText = heimLinks
-                        ? _spielerNamen(gastSpieler)
-                        : _spielerNamen(heimSpieler);
-                }
+            ...liga.tische.indexed.expand(
+              ((int, Tisch) entry) {
+                final idx = entry.$1;
+                final tisch = entry.$2;
+                final (:beg, :slot, :spieltag) = _aktivFuerTisch(tisch);
 
                 return [
                   if (idx > 0) const Divider(height: 1),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                    padding: const .only(
+                      left: 8,
+                      right: 16,
+                      top: 8,
+                      bottom: 8,
                     ),
-                    child: Column(
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                linksTeamName,
-                                textAlign: .right,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontWeight: .bold,
+                        SizedBox(
+                          width: 100,
+                          child: Column(
+                            children: [
+                              Chip(
+                                backgroundColor: theme.colorScheme.primary,
+                                shape: StadiumBorder(),
+                                label: Text(
+                                  tisch.name,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: .bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 60,
-                              child: Text(
-                                slot.label,
-                                textAlign: .center,
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.outline,
-                                  fontWeight: .bold,
+
+                              if (spieltag != null)
+                                Text(
+                                  'Tag ${spieltag.nummer}',
+                                  style: labelStyle,
                                 ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                rechtsTeamName,
-                                textAlign: .left,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontWeight: .bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 2),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                linksText,
-                                textAlign: .right,
-                                style: theme.textTheme.bodySmall,
-                              ),
+                        if (beg == null)
+                          Expanded(
+                            child: Text(
+                              textAlign: .center,
+                              '(frei)',
+                              style: labelStyle,
                             ),
-                            SizedBox(
-                              width: 60,
-                              child: Text(
-                                'vs',
-                                textAlign: .center,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.outline,
-                                ),
-                              ),
+                          )
+                        else
+                          Expanded(
+                            child: _BegegnungInfo(
+                              beg: beg,
+                              slot: slot,
+                              heimLinks: heimLinksMap[beg.id] ?? true,
+                              spielerTexte: _spielerTexte,
                             ),
-                            Expanded(
-                              child: Text(
-                                rechtsText,
-                                textAlign: .left,
-                                style: theme.textTheme.bodySmall,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
                       ],
                     ),
                   ),
@@ -226,3 +179,96 @@ class AktuelleSpiele extends StatelessWidget {
     );
   }
 }
+
+class _BegegnungInfo extends StatelessWidget {
+  const _BegegnungInfo({
+    required this.beg,
+    required this.slot,
+    required this.heimLinks,
+    required this.spielerTexte,
+  });
+
+  final Begegnung beg;
+  final SpielSlot? slot;
+  final bool heimLinks;
+  final (String, String) Function(Spiel?, bool) spielerTexte;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final spiel = slot != null ? beg.spielAt(slot!) : null;
+    final (linksText, rechtsText) = spielerTexte(spiel, heimLinks);
+    final linksTeam = heimLinks ? beg.heimTeam.name : beg.gastTeam.name;
+    final rechtsTeam = heimLinks ? beg.gastTeam.name : beg.heimTeam.name;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                linksTeam,
+                textAlign: TextAlign.right,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 52,
+              child: Text(
+                slot?.label ?? '',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                rechtsTeam,
+                textAlign: TextAlign.left,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2,),
+        Row(
+          crossAxisAlignment: .start,
+          children: [
+            Expanded(
+              child: Text(
+                linksText,
+                textAlign: TextAlign.right,
+                style: theme.textTheme.bodySmall,
+              ),
+            ),
+            SizedBox(
+              width: 52,
+              child: Text(
+                'vs',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                rechtsText,
+                textAlign: TextAlign.left,
+                style: theme.textTheme.bodySmall,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+

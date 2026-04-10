@@ -39,12 +39,6 @@ class SpielerPickerDialog extends StatelessWidget {
             },
             child: Row(
               children: [
-                Icon(
-                  Icons.person_remove_outlined,
-                  size: 18,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                const SizedBox(width: 8),
                 Text(
                   'Spieler:in entfernen',
                   style: TextStyle(

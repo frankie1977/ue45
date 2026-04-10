@@ -10,6 +10,7 @@ class SatzPickerDialog extends StatefulWidget {
     required this.rechtsSpielerName,
     required this.heimLinks,
     required this.onLoeschen,
+    this.initialSatz,
     super.key,
   });
 
@@ -20,14 +21,25 @@ class SatzPickerDialog extends StatefulWidget {
   final String rechtsSpielerName;
   final bool heimLinks;
   final VoidCallback onLoeschen;
+  final Satz? initialSatz;
 
   @override
   State<SatzPickerDialog> createState() => _SatzPickerDialogState();
 }
 
 class _SatzPickerDialogState extends State<SatzPickerDialog> {
-  // true = links hat 7 gewählt, false = rechts hat 7, null = nichts
-  bool? _siebenLinks;
+  int? _linksGewaehlt;
+  int? _rechtsGewaehlt;
+
+  @override
+  void initState() {
+    super.initState();
+    final satz = widget.initialSatz;
+    if (satz != null) {
+      _linksGewaehlt = widget.heimLinks ? satz.heimTore : satz.gastTore;
+      _rechtsGewaehlt = widget.heimLinks ? satz.gastTore : satz.heimTore;
+    }
+  }
 
   Satz _satz(int linksTore, int rechtsTore) => widget.heimLinks
       ? Satz(heimTore: linksTore, gastTore: rechtsTore)
@@ -40,7 +52,8 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
       Navigator.pop(context, _satz(val, 7));
     } else {
       setState(() {
-        _siebenLinks = true;
+        _linksGewaehlt = 7;
+        _rechtsGewaehlt = null;
       });
     }
   }
@@ -52,7 +65,8 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
       Navigator.pop(context, _satz(7, val));
     } else {
       setState(() {
-        _siebenLinks = false;
+        _rechtsGewaehlt = 7;
+        _linksGewaehlt = null;
       });
     }
   }
@@ -119,7 +133,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                       color: theme.colorScheme.outline,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 20),
                   Row(
                     children: [7, 6, 5, 4, 3, 2, 1, 0].map(
                       (v) {
@@ -129,7 +143,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                             context,
                             val: v,
                             istLinks: true,
-                            hervorgehoben: v == 7 && _siebenLinks == true,
+                            hervorgehoben: v == _linksGewaehlt,
                           ),
                         );
                       },
@@ -161,7 +175,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                       color: theme.colorScheme.outline,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 20),
                   Row(
                     children: [0, 1, 2, 3, 4, 5, 6, 7].map(
                       (v) {
@@ -171,7 +185,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                             context,
                             val: v,
                             istLinks: false,
-                            hervorgehoben: v == 7 && _siebenLinks == false,
+                            hervorgehoben: v == _rechtsGewaehlt,
                           ),
                         );
                       },
@@ -181,15 +195,17 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          TextButton.icon(
+          const SizedBox(height: 20),
+          TextButton(
             onPressed: widget.onLoeschen,
-            icon: const Icon(
-              Icons.delete_outline,
-              size: 18,
+            child: Text(
+              'Löschen',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
-            label: const Text('Löschen'),
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );

@@ -19,7 +19,27 @@ class _LigaScreenState extends State<LigaScreen> {
 
   void _begegnungGeaendert(Begegnung begegnung) {
     setState(() {
-      _liga = _liga.mitBegegnung(begegnung);
+      final warAbgeschlossen = _liga.begegnungen
+          .firstWhere((b) {
+            return b.id == begegnung.id;
+          })
+          .istAbgeschlossen;
+
+      Liga neueLiga = _liga.mitBegegnung(begegnung);
+
+      final tisch = begegnung.tisch;
+      if (!warAbgeschlossen && begegnung.istAbgeschlossen && tisch != null) {
+        final naechste = neueLiga.begegnungen
+            .where((b) {
+              return b.tisch == null;
+            })
+            .firstOrNull;
+        if (naechste != null) {
+          neueLiga = neueLiga.mitBegegnung(naechste.mitTisch(tisch,),);
+        }
+      }
+
+      _liga = neueLiga;
     });
   }
 
