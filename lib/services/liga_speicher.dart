@@ -16,7 +16,11 @@ class LigaSpeicherStub extends LigaSpeicher {
   Future<void> persistieren(String json,) async {
     // TODO: json-String schreiben (Datei, Datenbank o. ä.)
 
+
     print('Speichern ----> ${json.length}');
+
+    // print(json);
+    // print('----');
 
   }
 }

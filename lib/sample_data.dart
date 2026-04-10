@@ -232,58 +232,59 @@ Liga buildSampleLiga() {
               ),
             ),
       );
-  final Begegnung zweite = liga.begegnungen[1];
-  liga = liga.mitBegegnung(
-    zweite
-        .mitSpiel(
-          SpielSlot.d1,
-          Doppel(
-            heimSpieler: [b1, b2],
-            gastSpieler: [e1, e2],
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.e1,
-          Einzel(
-            heimSpieler: b3,
-            gastSpieler: e3,
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.d2,
-          Doppel(
-            heimSpieler: [b3, b4],
-            gastSpieler: [e3, e4],
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.e2,
-          Einzel(
-            heimSpieler: b4,
-            gastSpieler: e4,
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.d3,
-          Doppel(
-            heimSpieler: [b1, b3],
-            gastSpieler: [e1, e3],
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.e3,
-          Einzel(
-            heimSpieler: b5,
-            gastSpieler: e5,
-          ),
-        )
-        .mitSpiel(
-          SpielSlot.d4,
-          Doppel(
-            heimSpieler: [b2, b5],
-            gastSpieler: [e2, e5],
-          ),
-        ),
-  );
+
+  // final Begegnung zweite = liga.begegnungen[1];
+  // liga = liga.mitBegegnung(
+  //   zweite
+  //       .mitSpiel(
+  //         SpielSlot.d1,
+  //         Doppel(
+  //           heimSpieler: [b1, b2],
+  //           gastSpieler: [e1, e2],
+  //         ),
+  //       )
+  //       .mitSpiel(
+  //         SpielSlot.e1,
+  //         Einzel(
+  //           heimSpieler: b3,
+  //           gastSpieler: e3,
+  //         ),
+  //       )
+  //       .mitSpiel(
+  //         SpielSlot.d2,
+  //         Doppel(
+  //           heimSpieler: [b3, b4],
+  //           gastSpieler: [e3, e4],
+  //         ),
+  //       )
+  //       .mitSpiel(
+  //         SpielSlot.e2,
+  //         Einzel(
+  //           heimSpieler: b4,
+  //           gastSpieler: e4,
+  //         ),
+  //       )
+  //       .mitSpiel(
+  //         SpielSlot.d3,
+  //         Doppel(
+  //           heimSpieler: [b1, b3],
+  //           gastSpieler: [e1, e3],
+  //         ),
+  //       )
+  //       .mitSpiel(
+  //         SpielSlot.e3,
+  //         Einzel(
+  //           heimSpieler: b5,
+  //           gastSpieler: e5,
+  //         ),
+  //       )
+  //       .mitSpiel(
+  //         SpielSlot.d4,
+  //         Doppel(
+  //           heimSpieler: [b2, b5],
+  //           gastSpieler: [e2, e5],
+  //         ),
+  //       ),
+  // );
   return liga;
 }

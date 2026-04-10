@@ -722,6 +722,10 @@ class Liga {
       return Team.fromJson(t as Map<String, dynamic>);
     }).toList();
     final teamsById = {for (final t in teams) t.id: t};
+    final spielerById = {
+      for (final t in teams)
+        for (final s in t.spieler) s.id: s,
+    };
 
     final tische = ((json['tische'] as List<dynamic>?) ?? []).map((t) {
       return Tisch.fromJson(t as Map<String, dynamic>);
@@ -737,6 +741,7 @@ class Liga {
             st as Map<String, dynamic>,
             teamsById,
             tischeById,
+            spielerById,
           );
         },
       ).toList(),
@@ -746,6 +751,7 @@ class Liga {
             st as Map<String, dynamic>,
             teamsById,
             tischeById,
+            spielerById,
           );
         },
       ).toList(),

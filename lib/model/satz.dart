@@ -43,13 +43,13 @@ class Satz {
   }
 
   Map<String, dynamic> toJson() => {
-    'heimTore': heimTore,
-    'gastTore': gastTore,
+    'heim': heimTore,
+    'gast': gastTore,
   };
 
   factory Satz.fromJson(Map<String, dynamic> json) => Satz(
-    heimTore: json['heimTore'] as int,
-    gastTore: json['gastTore'] as int,
+    heimTore: json['heim'] as int,
+    gastTore: json['gast'] as int,
   );
 
   @override

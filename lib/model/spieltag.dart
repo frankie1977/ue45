@@ -1,4 +1,5 @@
 import 'package:ue45x/model/begegnung.dart';
+import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
 import 'package:ue45x/model/tisch.dart';
 
@@ -39,8 +40,8 @@ class Spieltag {
 
   Map<String, dynamic> toJson() => {
     'nummer': nummer,
-    'istHinrunde': istHinrunde,
-    'freilosId': freilos?.id,
+    'hin': istHinrunde,
+    'frei': freilos?.id,
     'begegnungen': begegnungen.map((b) {
       return b.toJson();
     }).toList(),
@@ -50,17 +51,19 @@ class Spieltag {
     Map<String, dynamic> json,
     Map<String, Team> teamsById,
     Map<String, Tisch> tischeById,
+    Map<String, Spieler> spielerById,
   ) {
-    final freilosId = json['freilosId'] as String?;
+    final freilosId = json['frei'] as String?;
     return Spieltag(
       nummer: json['nummer'] as int,
-      istHinrunde: json['istHinrunde'] as bool,
+      istHinrunde: json['hin'] as bool,
       freilos: freilosId != null ? teamsById[freilosId] : null,
       begegnungen: (json['begegnungen'] as List<dynamic>).map((b) {
         return Begegnung.fromJson(
           b as Map<String, dynamic>,
           teamsById,
           tischeById,
+          spielerById,
         );
       }).toList(),
     );

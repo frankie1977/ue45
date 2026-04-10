@@ -16,10 +16,13 @@ sealed class Spiel {
 
   Map<String, dynamic> toJson();
 
-  factory Spiel.fromJson(Map<String, dynamic> json) {
+  factory Spiel.fromJson(
+    Map<String, dynamic> json,
+    Map<String, Spieler> spielerById,
+  ) {
     return switch (json['type'] as String) {
-      'einzel' => Einzel.fromJson(json),
-      'doppel' => Doppel.fromJson(json),
+      'einzel' => Einzel.fromJson(json, spielerById,),
+      'doppel' => Doppel.fromJson(json, spielerById,),
       final t => throw FormatException('Unbekannter Spiel-Typ: $t'),
     };
   }
@@ -57,21 +60,20 @@ class Einzel extends Spiel {
   @override
   Map<String, dynamic> toJson() => {
     'type': 'einzel',
-    'heimSpieler': heimSpieler?.toJson(),
-    'gastSpieler': gastSpieler?.toJson(),
+    'heim': heimSpieler?.id,
+    'gast': gastSpieler?.id,
     'satz': satz?.toJson(),
   };
 
-  factory Einzel.fromJson(Map<String, dynamic> json) {
+  factory Einzel.fromJson(
+    Map<String, dynamic> json,
+    Map<String, Spieler> spielerById,
+  ) {
     return Einzel(
-      heimSpieler: json['heimSpieler'] != null
-          ? Spieler.fromJson(json['heimSpieler'] as Map<String, dynamic>)
-          : null,
-      gastSpieler: json['gastSpieler'] != null
-          ? Spieler.fromJson(json['gastSpieler'] as Map<String, dynamic>)
-          : null,
+      heimSpieler: spielerById[json['heim'] as String?],
+      gastSpieler: spielerById[json['gast'] as String?],
       satz: json['satz'] != null
-          ? Satz.fromJson(json['satz'] as Map<String, dynamic>)
+          ? Satz.fromJson(json['satz'] as Map<String, dynamic>,)
           : null,
     );
   }
@@ -113,27 +115,30 @@ class Doppel extends Spiel {
   @override
   Map<String, dynamic> toJson() => {
     'type': 'doppel',
-    'heimSpieler': heimSpieler.map((s) {
-      return s.toJson();
+    'heim': heimSpieler.map((s) {
+      return s.id;
     }).toList(),
-    'gastSpieler': gastSpieler.map((s) {
-      return s.toJson();
+    'gast': gastSpieler.map((s) {
+      return s.id;
     }).toList(),
     'saetze': saetze.map((s) {
       return s.toJson();
     }).toList(),
   };
 
-  factory Doppel.fromJson(Map<String, dynamic> json) {
+  factory Doppel.fromJson(
+    Map<String, dynamic> json,
+    Map<String, Spieler> spielerById,
+  ) {
     return Doppel(
-      heimSpieler: (json['heimSpieler'] as List<dynamic>).map((s) {
-        return Spieler.fromJson(s as Map<String, dynamic>);
+      heimSpieler: (json['heim'] as List<dynamic>).map((id) {
+        return spielerById[id as String]!;
       }).toList(),
-      gastSpieler: (json['gastSpieler'] as List<dynamic>).map((s) {
-        return Spieler.fromJson(s as Map<String, dynamic>);
+      gastSpieler: (json['gast'] as List<dynamic>).map((id) {
+        return spielerById[id as String]!;
       }).toList(),
       saetze: (json['saetze'] as List<dynamic>).map((s) {
-        return Satz.fromJson(s as Map<String, dynamic>);
+        return Satz.fromJson(s as Map<String, dynamic>,);
       }).toList(),
     );
   }

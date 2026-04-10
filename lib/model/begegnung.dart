@@ -1,4 +1,5 @@
 import 'package:ue45x/model/spiel.dart';
+import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
 import 'package:ue45x/model/tisch.dart';
 
@@ -46,10 +47,6 @@ class Begegnung {
   /// null = Spiel noch nicht eingetragen.
   final List<Spiel?> spiele;
 
-  /// Zeitpunkt, zu dem das letzte Spiel abgeschlossen wurde.
-  /// null = Begegnung noch nicht vollständig.
-  final DateTime? abgeschlossenAm;
-
   Begegnung({
     required this.id,
     required this.heimTeam,
@@ -57,7 +54,6 @@ class Begegnung {
     required this.istHinrunde,
     this.tisch,
     List<Spiel?>? spiele,
-    this.abgeschlossenAm,
   }) : spiele =
            spiele ??
            List.filled(
@@ -74,26 +70,15 @@ class Begegnung {
     istHinrunde: istHinrunde,
     tisch: neuerTisch,
     spiele: spiele,
-    abgeschlossenAm: abgeschlossenAm,
   );
 
   /// Gibt eine neue [Begegnung] zurück, bei der [slot] mit [spiel] belegt ist.
-  /// [abgeschlossenAm] wird automatisch gesetzt bzw. gelöscht.
   Begegnung mitSpiel(
     SpielSlot slot,
     Spiel spiel,
   ) {
     final neueSpiele = List<Spiel?>.from(spiele);
     neueSpiele[slot.index] = spiel;
-    final neu = Begegnung(
-      id: id,
-      heimTeam: heimTeam,
-      gastTeam: gastTeam,
-      istHinrunde: istHinrunde,
-      tisch: tisch,
-      spiele: neueSpiele,
-    );
-    final zeitstempel = neu.istAbgeschlossen ? DateTime.now() : null;
     return Begegnung(
       id: id,
       heimTeam: heimTeam,
@@ -101,7 +86,6 @@ class Begegnung {
       istHinrunde: istHinrunde,
       tisch: tisch,
       spiele: neueSpiele,
-      abgeschlossenAm: zeitstempel,
     );
   }
 
@@ -171,33 +155,36 @@ class Begegnung {
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'heimTeamId': heimTeam.id,
-    'gastTeamId': gastTeam.id,
-    'istHinrunde': istHinrunde,
+    'heim': heimTeam.id,
+    'gast': gastTeam.id,
+    'hin': istHinrunde,
     'tischId': tisch?.id,
     'spiele': spiele.map((s) {
       return s?.toJson();
     }).toList(),
-    'abgeschlossenAm': abgeschlossenAm?.toIso8601String(),
   };
 
   factory Begegnung.fromJson(
     Map<String, dynamic> json,
     Map<String, Team> teamsById,
     Map<String, Tisch> tischeById,
+    Map<String, Spieler> spielerById,
   ) {
-    final String? tsRaw = json['abgeschlossenAm'] as String?;
     final String? tischId = json['tischId'] as String?;
     return Begegnung(
       id: json['id'] as String,
-      heimTeam: teamsById[json['heimTeamId']]!,
-      gastTeam: teamsById[json['gastTeamId']]!,
-      istHinrunde: json['istHinrunde'] as bool,
+      heimTeam: teamsById[json['heim']]!,
+      gastTeam: teamsById[json['gast']]!,
+      istHinrunde: json['hin'] as bool,
       tisch: tischId != null ? tischeById[tischId] : null,
       spiele: (json['spiele'] as List<dynamic>).map((s) {
-        return s != null ? Spiel.fromJson(s as Map<String, dynamic>) : null;
+        return s != null
+            ? Spiel.fromJson(
+                s as Map<String, dynamic>,
+                spielerById,
+              )
+            : null;
       }).toList(),
-      abgeschlossenAm: tsRaw != null ? DateTime.parse(tsRaw) : null,
     );
   }
 

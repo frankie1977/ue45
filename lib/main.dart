@@ -12,19 +12,18 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await windowManager.ensureInitialized();
-
-  final WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 600),
-    center: true,
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.maximize();
-    await windowManager.show();
-    await windowManager.focus();
-  });
-
+  // if (isDesktop()) {
+  //   await windowManager.ensureInitialized();
+  //   final WindowOptions windowOptions = const WindowOptions(
+  //     size: Size(800, 600),
+  //     center: true,
+  //   );
+  //   windowManager.waitUntilReadyToShow(windowOptions, () async {
+  //     await windowManager.maximize();
+  //     await windowManager.show();
+  //     await windowManager.focus();
+  //   });
+  // }
 
   runApp(const MyApp());
 }
