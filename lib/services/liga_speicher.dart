@@ -9,6 +9,8 @@ abstract class LigaSpeicher {
   }
 
   Future<void> persistieren(String json,);
+
+  Future<Liga?> laden(String name,) async => null;
 }
 
 class LigaSpeicherStub extends LigaSpeicher {
