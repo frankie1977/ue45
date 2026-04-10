@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
             fontWeight: .bold,
           ),
           displayMedium: GoogleFonts.roboto(
-            fontSize: 67,
+            fontSize: 68,
             fontWeight: .bold,
           ),
           displaySmall: GoogleFonts.roboto(
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
             fontWeight: .w600,
           ),
           headlineMedium: GoogleFonts.roboto(
-            fontSize: 41,
+            fontSize: 42,
             fontWeight: .w600,
           ),
           headlineSmall: GoogleFonts.roboto(
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             fontWeight: .w600,
           ),
           titleLarge: GoogleFonts.roboto(
-            fontSize: 31,
+            fontSize: 32,
             fontWeight: .w600,
           ),
           titleMedium: GoogleFonts.roboto(
@@ -59,17 +59,17 @@ class MyApp extends StatelessWidget {
             fontSize: 22,
           ),
           bodySmall: GoogleFonts.roboto(
-            fontSize: 19,
+            fontSize: 20,
           ),
           labelLarge: GoogleFonts.roboto(
             fontSize: 22,
             fontWeight: .w500,
           ),
           labelMedium: GoogleFonts.roboto(
-            fontSize: 19,
+            fontSize: 20,
           ),
           labelSmall: GoogleFonts.roboto(
-            fontSize: 17,
+            fontSize: 18,
           ),
         ),
       ),

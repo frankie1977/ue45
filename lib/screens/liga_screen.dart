@@ -19,23 +19,23 @@ class _LigaScreenState extends State<LigaScreen> {
 
   void _begegnungGeaendert(Begegnung begegnung) {
     setState(() {
-      final warAbgeschlossen = _liga.begegnungen
-          .firstWhere((b) {
-            return b.id == begegnung.id;
-          })
-          .istAbgeschlossen;
+      final warAbgeschlossen = _liga.begegnungen.firstWhere((b) {
+        return b.id == begegnung.id;
+      }).istAbgeschlossen;
 
       Liga neueLiga = _liga.mitBegegnung(begegnung);
 
       final tisch = begegnung.tisch;
       if (!warAbgeschlossen && begegnung.istAbgeschlossen && tisch != null) {
-        final naechste = neueLiga.begegnungen
-            .where((b) {
-              return b.tisch == null;
-            })
-            .firstOrNull;
+        final naechste = neueLiga.begegnungen.where((b) {
+          return b.tisch == null;
+        }).firstOrNull;
         if (naechste != null) {
-          neueLiga = neueLiga.mitBegegnung(naechste.mitTisch(tisch,),);
+          neueLiga = neueLiga.mitBegegnung(
+            naechste.mitTisch(
+              tisch,
+            ),
+          );
         }
       }
 
@@ -57,11 +57,7 @@ class _LigaScreenState extends State<LigaScreen> {
         body: Row(
           crossAxisAlignment: .start,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 3,
-              child: TabelleTab(liga: _liga),
-            ),
-            const VerticalDivider(width: 1),
+
             Expanded(
               child: Column(
                 children: [
@@ -101,6 +97,28 @@ class _LigaScreenState extends State<LigaScreen> {
                   ),
                 ],
               ),
+            ),
+            const VerticalDivider(width: 1),
+            Column(
+              crossAxisAlignment: .start,
+              children: [
+                Padding(
+                  padding: .only(left: 20, top: 20, bottom: 10),
+                  child: Text(
+                    'Ü45-Liga 2026',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: .bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 2.7,
+                    child: TabelleTab(liga: _liga),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

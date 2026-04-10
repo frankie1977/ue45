@@ -23,12 +23,15 @@ class SpieltagSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final abgeschlossen = spieltag.begegnungen.every((b) {
       return b.istAbgeschlossen;
     });
 
     return Card(
-      elevation: istAktiv ? 4 : null,
+      elevation: istAktiv ? 2 : null,
+      surfaceTintColor: istAktiv ? Colors.lightGreen : null,
       margin: const .symmetric(horizontal: 12, vertical: 8),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -39,19 +42,22 @@ class SpieltagSection extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text('Spieltag ${spieltag.nummer}'),
+                  child: Text(
+                    'Tag ${spieltag.nummer}',
+                  ),
                 ),
                 if (abgeschlossen)
-                  Icon(
-                    Icons.check_circle_outline,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 18,
+                  Text(
+                    '(Abgeschlossen)',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.outline,
+                      )
                   )
-                else
-                  const Icon(
-                    Icons.radio_button_unchecked,
-                    size: 18,
-                  ),
+                  // Icon(
+                  //   Icons.check_circle,
+                  //   color: Theme.of(context).colorScheme.primary,
+                  //   size: 22,
+                  // )
               ],
             ),
           ),

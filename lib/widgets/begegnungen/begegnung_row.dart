@@ -314,7 +314,9 @@ class _BegegnungRowState extends State<BegegnungRow> {
     final zuwenigSpielerWarnung = _hatZuwenigSpieler();
 
     return Material(
-      color: _expanded ? theme.colorScheme.surfaceContainerLow : Colors.transparent,
+      color: _expanded
+          ? theme.colorScheme.surfaceContainerLow
+          : Colors.transparent,
       child: Column(
         children: [
           InkWell(
@@ -332,9 +334,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                     child: Row(
                       children: [
                         Icon(
-                          _expanded
-                              ? Icons.arrow_drop_down
-                              : Icons.arrow_right,
+                          _expanded ? Icons.arrow_drop_down : Icons.arrow_right,
                           size: 30,
                           color: theme.colorScheme.primary,
                         ),
@@ -482,8 +482,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                         hatDoppeltePaarung: duplikatSlots.contains(slot),
                         hatDuplikatEinzel: duplikatEinzelSlots.contains(slot),
                         hatZuvielDoppel: zuvielDoppelSlots.contains(slot),
-                        hatZuwenigSpieler:
-                            slot == SpielSlot.d4 && zuwenigSpielerWarnung,
+                        hatZuwenigSpieler: zuwenigSpielerWarnung,
                       ),
                     ];
                   }),

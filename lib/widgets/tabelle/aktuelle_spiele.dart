@@ -102,6 +102,8 @@ class AktuelleSpiele extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Card(
+        elevation: 2,
+        surfaceTintColor: Colors.lightGreen,
         clipBehavior: Clip.antiAlias,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

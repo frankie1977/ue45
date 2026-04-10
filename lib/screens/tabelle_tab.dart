@@ -16,10 +16,8 @@ class TabelleTab extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: .start,
         children: [
-          SizedBox(
-            height: 20,
-          ),
           AktuelleSpiele(liga: liga),
           SizedBox(
             height: 20,
