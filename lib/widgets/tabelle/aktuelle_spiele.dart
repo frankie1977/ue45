@@ -5,6 +5,7 @@ import 'package:ue45x/model/spiel.dart';
 import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/spieltag.dart';
 import 'package:ue45x/model/tisch.dart';
+import 'package:ue45x/widgets/tabelle/begegnung_info.dart';
 
 class AktuelleSpiele extends StatelessWidget {
   const AktuelleSpiele({
@@ -160,7 +161,7 @@ class AktuelleSpiele extends StatelessWidget {
                           )
                         else
                           Expanded(
-                            child: _BegegnungInfo(
+                            child: BegegnungInfo(
                               beg: beg,
                               slot: slot,
                               heimLinks: heimLinksMap[beg.id] ?? true,
@@ -176,98 +177,6 @@ class AktuelleSpiele extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _BegegnungInfo extends StatelessWidget {
-  const _BegegnungInfo({
-    required this.beg,
-    required this.slot,
-    required this.heimLinks,
-    required this.spielerTexte,
-  });
-
-  final Begegnung beg;
-  final SpielSlot? slot;
-  final bool heimLinks;
-  final (String, String) Function(Spiel?, bool) spielerTexte;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final spiel = slot != null ? beg.spielAt(slot!) : null;
-    final (linksText, rechtsText) = spielerTexte(spiel, heimLinks);
-    final linksTeam = heimLinks ? beg.heimTeam.name : beg.gastTeam.name;
-    final rechtsTeam = heimLinks ? beg.gastTeam.name : beg.heimTeam.name;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                linksTeam,
-                textAlign: TextAlign.right,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 52,
-              child: Text(
-                slot?.label ?? '',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.outline,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                rechtsTeam,
-                textAlign: TextAlign.left,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 2,),
-        Row(
-          crossAxisAlignment: .start,
-          children: [
-            Expanded(
-              child: Text(
-                linksText,
-                textAlign: TextAlign.right,
-                style: theme.textTheme.bodySmall,
-              ),
-            ),
-            SizedBox(
-              width: 52,
-              child: Text(
-                'vs',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.outline,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                rechtsText,
-                textAlign: TextAlign.left,
-                style: theme.textTheme.bodySmall,
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
