@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ue45x/screens/liga_screen.dart';
 import 'package:ue45x/screens/login_screen.dart';
+import 'package:ue45x/services/liga_speicher.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -114,11 +115,12 @@ class _AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<_AppRoot> {
   bool _angemeldet = true;
+  final LigaSpeicher _speicher = LigaSpeicherStub();
 
   @override
   Widget build(BuildContext context) {
     if (_angemeldet) {
-      return const LigaScreen();
+      return LigaScreen(speicher: _speicher,);
     }
     return LoginScreen(
       onAuthenticated: () {

@@ -6,9 +6,15 @@ import 'package:ue45x/screens/begegnungen_tab.dart';
 import 'package:ue45x/screens/tabelle_tab.dart';
 import 'package:ue45x/screens/teams_tab.dart';
 import 'package:ue45x/screens/tische_tab.dart';
+import 'package:ue45x/services/liga_speicher.dart';
 
 class LigaScreen extends StatefulWidget {
-  const LigaScreen({super.key});
+  const LigaScreen({
+    required this.speicher,
+    super.key,
+  });
+
+  final LigaSpeicher speicher;
 
   @override
   State<LigaScreen> createState() => _LigaScreenState();
@@ -41,12 +47,14 @@ class _LigaScreenState extends State<LigaScreen> {
 
       _liga = neueLiga;
     });
+    widget.speicher.speichern(_liga);
   }
 
   void _ligaGeaendert(Liga liga) {
     setState(() {
       _liga = liga;
     });
+    widget.speicher.speichern(_liga);
   }
 
   @override
