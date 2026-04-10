@@ -13,6 +13,8 @@ Liga buildSampleLiga() {
   final a3 = Spieler(id: 'a3', vorname: 'Jonathan', nachname: 'Ullmann');
   final a4 = Spieler(id: 'a4', vorname: 'Dagmar', nachname: 'Rings');
   final a5 = Spieler(id: 'a5', vorname: 'Ilja', nachname: 'Laurillard');
+  final a6 = Spieler(id: 'a6', vorname: 'Jan-Ole', nachname: 'Kundoch');
+  final a7 = Spieler(id: 'a7', vorname: 'Til', nachname: 'Rehfeldt');
 
   // Team B – Blaue Blitze
   final b1 = Spieler(id: 'b1', vorname: 'Felix', nachname: 'Maier');
@@ -59,7 +61,7 @@ Liga buildSampleLiga() {
   final teamA = Team(
     id: 'tA',
     name: 'Bolzen Edel',
-    spieler: [a1, a2, a3, a4, a5],
+    spieler: [a1, a2, a3, a4, a5, a6, a7],
   );
   final teamB = Team(
     id: 'tB',
@@ -92,10 +94,10 @@ Liga buildSampleLiga() {
     spieler: [g1, g2, g3, g4, g5],
   );
 
-  return Liga.mitSpielplan(
-    name: 'Testliga2',
-    teams: [],
-  );
+  // return Liga.mitSpielplan(
+  //   name: 'Testliga2',
+  //   teams: [],
+  // );
 
   // return Liga.mitSpielplan(
   //   name: 'Ü45-Liga 2026',
@@ -148,7 +150,7 @@ Liga buildSampleLiga() {
             .mitSpiel(
               SpielSlot.e1,
               Einzel(
-                heimSpieler: a2,
+                heimSpieler: a6,
                 gastSpieler: b2,
                 satz: Satz(
                   heimTore: 7,
@@ -215,7 +217,7 @@ Liga buildSampleLiga() {
             .mitSpiel(
               SpielSlot.d4,
               Doppel(
-                heimSpieler: [a3, a5],
+                heimSpieler: [a6, a7],
                 gastSpieler: [b3, b5],
                 saetze: [
                   Satz(
