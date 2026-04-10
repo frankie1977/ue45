@@ -21,10 +21,15 @@ class LigaSpeicherSupabase extends LigaSpeicher {
   final SupabaseClient _client;
   static const String _tabelle = 'ligas';
 
-  LigaSpeicherSupabase(this._client,);
+  LigaSpeicherSupabase(
+    this._client,
+  );
 
   @override
-  Future<void> speichern(Liga liga,) async {
+  Future<void> speichern(
+    Liga liga,
+  ) async {
+    print('supa upsert');
     await _client.from(_tabelle).upsert(
       {
         'name': liga.name,
@@ -34,18 +39,48 @@ class LigaSpeicherSupabase extends LigaSpeicher {
   }
 
   @override
-  Future<Liga?> laden(String name,) async {
+  Future<Liga?> laden(
+    String name,
+  ) async {
+    print('supa load');
     final Map<String, dynamic>? row = await _client
         .from(_tabelle)
         .select('daten')
-        .eq('name', name,)
+        .eq(
+          'name',
+          name,
+        )
         .maybeSingle();
     if (row == null) {
       return null;
     }
-    return Liga.fromJson(row['daten'] as Map<String, dynamic>,);
+    return Liga.fromJson(
+      row['daten'] as Map<String, dynamic>,
+    );
   }
 
   @override
-  Future<void> persistieren(String json,) async {}
+  Stream<Liga?> aenderungen(
+    String name,
+  ) {
+    print('supa aenderung');
+    return _client
+        .from(_tabelle)
+        .stream(
+          primaryKey: ['name'],
+        )
+        .eq(
+          'name',
+          name,
+        )
+        .map((rows) {
+          if (rows.isEmpty) {
+            return null;
+          }
+          return Liga.fromJson(
+            rows.first['daten'] as Map<String, dynamic>,
+          );
+        });
+  }
+
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -15,7 +16,6 @@ const String _supabaseAnonKey =
     'sb_publishable_8rlkviw-eypT8ejMyize3A_lpPaxtSy';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
     url: _supabaseUrl,
@@ -124,23 +124,39 @@ class _AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<_AppRoot> {
   bool _angemeldet = true;
-  final LigaSpeicherSupabase _speicher =
-      LigaSpeicherSupabase(Supabase.instance.client,);
+  final LigaSpeicherSupabase _speicher = LigaSpeicherSupabase(
+    Supabase.instance.client,
+  );
+  StreamSubscription<Liga?>? _abonnement;
+
   Liga? _liga;
 
   @override
   void initState() {
     super.initState();
-    _ligaLaden();
+    _abonnement = _speicher
+        .aenderungen(
+          'Ü45-Liga 2026',
+        )
+        .listen(
+          _onLigaUpdate,
+        );
   }
 
-  Future<void> _ligaLaden() async {
-    final Liga? geladen = await _speicher.laden('Ü45-Liga 2026');
-    final Liga liga = geladen ?? buildSampleLiga();
-    if (geladen == null) {
-      await _speicher.speichern(liga,);
+  void _onLigaUpdate(
+    Liga? liga,
+  ) {
+    print('on liga update');
+    if (liga == null) {
+      print('liga is null, create new');
+      // TODO protect from deleting all data
+      _speicher.speichern(
+        buildSampleLiga(),
+      );
+      return;
     }
     if (!mounted) {
+      print('not mounted?');
       return;
     }
     setState(() {
@@ -149,7 +165,15 @@ class _AppRootState extends State<_AppRoot> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void dispose() {
+    _abonnement?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     if (!_angemeldet) {
       return LoginScreen(
         onAuthenticated: () {
@@ -162,7 +186,9 @@ class _AppRootState extends State<_AppRoot> {
     final Liga? liga = _liga;
     if (liga == null) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator(),),
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
     return LigaScreen(

@@ -30,6 +30,18 @@ class _LigaScreenState extends State<LigaScreen> {
     _liga = widget.liga;
   }
 
+  @override
+  void didUpdateWidget(
+    LigaScreen oldWidget,
+  ) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.liga != widget.liga) {
+      setState(() {
+        _liga = widget.liga;
+      });
+    }
+  }
+
   void _begegnungGeaendert(Begegnung begegnung) {
     setState(() {
       final warAbgeschlossen = _liga.begegnungen.firstWhere((b) {
