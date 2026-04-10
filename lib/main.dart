@@ -1,8 +1,30 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ue45x/screens/liga_screen.dart';
+import 'package:ue45x/screens/login_screen.dart';
+import 'package:window_manager/window_manager.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await windowManager.ensureInitialized();
+
+  final WindowOptions windowOptions = const WindowOptions(
+    size: Size(800, 600),
+    center: true,
+  );
+
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.maximize();
+    await windowManager.show();
+    await windowManager.focus();
+  });
+
+
   runApp(const MyApp());
 }
 
@@ -73,7 +95,37 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const LigaScreen(),
+      home: const _AppRoot(),
+    );
+  }
+}
+
+bool isDesktop() {
+  return !kIsWeb &&
+      (Platform.isWindows || Platform.isMacOS || Platform.isLinux);
+}
+
+class _AppRoot extends StatefulWidget {
+  const _AppRoot();
+
+  @override
+  State<_AppRoot> createState() => _AppRootState();
+}
+
+class _AppRootState extends State<_AppRoot> {
+  bool _angemeldet = true;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_angemeldet) {
+      return const LigaScreen();
+    }
+    return LoginScreen(
+      onAuthenticated: () {
+        setState(() {
+          _angemeldet = true;
+        });
+      },
     );
   }
 }
