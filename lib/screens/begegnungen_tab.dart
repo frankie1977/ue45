@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/liga.dart';
+import 'package:ue45x/model/spieltag.dart';
+import 'package:ue45x/model/tisch.dart';
 import 'package:ue45x/widgets/begegnungen/runde_header.dart';
 import 'package:ue45x/widgets/begegnungen/spieltag_section.dart';
 
@@ -36,31 +38,37 @@ class _BegegnungenTabState extends State<BegegnungenTab>
         )
         .firstOrNull;
 
-    final tische = widget.liga.tische;
-    int index = 0;
-    final hinrundeWidgets = widget.liga.hinrunde.map((st) {
-      final w = SpieltagSection(
-        spieltag: st,
-        startIndex: index,
-        tische: tische,
-        onBegegnungGeaendert: widget.onBegegnungGeaendert,
-        istAktiv: st == aktiverSpieltag,
+    final List<Tisch> tische = widget.liga.tische;
+
+    final List<Widget> hinrundeWidgets = [];
+    int hinIndex = 0;
+    for (final Spieltag st in widget.liga.hinrunde) {
+      hinrundeWidgets.add(
+        SpieltagSection(
+          spieltag: st,
+          startIndex: hinIndex,
+          tische: tische,
+          onBegegnungGeaendert: widget.onBegegnungGeaendert,
+          istAktiv: st == aktiverSpieltag,
+        ),
       );
-      index += st.begegnungen.length;
-      return w;
-    }).toList();
-    index = 0;
-    final rueckrundeWidgets = widget.liga.rueckrunde.map((st) {
-      final w = SpieltagSection(
-        spieltag: st,
-        startIndex: index,
-        tische: tische,
-        onBegegnungGeaendert: widget.onBegegnungGeaendert,
-        istAktiv: st == aktiverSpieltag,
+      hinIndex += st.begegnungen.length;
+    }
+
+    final List<Widget> rueckrundeWidgets = [];
+    int rueckIndex = 0;
+    for (final Spieltag st in widget.liga.rueckrunde) {
+      rueckrundeWidgets.add(
+        SpieltagSection(
+          spieltag: st,
+          startIndex: rueckIndex,
+          tische: tische,
+          onBegegnungGeaendert: widget.onBegegnungGeaendert,
+          istAktiv: st == aktiverSpieltag,
+        ),
       );
-      index += st.begegnungen.length;
-      return w;
-    }).toList();
+      rueckIndex += st.begegnungen.length;
+    }
 
     return ListView(
       children: [

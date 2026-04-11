@@ -196,31 +196,14 @@ class Liga {
       return t.id == teamId;
     });
     final neues = Team(id: altes.id, name: neuerName, spieler: altes.spieler);
-
-    Spieltag aktualisiereTag(Spieltag st) => Spieltag(
-      nummer: st.nummer,
-      istHinrunde: st.istHinrunde,
-      freilos: st.freilos?.id == teamId ? neues : st.freilos,
-      begegnungen: st.begegnungen.map(
-        (b) {
-          return Begegnung(
-            id: b.id,
-            heimTeam: b.heimTeam.id == teamId ? neues : b.heimTeam,
-            gastTeam: b.gastTeam.id == teamId ? neues : b.gastTeam,
-            istHinrunde: b.istHinrunde,
-            spiele: b.spiele,
-          );
-        },
-      ).toList(),
-    );
-
+    final (hinr, rueckr) = _tageMitTeam(neues);
     return Liga(
       name: name,
       teams: teams.map((t) {
         return t.id == teamId ? neues : t;
       }).toList(),
-      hinrunde: hinrunde.map(aktualisiereTag).toList(),
-      rueckrunde: rueckrunde.map(aktualisiereTag).toList(),
+      hinrunde: hinr,
+      rueckrunde: rueckr,
       tische: tische,
     );
   }
@@ -266,20 +249,15 @@ class Liga {
         ),
     };
 
+    final altesTeam = teams.firstWhere((t) {
+      return t.id == teamId;
+    });
     final neuesTeam = Team(
       id: teamId,
-      name: teams.firstWhere((t) {
-        return t.id == teamId;
-      }).name,
-      spieler: teams
-          .firstWhere((t) {
-            return t.id == teamId;
-          })
-          .spieler
-          .map((s) {
-            return s.id == aktualisiert.id ? aktualisiert : s;
-          })
-          .toList(),
+      name: altesTeam.name,
+      spieler: altesTeam.spieler.map((s) {
+        return s.id == aktualisiert.id ? aktualisiert : s;
+      }).toList(),
     );
     final (hinr, rueckr) = _tageMitTeam(neuesTeam);
 
@@ -448,59 +426,46 @@ class Liga {
     });
   }
 
-  int siegeVon(Team team) {
-    int siege = 0;
+  int _saetzeZaehlen(
+    Team team,
+    bool Function(Satz, bool) zaehlen,
+  ) {
+    int count = 0;
     for (final Begegnung b in abgeschlossen(team)) {
+      final bool istHeim = b.heimTeam == team;
       for (final Spiel? s in b.spiele) {
         if (s != null) {
           for (final Satz a in s.saetze) {
-            if (b.heimTeam == team) {
-              siege += (a.punkteHeim == 2 ? 1 : 0);
-            } else if (b.gastTeam == team) {
-              siege += (a.punkteGast == 2 ? 1 : 0);
+            if (zaehlen(a, istHeim)) {
+              count++;
             }
           }
         }
       }
     }
-    return siege;
+    return count;
   }
 
-  int niederlagenVon(Team team) {
-    int niederlagen = 0;
-    for (final Begegnung b in abgeschlossen(team)) {
-      for (final Spiel? s in b.spiele) {
-        if (s != null) {
-          for (final Satz a in s.saetze) {
-            if (b.heimTeam == team) {
-              niederlagen += (a.punkteHeim == 0 ? 1 : 0);
-            } else if (b.gastTeam == team) {
-              niederlagen += (a.punkteGast == 0 ? 1 : 0);
-            }
-          }
-        }
-      }
-    }
-    return niederlagen;
-  }
+  int siegeVon(Team team) => _saetzeZaehlen(
+    team,
+    (Satz a, bool istHeim) {
+      return istHeim ? a.punkteHeim == 2 : a.punkteGast == 2;
+    },
+  );
 
-  int unentschiedenVon(Team team) {
-    int unentschieden = 0;
-    for (final Begegnung b in abgeschlossen(team)) {
-      for (final Spiel? s in b.spiele) {
-        if (s != null) {
-          for (final Satz a in s.saetze) {
-            if (b.heimTeam == team) {
-              unentschieden += (a.punkteHeim == 1 ? 1 : 0);
-            } else if (b.gastTeam == team) {
-              unentschieden += (a.punkteGast == 1 ? 1 : 0);
-            }
-          }
-        }
-      }
-    }
-    return unentschieden;
-  }
+  int niederlagenVon(Team team) => _saetzeZaehlen(
+    team,
+    (Satz a, bool istHeim) {
+      return istHeim ? a.punkteHeim == 0 : a.punkteGast == 0;
+    },
+  );
+
+  int unentschiedenVon(Team team) => _saetzeZaehlen(
+    team,
+    (Satz a, bool istHeim) {
+      return a.istUnentschieden;
+    },
+  );
 
   int toreVon(Team team) {
     int fuer = 0;

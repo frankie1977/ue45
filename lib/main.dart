@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -110,11 +108,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-bool isDesktop() {
-  return !kIsWeb &&
-      (Platform.isWindows || Platform.isMacOS || Platform.isLinux);
-}
-
 class _AppRoot extends StatefulWidget {
   const _AppRoot();
 
@@ -123,8 +116,10 @@ class _AppRoot extends StatefulWidget {
 }
 
 class _AppRootState extends State<_AppRoot> {
+  
   bool _angemeldet = true;
-  final LigaSpeicherSupabase _speicher = LigaSpeicherSupabase(
+
+  final LigaSpeicherSupabase _supabase = LigaSpeicherSupabase(
     Supabase.instance.client,
   );
   StreamSubscription<Liga?>? _abonnement;
@@ -134,7 +129,7 @@ class _AppRootState extends State<_AppRoot> {
   @override
   void initState() {
     super.initState();
-    _abonnement = _speicher
+    _abonnement = _supabase
         .aenderungen(
           'Ü45-Liga 2026',
         )
@@ -146,17 +141,14 @@ class _AppRootState extends State<_AppRoot> {
   void _onLigaUpdate(
     Liga? liga,
   ) {
-    print('on liga update');
     if (liga == null) {
-      print('liga is null, create new');
       // TODO protect from deleting all data
-      _speicher.speichern(
+      _supabase.speichern(
         buildSampleLiga(),
       );
       return;
     }
     if (!mounted) {
-      print('not mounted?');
       return;
     }
     setState(() {
@@ -192,7 +184,7 @@ class _AppRootState extends State<_AppRoot> {
       );
     }
     return LigaScreen(
-      speicher: _speicher,
+      speicher: _supabase,
       liga: liga,
     );
   }

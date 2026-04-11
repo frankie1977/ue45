@@ -29,7 +29,6 @@ class LigaSpeicherSupabase extends LigaSpeicher {
   Future<void> speichern(
     Liga liga,
   ) async {
-    print('supa upsert');
     await _client.from(_tabelle).upsert(
       {
         'name': liga.name,
@@ -39,31 +38,9 @@ class LigaSpeicherSupabase extends LigaSpeicher {
   }
 
   @override
-  Future<Liga?> laden(
-    String name,
-  ) async {
-    print('supa load');
-    final Map<String, dynamic>? row = await _client
-        .from(_tabelle)
-        .select('daten')
-        .eq(
-          'name',
-          name,
-        )
-        .maybeSingle();
-    if (row == null) {
-      return null;
-    }
-    return Liga.fromJson(
-      row['daten'] as Map<String, dynamic>,
-    );
-  }
-
-  @override
   Stream<Liga?> aenderungen(
     String name,
   ) {
-    print('supa aenderung');
     return _client
         .from(_tabelle)
         .stream(
@@ -82,5 +59,4 @@ class LigaSpeicherSupabase extends LigaSpeicher {
           );
         });
   }
-
 }
