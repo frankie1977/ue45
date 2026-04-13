@@ -17,7 +17,9 @@ class BegegnungInfo extends StatelessWidget {
   final (String, String) Function(Spiel?, bool) spielerTexte;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final theme = Theme.of(context);
     final spiel = slot != null ? beg.spielAt(slot!) : null;
     final (linksText, rechtsText) = spielerTexte(spiel, heimLinks);
@@ -44,7 +46,7 @@ class BegegnungInfo extends StatelessWidget {
                 slot?.label ?? '',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.outline,
+                  color: theme.colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -60,7 +62,9 @@ class BegegnungInfo extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 2,),
+        const SizedBox(
+          height: 2,
+        ),
         Row(
           crossAxisAlignment: .start,
           children: [

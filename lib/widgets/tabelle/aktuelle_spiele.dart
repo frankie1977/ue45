@@ -57,11 +57,11 @@ class AktuelleSpiele extends StatelessWidget {
     return (beg: null, slot: null, spieltag: null);
   }
 
-  String _einzelName(Spieler? spieler) => spieler?.name ?? '–';
+  String _einzelName(Spieler? spieler) => spieler?.name ?? '?';
 
   String _doppelNamen(List<Spieler> spieler) {
     if (spieler.isEmpty) {
-      return '–';
+      return '?';
     }
     return spieler
         .map((s) {
@@ -75,7 +75,7 @@ class AktuelleSpiele extends StatelessWidget {
     bool heimLinks,
   ) {
     return switch (spiel) {
-      null => ('–', '–'),
+      null => ('?', '?'),
       Einzel(:final heimSpieler, :final gastSpieler) =>
         heimLinks
             ? (_einzelName(heimSpieler), _einzelName(gastSpieler))
@@ -88,7 +88,9 @@ class AktuelleSpiele extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     if (liga.tische.isEmpty) {
       return const SizedBox.shrink();
     }

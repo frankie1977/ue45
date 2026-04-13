@@ -22,7 +22,9 @@ class SpieltagSection extends StatelessWidget {
   final bool istAktiv;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final theme = Theme.of(context);
 
     final abgeschlossen = spieltag.begegnungen.every((b) {
@@ -42,22 +44,40 @@ class SpieltagSection extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    'Tag ${spieltag.nummer}',
+                  // child: Text(
+                  //   'Tag ${spieltag.nummer}',
+                  // ),
+                  child: Align(
+                    alignment: .centerLeft,
+                    child: Chip(
+                      side: BorderSide(
+                        color: theme.colorScheme.primary,
+                      ),
+                      materialTapTargetSize: .shrinkWrap,
+                      backgroundColor: Colors.transparent,
+                      label: Text(
+                        'Tag ${spieltag.nummer}',
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          // color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: .bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 if (abgeschlossen)
                   Text(
                     '(Abgeschlossen)',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.outline,
-                      )
-                  )
-                  // Icon(
-                  //   Icons.check_circle,
-                  //   color: Theme.of(context).colorScheme.primary,
-                  //   size: 22,
-                  // )
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.outline,
+                    ),
+                  ),
+                // Icon(
+                //   Icons.check_circle,
+                //   color: Theme.of(context).colorScheme.primary,
+                //   size: 22,
+                // )
               ],
             ),
           ),

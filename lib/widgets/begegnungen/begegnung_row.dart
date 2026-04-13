@@ -284,10 +284,14 @@ class _BegegnungRowState extends State<BegegnungRow> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final theme = Theme.of(context);
-    final done = widget.begegnung.istAbgeschlossen;
-    final heimLinks = widget.heimLinks;
+    final bool done = widget.begegnung.istAbgeschlossen;
+    final bool laeuft = widget.begegnung.laeuftGerade;
+    final bool heimLinks = widget.heimLinks;
+    final bool hatTisch = widget.begegnung.tisch != null;
 
     final linksName = heimLinks
         ? widget.begegnung.heimTeam.name
@@ -314,9 +318,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
     final zuwenigSpielerWarnung = _hatZuwenigSpieler();
 
     return Material(
-      color: _expanded
-          ? theme.colorScheme.surfaceContainerLow
-          : Colors.transparent,
+      color: Colors.transparent,
       child: Column(
         children: [
           InkWell(
@@ -348,7 +350,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                         Text(
                           linksName,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: .bold,
+                            fontWeight: done || !hatTisch ? .normal : .bold,
                           ),
                         ),
                       ],
@@ -371,7 +373,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                                     color: theme.colorScheme.primary,
                                   )
                                 : theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.outline,
+                                    color: theme.colorScheme.primary,
                                   ),
                           ),
                         ),
@@ -383,7 +385,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                                   color: theme.colorScheme.primary,
                                 )
                               : theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.outline,
+                                  color: theme.colorScheme.primary,
                                 ),
                         ),
                         Expanded(
@@ -397,7 +399,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                                     color: theme.colorScheme.primary,
                                   )
                                 : theme.textTheme.bodyMedium?.copyWith(
-                                    color: theme.colorScheme.outline,
+                                    color: theme.colorScheme.primary,
                                   ),
                           ),
                         ),
@@ -408,7 +410,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                     child: Text(
                       rechtsName,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: .bold,
+                        fontWeight: done || !hatTisch ? .normal : .bold,
                       ),
                     ),
                   ),
@@ -419,18 +421,21 @@ class _BegegnungRowState extends State<BegegnungRow> {
                       children: [
                         InkWell(
                           onTap: _tischWaehlen,
-                          child: widget.begegnung.tisch == null
+                          child: !hatTisch
                               ? Text(
-                                  'Tisch',
+                                  'Auf Tisch?',
                                   style: theme.textTheme.labelSmall?.copyWith(
                                     color: theme.colorScheme.primary,
                                   ),
                                 )
                               : Chip(
-                                  backgroundColor: theme.colorScheme.primary,
+                                  backgroundColor: done
+                                      ? theme.colorScheme.primary.withAlpha(100)
+                                      : theme.colorScheme.primary,
                                   shape: StadiumBorder(),
                                   label: Text(
                                     widget.begegnung.tisch!.name,
+                                    // laeuft.toString(),
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: Colors.white,
                                       fontWeight: .bold,
@@ -448,6 +453,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
           if (_expanded)
             Container(
               decoration: BoxDecoration(
+                color: Colors.black.withAlpha(5),
                 border: Border(
                   left: BorderSide(
                     color: theme.colorScheme.primary,
@@ -486,9 +492,16 @@ class _BegegnungRowState extends State<BegegnungRow> {
                       ),
                     ];
                   }),
-                  const Divider(height: 1, indent: 16, endIndent: 16),
+                  const Divider(
+                    height: 1,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
                   Padding(
-                    padding: const .symmetric(horizontal: 16, vertical: 6),
+                    padding: const .symmetric(
+                      horizontal: 16,
+                      vertical: 6,
+                    ),
                     child: Row(
                       children: [
                         const SizedBox(width: 30),

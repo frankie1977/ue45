@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
             fontSize: 24,
           ),
           bodyMedium: GoogleFonts.roboto(
-            fontSize: 22,
+            fontSize: 24,
           ),
           bodySmall: GoogleFonts.roboto(
             fontSize: 20,

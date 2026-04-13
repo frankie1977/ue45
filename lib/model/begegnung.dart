@@ -103,6 +103,14 @@ class Begegnung {
     return s != null && s.istAbgeschlossen;
   });
 
+  bool get laeuftGerade =>
+      !istAbgeschlossen &&
+      spiele.any((s) {
+        return s != null && s.saetze.any((satz) {
+          return satz.istAbgeschlossen;
+        });
+      });
+
   // ── Ligapunkte ───────────────────────────────────────────────────
 
   int get ligapunkteHeim {

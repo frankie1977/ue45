@@ -37,7 +37,11 @@ class SpielDetail extends StatelessWidget {
   final bool hatZuwenigSpieler;
   final bool hatZuvielDoppel;
 
-  Spiel _spielerAktualisieren(bool istHeim, int index, Spieler ausgewaehlt) {
+  Spiel _spielerAktualisieren(
+    bool istHeim,
+    int index,
+    Spieler ausgewaehlt,
+  ) {
     switch (spiel) {
       case null:
         return slot.istDoppel
@@ -72,7 +76,10 @@ class SpielDetail extends StatelessWidget {
     }
   }
 
-  Spiel _spielerEntfernen(bool istHeim, int index) {
+  Spiel _spielerEntfernen(
+    bool istHeim,
+    int index,
+  ) {
     switch (spiel) {
       case null:
         return spiel!;
@@ -116,7 +123,13 @@ class SpielDetail extends StatelessWidget {
       },
     );
     if (picked != null) {
-      onSpielerGeandert(_spielerAktualisieren(istHeim, index, picked));
+      onSpielerGeandert(
+        _spielerAktualisieren(
+          istHeim,
+          index,
+          picked,
+        ),
+      );
     }
   }
 
@@ -143,23 +156,43 @@ class SpielDetail extends StatelessWidget {
       );
     }
     return Align(
-      alignment: align == .end ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: align == .end ? .centerRight : .centerLeft,
       child: InkWell(
         onTap: () {
-          _spielerAuswaehlen(context, team, istHeim, index, null);
+          _spielerAuswaehlen(
+            context,
+            team,
+            istHeim,
+            index,
+            null,
+          );
         },
         borderRadius: BorderRadius.circular(12),
-        child: Icon(
-          Icons.person_add_outlined,
-          size: 18,
-          color: theme.colorScheme.primary,
+        child: Row(
+          mainAxisSize: .min,
+          children: [
+            Text(
+              'Wer spielt?',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            // Icon(
+            //   Icons.person_add_outlined,
+            //   size: 18,
+            //   color: theme.colorScheme.primary,
+            // ),
+          ],
+
         ),
       ),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     final theme = Theme.of(context);
 
     final List<Satz> saetze = switch (spiel) {
