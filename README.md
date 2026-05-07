@@ -5,8 +5,9 @@ cp -r build/web/* docs/
 
 
 TODO
-- supabase persistance
-- zugangsschutz 
+x zugangsschutz
+x supabase persistance
+- persistance fallback
 - mobile client version
 
 

@@ -43,7 +43,7 @@ class TeamCard extends StatelessWidget {
           mainAxisSize: .min,
           children: [
             IconButton(
-              icon: const Icon(Icons.edit_outlined),
+              icon: Icon(Icons.edit_outlined, color: theme.colorScheme.primary,),
               onPressed: onUmbenennen,
               tooltip: 'Umbenennen',
             ),
@@ -69,7 +69,10 @@ class TeamCard extends StatelessWidget {
                   mainAxisSize: .min,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.edit_outlined),
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        color: theme.colorScheme.primary,
+                      ),
                       onPressed: () {
                         onSpielerUmbenennen(s);
                       },
@@ -90,8 +93,16 @@ class TeamCard extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.person_add_outlined),
-            title: const Text('Spieler:in hinzufügen'),
+            leading: Icon(
+              Icons.person_add_outlined,
+              color: theme.colorScheme.primary,
+            ),
+            title: Text(
+              'Spieler:in hinzufügen',
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
+            ),
             onTap: onSpielerHinzufuegen,
           ),
         ],

@@ -28,7 +28,10 @@ class TischeTab extends StatelessWidget {
       final id = 'tisch_${DateTime.now().millisecondsSinceEpoch}';
       onLigaGeaendert(
         liga.mitTischHinzugefuegt(
-          Tisch(id: id, name: name,),
+          Tisch(
+            id: id,
+            name: name,
+          ),
         ),
       );
     }
@@ -46,7 +49,12 @@ class TischeTab extends StatelessWidget {
       },
     );
     if (neuerName != null && neuerName.isNotEmpty) {
-      onLigaGeaendert(liga.mitTischUmbenennt(tisch.id, neuerName,));
+      onLigaGeaendert(
+        liga.mitTischUmbenennt(
+          tisch.id,
+          neuerName,
+        ),
+      );
     }
   }
 
@@ -78,12 +86,17 @@ class TischeTab extends StatelessWidget {
       },
     );
     if (confirmed == true) {
-      onLigaGeaendert(liga.mitTischEntfernt(tisch.id,));
+      onLigaGeaendert(
+        liga.mitTischEntfernt(
+          tisch.id,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: liga.tische.isEmpty
           ? const Center(
@@ -93,27 +106,40 @@ class TischeTab extends StatelessWidget {
               itemCount: liga.tische.length,
               itemBuilder: (context, index) {
                 final tisch = liga.tische[index];
-                return ListTile(
-                  leading: const Icon(Icons.table_restaurant),
-                  title: Text(tisch.name),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        tooltip: 'Umbenennen',
-                        onPressed: () {
-                          _tischUmbenennen(context, tisch);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        tooltip: 'Entfernen',
-                        onPressed: () {
-                          _tischEntfernen(context, tisch);
-                        },
-                      ),
-                    ],
+                return Card(
+                  margin: const .symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.table_restaurant),
+                    title: Text(tisch.name),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.edit_outlined,
+                            color: theme.colorScheme.primary,
+                          ),
+                          tooltip: 'Umbenennen',
+                          onPressed: () {
+                            _tischUmbenennen(context, tisch);
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete_outline,
+                            color: theme.colorScheme.error,
+                          ),
+
+                          tooltip: 'Entfernen',
+                          onPressed: () {
+                            _tischEntfernen(context, tisch);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
