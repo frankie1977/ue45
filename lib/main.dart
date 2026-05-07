@@ -117,7 +117,7 @@ class _AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<_AppRoot> {
   
-  bool _angemeldet = true;
+  bool _angemeldet = false;
 
   final LigaSpeicherSupabase _supabase = LigaSpeicherSupabase(
     Supabase.instance.client,
