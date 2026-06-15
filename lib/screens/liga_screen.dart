@@ -6,6 +6,10 @@ import 'package:ue45x/screens/tabelle_tab.dart';
 import 'package:ue45x/screens/teams_tab.dart';
 import 'package:ue45x/screens/tische_tab.dart';
 import 'package:ue45x/services/liga_speicher.dart';
+import 'package:ue45x/widgets/tabelle/aktuelle_spiele.dart';
+import 'package:ue45x/widgets/tabelle/letzte_ergebnisse.dart';
+import 'package:ue45x/widgets/tabelle/tabelle_header.dart';
+import 'package:ue45x/widgets/tabelle/tabelle_row.dart';
 
 class LigaScreen extends StatefulWidget {
   const LigaScreen({
@@ -23,6 +27,7 @@ class LigaScreen extends StatefulWidget {
 
 class _LigaScreenState extends State<LigaScreen> {
   late Liga _liga;
+  bool _viewModus = false;
 
   @override
   void initState() {
@@ -76,79 +81,180 @@ class _LigaScreenState extends State<LigaScreen> {
     widget.speicher.speichern(_liga);
   }
 
+  Widget _titelMitUmschalter(BuildContext context) {
+    return Row(
+      mainAxisAlignment: .spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10,),
+          child: Text(
+            _liga.name,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: .bold,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 8, top: 10,),
+          child: IconButton(
+            icon: Icon(
+              _viewModus ? Icons.edit : Icons.visibility,
+            ),
+            tooltip: _viewModus ? 'Bearbeiten' : 'Anzeigemodus',
+            onPressed: () {
+              setState(() {
+                _viewModus = !_viewModus;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildViewModus(BuildContext context) {
+    final teams = _liga.tabelle;
+
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+        textScaler: TextScaler.linear(1.4),
+      ),
+      child: Column(
+        crossAxisAlignment: .stretch,
+        children: [
+          _titelMitUmschalter(context),
+          const Divider(height: 1,),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: .stretch,
+              children: [
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: .start,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16,),
+                          child: AktuelleSpiele(liga: _liga, viewModus: true,),
+                        ),
+                      ),
+                      const VerticalDivider(width: 1,),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16,),
+                          child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            child: Column(
+                              children: [
+                                const TabelleHeader(),
+                                const Divider(height: 1,),
+                                Expanded(
+                                  child: ListView.separated(
+                                    itemCount: teams.length,
+                                    separatorBuilder: (
+                                      BuildContext ctx,
+                                      int i,
+                                    ) {
+                                      return const Divider(height: 1,);
+                                    },
+                                    itemBuilder: (BuildContext ctx, int index) {
+                                      return TabelleRow(
+                                        rang: index + 1,
+                                        team: teams[index],
+                                        liga: _liga,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1,),
+                LetzteErgebnisse(liga: _liga, viewModus: true,),
+                const SizedBox(height: 8,),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEditModus(BuildContext context) {
+    return Row(
+      crossAxisAlignment: .start,
+      children: [
+        Expanded(
+          child: Column(
+            children: [
+              const SizedBox(height: 10,),
+              const TabBar(
+                tabs: [
+                  Tab(
+                    icon: Icon(Icons.sports_soccer, size: 32,),
+                    text: 'Spiele',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.groups, size: 32,),
+                    text: 'Anmeldung',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.table_restaurant, size: 32,),
+                    text: 'Tische',
+                  ),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    BegegnungenTab(
+                      liga: _liga,
+                      onBegegnungGeaendert: _begegnungGeaendert,
+                    ),
+                    TeamsTab(liga: _liga, onLigaGeaendert: _ligaGeaendert,),
+                    TischeTab(
+                      liga: _liga,
+                      onLigaGeaendert: _ligaGeaendert,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const VerticalDivider(width: 1,),
+        SizedBox(
+          width: MediaQuery.of(context).size.width / 2.7,
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              _titelMitUmschalter(context),
+              Expanded(
+                child: TabelleTab(liga: _liga,),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        body: Row(
-          crossAxisAlignment: .start,
-          children: [
-
-            Expanded(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  const TabBar(
-                    tabs: [
-                      Tab(
-                        icon: Icon(Icons.sports_soccer, size: 32),
-                        text: 'Spiele',
-                      ),
-                      Tab(
-                        icon: Icon(Icons.groups, size: 32),
-                        text: 'Anmeldung',
-                      ),
-                      Tab(
-                        icon: Icon(Icons.table_restaurant, size: 32),
-                        text: 'Tische',
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        BegegnungenTab(
-                          liga: _liga,
-                          onBegegnungGeaendert: _begegnungGeaendert,
-                        ),
-                        TeamsTab(liga: _liga, onLigaGeaendert: _ligaGeaendert),
-                        TischeTab(
-                          liga: _liga,
-                          onLigaGeaendert: _ligaGeaendert,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const VerticalDivider(width: 1),
-            Column(
-              crossAxisAlignment: .start,
-              children: [
-                Padding(
-                  padding: .only(left: 20, top: 20, bottom: 10),
-                  child: Text(
-                    _liga.name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: .bold,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 2.7,
-                    child: TabelleTab(liga: _liga),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+        body: _viewModus
+            ? _buildViewModus(context)
+            : _buildEditModus(context),
       ),
     );
   }

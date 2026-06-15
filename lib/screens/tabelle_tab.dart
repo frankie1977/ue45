@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ue45x/model/liga.dart';
 import 'package:ue45x/widgets/tabelle/aktuelle_spiele.dart';
+import 'package:ue45x/widgets/tabelle/letzte_ergebnisse.dart';
 import 'package:ue45x/widgets/tabelle/spieler_top_liste.dart';
 import 'package:ue45x/widgets/tabelle/tabelle_header.dart';
 import 'package:ue45x/widgets/tabelle/tabelle_row.dart';
@@ -51,7 +52,12 @@ class TabelleTab extends StatelessWidget {
             height: 20,
           ),
 
-          SpielerTopListe(liga: liga),
+          LetzteErgebnisse(liga: liga,),
+          SizedBox(
+            height: 20,
+          ),
+
+          SpielerTopListe(liga: liga,),
         ],
       ),
     );

@@ -10,10 +10,12 @@ import 'package:ue45x/widgets/tabelle/begegnung_info.dart';
 class AktuelleSpiele extends StatelessWidget {
   const AktuelleSpiele({
     required this.liga,
+    this.viewModus = false,
     super.key,
   });
 
   final Liga liga;
+  final bool viewModus;
 
   Map<String, bool> _heimLinksMap() {
     final result = <String, bool>{};
@@ -139,7 +141,7 @@ class AktuelleSpiele extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 100,
+                          width: 130,
                           child: Column(
                             children: [
                               Chip(
@@ -177,6 +179,7 @@ class AktuelleSpiele extends StatelessWidget {
                               slot: slot,
                               heimLinks: heimLinksMap[beg.id] ?? true,
                               spielerTexte: _spielerTexte,
+                              viewModus: viewModus,
                             ),
                           ),
                       ],

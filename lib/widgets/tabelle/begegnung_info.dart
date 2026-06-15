@@ -8,6 +8,7 @@ class BegegnungInfo extends StatelessWidget {
     required this.slot,
     required this.heimLinks,
     required this.spielerTexte,
+    this.viewModus = false,
     super.key,
   });
 
@@ -15,6 +16,7 @@ class BegegnungInfo extends StatelessWidget {
   final SpielSlot? slot;
   final bool heimLinks;
   final (String, String) Function(Spiel?, bool) spielerTexte;
+  final bool viewModus;
 
   @override
   Widget build(
@@ -40,14 +42,19 @@ class BegegnungInfo extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              width: 52,
-              child: Text(
-                slot?.label ?? '',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.bold,
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: viewModus ? 16.0 : 0.0,
+              ),
+              child: SizedBox(
+                width: 52,
+                child: Text(
+                  slot?.label ?? '',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -75,13 +82,18 @@ class BegegnungInfo extends StatelessWidget {
                 style: theme.textTheme.bodySmall,
               ),
             ),
-            SizedBox(
-              width: 52,
-              child: Text(
-                'vs',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.outline,
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: viewModus ? 16.0 : 0.0,
+              ),
+              child: SizedBox(
+                width: 52,
+                child: Text(
+                  'vs',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.outline,
+                  ),
                 ),
               ),
             ),
