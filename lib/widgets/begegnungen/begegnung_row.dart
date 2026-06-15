@@ -437,7 +437,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                                     widget.begegnung.tisch!.name,
                                     // laeuft.toString(),
                                     style: theme.textTheme.labelSmall?.copyWith(
-                                      color: Colors.white,
+                                      color: theme.colorScheme.onPrimary,
                                       fontWeight: .bold,
                                     ),
                                   ),

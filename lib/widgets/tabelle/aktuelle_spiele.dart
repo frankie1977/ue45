@@ -150,7 +150,7 @@ class AktuelleSpiele extends StatelessWidget {
                                 label: Text(
                                   tisch.name,
                                   style: theme.textTheme.labelSmall?.copyWith(
-                                    color: Colors.white,
+                                    color: theme.colorScheme.onPrimary,
                                     fontWeight: .bold,
                                   ),
                                 ),

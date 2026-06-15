@@ -8,6 +8,7 @@ import 'package:ue45x/screens/tische_tab.dart';
 import 'package:ue45x/services/liga_speicher.dart';
 import 'package:ue45x/widgets/tabelle/aktuelle_spiele.dart';
 import 'package:ue45x/widgets/tabelle/letzte_ergebnisse.dart';
+import 'package:ue45x/widgets/tabelle/spieler_top_liste.dart';
 import 'package:ue45x/widgets/tabelle/tabelle_header.dart';
 import 'package:ue45x/widgets/tabelle/tabelle_row.dart';
 
@@ -126,60 +127,69 @@ class _LigaScreenState extends State<LigaScreen> {
           _titelMitUmschalter(context),
           const Divider(height: 1,),
           Expanded(
-            child: Column(
+            child: Row(
               crossAxisAlignment: .stretch,
               children: [
                 Expanded(
-                  child: Row(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16,),
-                          child: AktuelleSpiele(liga: _liga, viewModus: true,),
-                        ),
-                      ),
-                      const VerticalDivider(width: 1,),
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16,),
+                  flex: 3,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: .stretch,
+                      children: [
+                        const SizedBox(height: 8,),
+                        AktuelleSpiele(liga: _liga, viewModus: true,),
+                        const SizedBox(height: 8,),
+                        LetzteErgebnisse(liga: _liga, viewModus: true,),
+                      ],
+                    ),
+                  ),
+                ),
+                const VerticalDivider(width: 1,),
+                Expanded(
+                  flex: 2,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: .stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0,),
                           child: Card(
                             clipBehavior: Clip.antiAlias,
                             child: Column(
                               children: [
                                 const TabelleHeader(),
                                 const Divider(height: 1,),
-                                Expanded(
-                                  child: ListView.separated(
-                                    itemCount: teams.length,
-                                    separatorBuilder: (
-                                      BuildContext ctx,
-                                      int i,
-                                    ) {
-                                      return const Divider(height: 1,);
-                                    },
-                                    itemBuilder: (BuildContext ctx, int index) {
-                                      return TabelleRow(
-                                        rang: index + 1,
-                                        team: teams[index],
-                                        liga: _liga,
-                                      );
-                                    },
-                                  ),
+                                ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: teams.length,
+                                  separatorBuilder: (
+                                    BuildContext ctx,
+                                    int i,
+                                  ) {
+                                    return const Divider(height: 1,);
+                                  },
+                                  itemBuilder: (
+                                    BuildContext ctx,
+                                    int index,
+                                  ) {
+                                    return TabelleRow(
+                                      rang: index + 1,
+                                      team: teams[index],
+                                      liga: _liga,
+                                    );
+                                  },
                                 ),
                               ],
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 8,),
+                        SpielerTopListe(liga: _liga,),
+                      ],
+                    ),
                   ),
                 ),
-                const Divider(height: 1,),
-                LetzteErgebnisse(liga: _liga, viewModus: true,),
-                const SizedBox(height: 8,),
               ],
             ),
           ),

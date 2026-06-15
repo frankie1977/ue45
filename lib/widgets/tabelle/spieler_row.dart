@@ -73,7 +73,7 @@ class SpielerRow extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 112,
+            width: 132,
             child: Text(
               '${stats.punkteGeholt} ($pct)',
               textAlign: TextAlign.center,
@@ -81,7 +81,7 @@ class SpielerRow extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 44,
+            width: 64,
             child: Text(
               torDiffText,
               textAlign: TextAlign.center,

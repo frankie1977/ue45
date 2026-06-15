@@ -52,7 +52,7 @@ class SpielerTopListe extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 112,
+                    width: 132,
                     child: Text(
                       'Pkt',
                       style: labelStyle,
@@ -60,9 +60,9 @@ class SpielerTopListe extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 44,
+                    width: 64,
                     child: Text(
-                      'Tore',
+                      '',
                       style: labelStyle,
                       textAlign: TextAlign.center,
                     ),

@@ -65,7 +65,7 @@ class TabelleRow extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 52,
+            width: 78,
             child: Text(
               '$tore:$gegenTore',
               textAlign: .center,
@@ -73,7 +73,7 @@ class TabelleRow extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 44,
+            width: 58,
             child: Text(
               liga.torDifferenzVon(team) > 0
                   ? '+${liga.torDifferenzVon(team)}'
