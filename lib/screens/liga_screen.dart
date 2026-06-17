@@ -103,6 +103,7 @@ class _LigaScreenState extends State<LigaScreen> {
             mainAxisSize: .min,
             children: [
               IconButton(
+                color: Theme.of(context).colorScheme.primary,
                 icon: const Icon(
                   Icons.receipt_long,
                 ),
@@ -112,6 +113,7 @@ class _LigaScreenState extends State<LigaScreen> {
                 },
               ),
               IconButton(
+                color: Theme.of(context).colorScheme.primary,
                 icon: Icon(
                   _viewModus ? Icons.edit : Icons.visibility,
                 ),
