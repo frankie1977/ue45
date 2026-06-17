@@ -2,11 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ue45x/model/liga.dart';
 import 'package:ue45x/sample_data.dart';
 import 'package:ue45x/screens/liga_screen.dart';
 import 'package:ue45x/screens/login_screen.dart';
+import 'package:ue45x/services/ergebnis_log.dart';
+import 'package:ue45x/services/liga_speicher_fallback.dart';
+import 'package:ue45x/services/liga_speicher_lokal.dart';
 import 'package:ue45x/services/liga_speicher_supabase.dart';
 
 const String _supabaseUrl = 'https://xnbdjjhzijorxijffron.supabase.co';
@@ -15,9 +19,19 @@ const String _supabaseAnonKey =
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(
-    url: _supabaseUrl,
-    anonKey: _supabaseAnonKey,
+  // Defensiv: schlaegt die Init offline fehl, startet die App trotzdem mit
+  // dem lokalen Cache. Die eigentlichen Netzwerk-Calls fangen wir spaeter ab.
+  try {
+    await Supabase.initialize(
+      url: _supabaseUrl,
+      anonKey: _supabaseAnonKey,
+    );
+  } catch (_) {
+    // Offline beim Start - weiter mit lokalem Fallback.
+  }
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  ErgebnisLog.initialisieren(
+    prefs,
   );
 
   // if (isDesktop()) {
@@ -33,7 +47,11 @@ void main() async {
   //   });
   // }
 
-  runApp(const MyApp());
+  runApp(
+    MyApp(
+      prefs: prefs,
+    ),
+  );
 }
 
 TextTheme _robotoTextTheme(TextTheme base) {
@@ -57,7 +75,12 @@ TextTheme _robotoTextTheme(TextTheme base) {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({
+    required this.prefs,
+    super.key,
+  });
+
+  final SharedPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -78,13 +101,19 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const _AppRoot(),
+      home: _AppRoot(
+        prefs: prefs,
+      ),
     );
   }
 }
 
 class _AppRoot extends StatefulWidget {
-  const _AppRoot();
+  const _AppRoot({
+    required this.prefs,
+  });
+
+  final SharedPreferences prefs;
 
   @override
   State<_AppRoot> createState() => _AppRootState();
@@ -94,8 +123,13 @@ class _AppRootState extends State<_AppRoot> {
   
   bool _angemeldet = true;
 
-  final LigaSpeicherSupabase _supabase = LigaSpeicherSupabase(
-    Supabase.instance.client,
+  late final LigaSpeicherFallback _speicher = LigaSpeicherFallback(
+    remote: LigaSpeicherSupabase(
+      Supabase.instance.client,
+    ),
+    lokal: LigaSpeicherLokal(
+      widget.prefs,
+    ),
   );
   StreamSubscription<Liga?>? _abonnement;
 
@@ -104,12 +138,16 @@ class _AppRootState extends State<_AppRoot> {
   @override
   void initState() {
     super.initState();
-    _abonnement = _supabase
+    _abonnement = _speicher
         .aenderungen(
           'Ü45-Liga 2026',
         )
         .listen(
           _onLigaUpdate,
+          onError: (Object fehler) {
+            // Stream-Fehler darf den App-Zustand nicht zerstoeren; der
+            // Fallback schaltet bereits auf Offline um.
+          },
         );
   }
 
@@ -117,10 +155,13 @@ class _AppRootState extends State<_AppRoot> {
     Liga? liga,
   ) {
     if (liga == null) {
-      // TODO protect from deleting all data
-      _supabase.speichern(
-        buildSampleLiga(),
-      );
+      // Sample-Daten NUR seeden, wenn Supabase online bestaetigt leer ist.
+      // Offline duerfen wir nichts schreiben (sonst Datenverlust-Gefahr).
+      if (!_speicher.istOffline.value) {
+        _speicher.speichern(
+          buildSampleLiga(),
+        );
+      }
       return;
     }
     if (!mounted) {
@@ -134,6 +175,7 @@ class _AppRootState extends State<_AppRoot> {
   @override
   void dispose() {
     _abonnement?.cancel();
+    _speicher.dispose();
     super.dispose();
   }
 
@@ -151,16 +193,84 @@ class _AppRootState extends State<_AppRoot> {
       );
     }
     final Liga? liga = _liga;
-    if (liga == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
+    return ValueListenableBuilder<bool>(
+      valueListenable: _speicher.istOffline,
+      builder: (context, offline, child) {
+        final Widget inhalt = liga == null
+            ? Scaffold(
+                body: Center(
+                  child: offline
+                      ? const Padding(
+                          padding: EdgeInsets.all(
+                            24,
+                          ),
+                          child: Text(
+                            'Supabase nicht erreichbar und keine lokale '
+                            'Kopie vorhanden.',
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : const CircularProgressIndicator(),
+                ),
+              )
+            : LigaScreen(
+                speicher: _speicher,
+                liga: liga,
+              );
+        return Column(
+          children: [
+            if (offline)
+              const _OfflineBanner(),
+            Expanded(
+              child: inhalt,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _OfflineBanner extends StatelessWidget {
+  const _OfflineBanner();
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    return Material(
+      color: Colors.orange.shade900,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
+          child: Row(
+            children: const [
+              Icon(
+                Icons.cloud_off,
+                size: 20,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: Text(
+                  'Offline – Ergebnisse werden lokal gespeichert und '
+                  'automatisch synchronisiert, sobald die Verbindung '
+                  'zurück ist.',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      );
-    }
-    return LigaScreen(
-      speicher: _supabase,
-      liga: liga,
+      ),
     );
   }
 }

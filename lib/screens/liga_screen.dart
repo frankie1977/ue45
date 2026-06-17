@@ -6,6 +6,7 @@ import 'package:ue45x/screens/tabelle_tab.dart';
 import 'package:ue45x/screens/teams_tab.dart';
 import 'package:ue45x/screens/tische_tab.dart';
 import 'package:ue45x/services/liga_speicher.dart';
+import 'package:ue45x/widgets/ergebnis_log_view.dart';
 import 'package:ue45x/widgets/tabelle/aktuelle_spiele.dart';
 import 'package:ue45x/widgets/tabelle/letzte_ergebnisse.dart';
 import 'package:ue45x/widgets/tabelle/spieler_top_liste.dart';
@@ -98,16 +99,30 @@ class _LigaScreenState extends State<LigaScreen> {
         ),
         Padding(
           padding: const EdgeInsets.only(right: 8, top: 10,),
-          child: IconButton(
-            icon: Icon(
-              _viewModus ? Icons.edit : Icons.visibility,
-            ),
-            tooltip: _viewModus ? 'Bearbeiten' : 'Anzeigemodus',
-            onPressed: () {
-              setState(() {
-                _viewModus = !_viewModus;
-              });
-            },
+          child: Row(
+            mainAxisSize: .min,
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.receipt_long,
+                ),
+                tooltip: 'Ergebnis-Log',
+                onPressed: () {
+                  oeffneErgebnisLog(context);
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  _viewModus ? Icons.edit : Icons.visibility,
+                ),
+                tooltip: _viewModus ? 'Bearbeiten' : 'Anzeigemodus',
+                onPressed: () {
+                  setState(() {
+                    _viewModus = !_viewModus;
+                  });
+                },
+              ),
+            ],
           ),
         ),
       ],

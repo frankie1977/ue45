@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ue45x/model/begegnung.dart';
 import 'package:ue45x/model/satz.dart';
 import 'package:ue45x/model/spiel.dart';
+import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/tisch.dart';
+import 'package:ue45x/services/ergebnis_log.dart';
 import 'package:ue45x/widgets/begegnungen/spiel_detail.dart';
 
 class BegegnungRow extends StatefulWidget {
@@ -43,9 +45,93 @@ class _BegegnungRowState extends State<BegegnungRow> {
         saetze: _saetzeAktualisiert(saetze, satzIndex, satz),
       ),
     };
+    _logErgebnis(
+      slot,
+      spiel,
+      _ergebnisTeilFuerSetzen(spiel, satzIndex, satz),
+    );
     widget.onBegegnungGeaendert(
       widget.begegnung.mitSpiel(slot, neuesSpiel),
     );
+  }
+
+  String _ergebnisTeilFuerSetzen(
+    Spiel spiel,
+    int satzIndex,
+    Satz satz,
+  ) {
+    final Satz? alt = _vorhandenerSatz(spiel, satzIndex);
+    final String neu = '${satz.heimTore}:${satz.gastTore}';
+    if (alt == null) {
+      return neu;
+    }
+    return '$neu (geändert, vorher ${alt.heimTore}:${alt.gastTore})';
+  }
+
+  Satz? _vorhandenerSatz(
+    Spiel spiel,
+    int satzIndex,
+  ) {
+    return switch (spiel) {
+      Einzel(:final satz) => satz,
+      Doppel(:final saetze) =>
+        satzIndex < saetze.length ? saetze[satzIndex] : null,
+    };
+  }
+
+  void _logErgebnis(
+    SpielSlot slot,
+    Spiel spiel,
+    String ergebnisTeil,
+  ) {
+    final DateTime jetzt = DateTime.now();
+    final String zeile =
+        '${_datum(jetzt)}, ${_uhrzeit(jetzt)}, ${slot.label}, '
+        '${_paarungText(spiel)}, $ergebnisTeil';
+    ErgebnisLog.instance.eintragen(
+      zeile,
+    );
+  }
+
+  String _paarungText(
+    Spiel spiel,
+  ) {
+    return switch (spiel) {
+      Einzel(:final heimSpieler, :final gastSpieler) =>
+        '${heimSpieler?.name ?? '?'} vs ${gastSpieler?.name ?? '?'}',
+      Doppel(:final heimSpieler, :final gastSpieler) =>
+        '${_doppelText(heimSpieler)} vs ${_doppelText(gastSpieler)}',
+    };
+  }
+
+  String _doppelText(
+    List<Spieler> spieler,
+  ) {
+    if (spieler.length >= 2) {
+      return '${spieler[0].name} (+${spieler[1].name})';
+    }
+    if (spieler.isNotEmpty) {
+      return spieler[0].name;
+    }
+    return '?';
+  }
+
+  String _datum(
+    DateTime d,
+  ) {
+    return '${_zweiStellig(d.day)}.${_zweiStellig(d.month)}.${d.year}';
+  }
+
+  String _uhrzeit(
+    DateTime d,
+  ) {
+    return '${_zweiStellig(d.hour)}:${_zweiStellig(d.minute)}';
+  }
+
+  String _zweiStellig(
+    int n,
+  ) {
+    return n.toString().padLeft(2, '0');
   }
 
   void _spielerSetzen(SpielSlot slot, Spiel neuesSpiel) {
@@ -56,6 +142,14 @@ class _BegegnungRowState extends State<BegegnungRow> {
     final spiel = widget.begegnung.spielAt(slot);
     if (spiel == null) {
       return;
+    }
+    final Satz? geloescht = _vorhandenerSatz(spiel, satzIndex);
+    if (geloescht != null) {
+      _logErgebnis(
+        slot,
+        spiel,
+        '${geloescht.heimTore}:${geloescht.gastTore} (gelöscht)',
+      );
     }
     final Spiel neuesSpiel = switch (spiel) {
       Einzel(:final heimSpieler, :final gastSpieler) => Einzel(
