@@ -124,8 +124,6 @@ class _SpielRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final heimGewinnt = spiel.punkteHeim > spiel.punkteGast;
-    final gastGewinnt = spiel.punkteGast > spiel.punkteHeim;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8,),
@@ -135,10 +133,7 @@ class _SpielRow extends StatelessWidget {
             child: Text(
               _heimText(),
               textAlign: TextAlign.right,
-              style: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: heimGewinnt ? FontWeight.bold : FontWeight.normal,
-                color: heimGewinnt ? theme.colorScheme.primary : null,
-              ),
+              style: theme.textTheme.bodySmall,
             ),
           ),
           Padding(
@@ -161,6 +156,7 @@ class _SpielRow extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
                   ),
                 ),
               ],
@@ -171,10 +167,7 @@ class _SpielRow extends StatelessWidget {
             child: Text(
               _gastText(),
               textAlign: TextAlign.left,
-              style: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: gastGewinnt ? FontWeight.bold : FontWeight.normal,
-                color: gastGewinnt ? theme.colorScheme.primary : null,
-              ),
+              style: theme.textTheme.bodySmall,
             ),
           ),
         ],

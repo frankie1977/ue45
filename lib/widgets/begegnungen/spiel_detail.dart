@@ -245,7 +245,7 @@ class SpielDetail extends StatelessWidget {
       if (hatDoppeltePaarung) 'Paarung kommt mehrfach vor!',
       if (hatDuplikatEinzel) 'Spieler:in in mehr als 1 Einzel!',
       if (hatZuwenigSpieler)
-        'Weniger als 5 verschiedene Spieler:innen pro Seite!',
+        'Weniger als 4 verschiedene Spieler:innen pro Seite!',
       if (hatZuvielDoppel) 'Spieler:in in mehr als 2 Doppeln!',
     ];
 

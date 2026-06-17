@@ -100,7 +100,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
             }
         }
       }
-      return spielerIds.length < 5;
+      return spielerIds.length < 4;
     }
 
     return pruefeSeite(istHeim: true) || pruefeSeite(istHeim: false);
@@ -373,6 +373,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                                     color: theme.colorScheme.primary,
                                   )
                                 : theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: .bold,
                                     color: theme.colorScheme.primary,
                                   ),
                           ),
@@ -385,6 +386,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                                   color: theme.colorScheme.primary,
                                 )
                               : theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: .bold,
                                   color: theme.colorScheme.primary,
                                 ),
                         ),
@@ -399,6 +401,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
                                     color: theme.colorScheme.primary,
                                   )
                                 : theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: .bold,
                                     color: theme.colorScheme.primary,
                                   ),
                           ),

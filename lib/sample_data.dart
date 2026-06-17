@@ -202,34 +202,6 @@ Liga buildSampleLiga() {
                   ),
                 ],
               ),
-            )
-            .mitSpiel(
-              SpielSlot.e3,
-              Einzel(
-                heimSpieler: a5,
-                gastSpieler: b5,
-                satz: Satz(
-                  heimTore: 3,
-                  gastTore: 6,
-                ),
-              ),
-            )
-            .mitSpiel(
-              SpielSlot.d4,
-              Doppel(
-                heimSpieler: [a6, a7],
-                gastSpieler: [b3, b5],
-                saetze: [
-                  Satz(
-                    heimTore: 5,
-                    gastTore: 5,
-                  ),
-                  // Satz(
-                  //   heimTore: 6,
-                  //   gastTore: 0,
-                  // ),
-                ],
-              ),
             ),
       );
 
