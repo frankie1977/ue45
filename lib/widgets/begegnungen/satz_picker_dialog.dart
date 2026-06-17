@@ -46,26 +46,26 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
       : Satz(heimTore: rechtsTore, gastTore: linksTore);
 
   void _onLinksGeklickt(BuildContext context, int val) {
-    if (val == 6) {
-      Navigator.pop(context, _satz(6, 6));
-    } else if (val < 7) {
-      Navigator.pop(context, _satz(val, 7));
+    if (val == 5) {
+      Navigator.pop(context, _satz(5, 5));
+    } else if (val < 6) {
+      Navigator.pop(context, _satz(val, 6));
     } else {
       setState(() {
-        _linksGewaehlt = 7;
+        _linksGewaehlt = 6;
         _rechtsGewaehlt = null;
       });
     }
   }
 
   void _onRechtsGeklickt(BuildContext context, int val) {
-    if (val == 6) {
-      Navigator.pop(context, _satz(6, 6));
-    } else if (val < 7) {
-      Navigator.pop(context, _satz(7, val));
+    if (val == 5) {
+      Navigator.pop(context, _satz(5, 5));
+    } else if (val < 6) {
+      Navigator.pop(context, _satz(6, val));
     } else {
       setState(() {
-        _rechtsGewaehlt = 7;
+        _rechtsGewaehlt = 6;
         _linksGewaehlt = null;
       });
     }
@@ -135,7 +135,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                   ),
                   const SizedBox(height: 20),
                   Row(
-                    children: [7, 6, 5, 4, 3, 2, 1, 0].map(
+                    children: [6, 5, 4, 3, 2, 1, 0].map(
                       (v) {
                         return Padding(
                           padding: const .symmetric(horizontal: 2),
@@ -177,7 +177,7 @@ class _SatzPickerDialogState extends State<SatzPickerDialog> {
                   ),
                   const SizedBox(height: 20),
                   Row(
-                    children: [0, 1, 2, 3, 4, 5, 6, 7].map(
+                    children: [0, 1, 2, 3, 4, 5, 6].map(
                       (v) {
                         return Padding(
                           padding: const .symmetric(horizontal: 2),

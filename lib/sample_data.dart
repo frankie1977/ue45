@@ -137,11 +137,11 @@ Liga buildSampleLiga() {
                 gastSpieler: [b1, b2],
                 saetze: [
                   Satz(
-                    heimTore: 6,
-                    gastTore: 6,
+                    heimTore: 5,
+                    gastTore: 5,
                   ),
                   Satz(
-                    heimTore: 7,
+                    heimTore: 6,
                     gastTore: 2,
                   ),
                 ],
@@ -153,7 +153,7 @@ Liga buildSampleLiga() {
                 heimSpieler: a6,
                 gastSpieler: b2,
                 satz: Satz(
-                  heimTore: 7,
+                  heimTore: 6,
                   gastTore: 3,
                 ),
               ),
@@ -165,12 +165,12 @@ Liga buildSampleLiga() {
                 gastSpieler: [b2, b3],
                 saetze: [
                   Satz(
-                    heimTore: 7,
+                    heimTore: 6,
                     gastTore: 3,
                   ),
                   Satz(
-                    heimTore: 7,
-                    gastTore: 5,
+                    heimTore: 6,
+                    gastTore: 4,
                   ),
                 ],
               ),
@@ -181,8 +181,8 @@ Liga buildSampleLiga() {
                 heimSpieler: a4,
                 gastSpieler: b4,
                 satz: Satz(
-                  heimTore: 7,
-                  gastTore: 5,
+                  heimTore: 6,
+                  gastTore: 4,
                 ),
               ),
             )
@@ -193,12 +193,12 @@ Liga buildSampleLiga() {
                 gastSpieler: [b4, b5],
                 saetze: [
                   Satz(
-                    heimTore: 7,
+                    heimTore: 6,
                     gastTore: 2,
                   ),
                   Satz(
                     heimTore: 4,
-                    gastTore: 7,
+                    gastTore: 6,
                   ),
                 ],
               ),
@@ -210,7 +210,7 @@ Liga buildSampleLiga() {
                 gastSpieler: b5,
                 satz: Satz(
                   heimTore: 3,
-                  gastTore: 7,
+                  gastTore: 6,
                 ),
               ),
             )
@@ -221,11 +221,11 @@ Liga buildSampleLiga() {
                 gastSpieler: [b3, b5],
                 saetze: [
                   Satz(
-                    heimTore: 6,
-                    gastTore: 6,
+                    heimTore: 5,
+                    gastTore: 5,
                   ),
                   // Satz(
-                  //   heimTore: 7,
+                  //   heimTore: 6,
                   //   gastTore: 0,
                   // ),
                 ],

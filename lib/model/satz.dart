@@ -1,5 +1,5 @@
-/// Ein Satz: bis max 7 Tore.
-/// 7:x (x < 7) → Sieg (2:0 Punkte), 6:6 → Unentschieden (1:1 Punkte).
+/// Ein Satz: bis max 6 Tore.
+/// 6:x (x < 6) → Sieg (2:0 Punkte), 5:5 → Unentschieden (1:1 Punkte).
 class Satz {
   final int heimTore;
   final int gastTore;
@@ -10,15 +10,15 @@ class Satz {
   });
 
   bool get istGueltig =>
-      (heimTore == 6 && gastTore == 6) ||
-      (heimTore == 7 && gastTore < 6 && gastTore >= 0) ||
-      (gastTore == 7 && heimTore < 6 && heimTore >= 0);
+      (heimTore == 5 && gastTore == 5) ||
+      (heimTore == 6 && gastTore < 5 && gastTore >= 0) ||
+      (gastTore == 6 && heimTore < 5 && heimTore >= 0);
 
-  bool get istUnentschieden => heimTore == 6 && gastTore == 6;
+  bool get istUnentschieden => heimTore == 5 && gastTore == 5;
 
-  bool get heimGewinnt => heimTore == 7 && gastTore < 7;
+  bool get heimGewinnt => heimTore == 6 && gastTore < 6;
 
-  bool get gastGewinnt => gastTore == 7 && heimTore < 7;
+  bool get gastGewinnt => gastTore == 6 && heimTore < 6;
 
   bool get istAbgeschlossen => heimGewinnt || gastGewinnt || istUnentschieden;
 
