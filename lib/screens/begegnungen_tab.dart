@@ -25,6 +25,16 @@ class _BegegnungenTabState extends State<BegegnungenTab>
   @override
   bool get wantKeepAlive => true;
 
+  final Set<String> _expandedIds = {};
+
+  void _expandToggle(String begegnungId) {
+    setState(() {
+      if (!_expandedIds.remove(begegnungId)) {
+        _expandedIds.add(begegnungId);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -49,6 +59,8 @@ class _BegegnungenTabState extends State<BegegnungenTab>
           startIndex: hinIndex,
           tische: tische,
           onBegegnungGeaendert: widget.onBegegnungGeaendert,
+          expandedIds: _expandedIds,
+          onExpandToggle: _expandToggle,
           istAktiv: st == aktiverSpieltag,
         ),
       );
@@ -64,6 +76,8 @@ class _BegegnungenTabState extends State<BegegnungenTab>
           startIndex: rueckIndex,
           tische: tische,
           onBegegnungGeaendert: widget.onBegegnungGeaendert,
+          expandedIds: _expandedIds,
+          onExpandToggle: _expandToggle,
           istAktiv: st == aktiverSpieltag,
         ),
       );

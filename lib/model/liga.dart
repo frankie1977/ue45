@@ -107,11 +107,25 @@ class Liga {
       rot[1] = last;
     }
 
+    // Rückrunde bekommt eine von der Hinrunde unabhängige, aber
+    // deterministische Reihenfolge: Spieltage um die halbe Rundenzahl
+    // rotieren und fortlaufend neu durchnummerieren.
+    final versatz = rounds ~/ 2;
+    final rueckrundeSortiert = <Spieltag>[
+      for (int i = 0; i < rueckrunde.length; i++)
+        Spieltag(
+          nummer: rounds + i + 1,
+          istHinrunde: false,
+          freilos: rueckrunde[(i + versatz) % rounds].freilos,
+          begegnungen: rueckrunde[(i + versatz) % rounds].begegnungen,
+        ),
+    ];
+
     return Liga(
       name: name,
       teams: teams,
       hinrunde: hinrunde,
-      rueckrunde: rueckrunde,
+      rueckrunde: rueckrundeSortiert,
       tische: tische,
     );
   }
@@ -186,6 +200,14 @@ class Liga {
         return s.saetze.isNotEmpty;
       });
     },
+  );
+
+  /// Würfelt die Team-Reihenfolge neu und erzeugt den Spielplan neu.
+  /// Nur sinnvoll, solange keine Ergebnisse eingetragen sind.
+  Liga mitGemischtemSpielplan() => Liga.mitSpielplan(
+    name: name,
+    teams: List<Team>.from(teams)..shuffle(),
+    tische: tische,
   );
 
   Liga mitTeamUmbenennt(

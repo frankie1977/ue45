@@ -178,9 +178,53 @@ class TeamsTab extends StatelessWidget {
     }
   }
 
+  Future<void> _spielplanNeuAuslosen(BuildContext context) async {
+    if (liga.aufgestellteSpielerIds.isNotEmpty) {
+      final bestaetigt = await showDialog<bool>(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: const Text('Neu auslosen'),
+            content: const Text(
+              'Beim Neu-Auslosen werden alle bisherigen '
+              'Aufstellungen zurückgesetzt. Fortfahren?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx, false);
+                },
+                child: const Text('Abbrechen'),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.pop(ctx, true);
+                },
+                child: const Text('Neu auslosen'),
+              ),
+            ],
+          );
+        },
+      );
+      if (bestaetigt != true) {
+        return;
+      }
+      if (!context.mounted) {
+        return;
+      }
+    }
+    onLigaGeaendert(liga.mitGemischtemSpielplan());
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Spielpaarungen neu ausgelost.'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final kannLoeschen = !liga.hatErgebnisse;
+    final darfAuslosen = !liga.hatErgebnisse && liga.teams.length >= 2;
     final aufgestellt = liga.aufgestellteSpielerIds;
     return Scaffold(
       body: ListView.builder(
@@ -210,11 +254,28 @@ class TeamsTab extends StatelessWidget {
         },
       ),
       floatingActionButton: kannLoeschen
-          ? FloatingActionButton(
-              onPressed: () {
-                _teamHinzufuegen(context);
-              },
-              child: const Icon(Icons.add),
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (darfAuslosen) ...[
+                  FloatingActionButton.small(
+                    heroTag: 'auslosen',
+                    tooltip: 'Spielpaarungen neu auslosen',
+                    onPressed: () {
+                      _spielplanNeuAuslosen(context);
+                    },
+                    child: const Icon(Icons.casino),
+                  ),
+                  const SizedBox(height: 12,),
+                ],
+                FloatingActionButton(
+                  heroTag: 'team',
+                  onPressed: () {
+                    _teamHinzufuegen(context);
+                  },
+                  child: const Icon(Icons.add),
+                ),
+              ],
             )
           : null,
     );

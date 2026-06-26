@@ -13,6 +13,8 @@ class BegegnungRow extends StatefulWidget {
     required this.heimLinks,
     required this.tische,
     required this.onBegegnungGeaendert,
+    required this.expanded,
+    required this.onExpandToggle,
     super.key,
   });
 
@@ -20,13 +22,14 @@ class BegegnungRow extends StatefulWidget {
   final bool heimLinks;
   final List<Tisch> tische;
   final void Function(Begegnung) onBegegnungGeaendert;
+  final bool expanded;
+  final VoidCallback onExpandToggle;
 
   @override
   State<BegegnungRow> createState() => _BegegnungRowState();
 }
 
 class _BegegnungRowState extends State<BegegnungRow> {
-  bool _expanded = false;
 
   void _satzSetzen(SpielSlot slot, int satzIndex, Satz satz) {
     final spiel = widget.begegnung.spielAt(slot);
@@ -417,9 +420,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
         children: [
           InkWell(
             onTap: () {
-              setState(() {
-                _expanded = !_expanded;
-              });
+              widget.onExpandToggle();
             },
             child: Padding(
               padding: const .symmetric(horizontal: 16, vertical: 8),
@@ -430,7 +431,9 @@ class _BegegnungRowState extends State<BegegnungRow> {
                     child: Row(
                       children: [
                         Icon(
-                          _expanded ? Icons.arrow_drop_down : Icons.arrow_right,
+                          widget.expanded
+                              ? Icons.arrow_drop_down
+                              : Icons.arrow_right,
                           size: 30,
                           color: theme.colorScheme.primary,
                         ),
@@ -547,7 +550,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
               ),
             ),
           ),
-          if (_expanded)
+          if (widget.expanded)
             Container(
               decoration: BoxDecoration(
                 color: Colors.black.withAlpha(5),

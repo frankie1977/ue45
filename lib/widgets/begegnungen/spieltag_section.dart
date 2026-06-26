@@ -11,6 +11,8 @@ class SpieltagSection extends StatelessWidget {
     required this.startIndex,
     required this.tische,
     required this.onBegegnungGeaendert,
+    required this.expandedIds,
+    required this.onExpandToggle,
     this.istAktiv = false,
     super.key,
   });
@@ -19,6 +21,8 @@ class SpieltagSection extends StatelessWidget {
   final int startIndex;
   final List<Tisch> tische;
   final void Function(Begegnung) onBegegnungGeaendert;
+  final Set<String> expandedIds;
+  final void Function(String) onExpandToggle;
   final bool istAktiv;
 
   @override
@@ -85,10 +89,15 @@ class SpieltagSection extends StatelessWidget {
           ...spieltag.begegnungen.indexed.map(
             ((int, Begegnung) e) {
               return BegegnungRow(
+                key: ValueKey(e.$2.id),
                 begegnung: e.$2,
                 heimLinks: (startIndex + e.$1).isEven,
                 tische: tische,
                 onBegegnungGeaendert: onBegegnungGeaendert,
+                expanded: expandedIds.contains(e.$2.id),
+                onExpandToggle: () {
+                  onExpandToggle(e.$2.id);
+                },
               );
             },
           ),
