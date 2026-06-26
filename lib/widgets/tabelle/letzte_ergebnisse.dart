@@ -16,7 +16,7 @@ class LetzteErgebnisse extends StatelessWidget {
   List<({Spiel spiel, SpielSlot slot, Begegnung beg})> _abgeschlosseneSpiele() {
     final result = <({Spiel spiel, SpielSlot slot, Begegnung beg})>[];
     for (final beg in liga.begegnungen) {
-      for (final slot in SpielSlot.values) {
+      for (final slot in beg.slots) {
         final spiel = beg.spielAt(slot);
         // Doppel schon ab dem ersten fertigen Satz zeigen (nicht erst,
         // wenn beide Sätze eingetragen sind).

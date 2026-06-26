@@ -3,13 +3,16 @@ import 'package:ue45x/model/spieler.dart';
 import 'package:ue45x/model/team.dart';
 import 'package:ue45x/model/tisch.dart';
 
-/// Reihenfolge der Spiele in einer Begegnung: D1, E1, D2, E2, D3.
+/// Mögliche Spiele einer Begegnung in fester Reihenfolge.
+/// 5er-Format nutzt D1..D3, 7er-Format zusätzlich E3, D4.
 enum SpielSlot {
   d1,
   e1,
   d2,
   e2,
   d3,
+  e3,
+  d4,
 }
 
 extension SpielSlotLabel on SpielSlot {
@@ -19,18 +22,21 @@ extension SpielSlotLabel on SpielSlot {
     SpielSlot.d2 => 'D2',
     SpielSlot.e2 => 'E2',
     SpielSlot.d3 => 'D3',
+    SpielSlot.e3 => 'E3',
+    SpielSlot.d4 => 'D4',
   };
 
   bool get istDoppel =>
       this == SpielSlot.d1 ||
       this == SpielSlot.d2 ||
-      this == SpielSlot.d3;
+      this == SpielSlot.d3 ||
+      this == SpielSlot.d4;
 }
 
 /// Eine Begegnung zwischen zwei Teams (Hin- oder Rückrunde).
 ///
-/// Enthält 5 Spiele in fester Reihenfolge: D1, E1, D2, E2, D3.
-/// Pro Begegnung sind max. 16 Punkte zu vergeben (8 Sätze × 2).
+/// Enthält je nach Liga-Format 5 (D1,E1,D2,E2,D3) oder 7 Spiele
+/// (zusätzlich E3,D4). Die Länge von [spiele] bestimmt das Format.
 class Begegnung {
   final String id;
   final Team heimTeam;
@@ -38,7 +44,7 @@ class Begegnung {
   final bool istHinrunde;
   final Tisch? tisch;
 
-  /// 5 Slots, Index entspricht [SpielSlot].
+  /// 5 oder 7 Slots, Index entspricht [SpielSlot].
   /// null = Spiel noch nicht eingetragen.
   final List<Spiel?> spiele;
 
@@ -52,9 +58,12 @@ class Begegnung {
   }) : spiele =
            spiele ??
            List.filled(
-             SpielSlot.values.length,
+             5,
              null,
            );
+
+  /// Die in dieser Begegnung aktiven Slots (5 oder 7), je nach Format.
+  List<SpielSlot> get slots => SpielSlot.values.take(spiele.length).toList();
 
   Spiel? spielAt(SpielSlot slot) => spiele[slot.index];
 

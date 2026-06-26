@@ -174,39 +174,9 @@ class _BegegnungRowState extends State<BegegnungRow> {
     );
   }
 
-  bool _hatZuwenigSpieler() {
-    bool pruefeSeite({required bool istHeim}) {
-      final Set<String> spielerIds = {};
-      for (final slot in SpielSlot.values) {
-        final spiel = widget.begegnung.spielAt(slot);
-        switch (spiel) {
-          case null:
-            return false;
-          case Einzel(:final heimSpieler, :final gastSpieler):
-            final spieler = istHeim ? heimSpieler : gastSpieler;
-            if (spieler == null) {
-              return false;
-            }
-            spielerIds.add(spieler.id);
-          case Doppel(:final heimSpieler, :final gastSpieler):
-            final spieler = istHeim ? heimSpieler : gastSpieler;
-            if (spieler.length != 2) {
-              return false;
-            }
-            for (final s in spieler) {
-              spielerIds.add(s.id);
-            }
-        }
-      }
-      return spielerIds.length < 4;
-    }
-
-    return pruefeSeite(istHeim: true) || pruefeSeite(istHeim: false);
-  }
-
   Set<SpielSlot> _duplikatPaarungSlots() {
     final Map<String, List<SpielSlot>> paarungen = {};
-    for (final slot in SpielSlot.values) {
+    for (final slot in widget.begegnung.slots) {
       final spiel = widget.begegnung.spielAt(slot);
       if (spiel is! Doppel) {
         continue;
@@ -239,50 +209,10 @@ class _BegegnungRowState extends State<BegegnungRow> {
     return result;
   }
 
-  Set<SpielSlot> _zuvielDoppelSlots() {
-    final Map<String, List<SpielSlot>> heim = {};
-    final Map<String, List<SpielSlot>> gast = {};
-    for (final slot in SpielSlot.values) {
-      if (!slot.istDoppel) {
-        continue;
-      }
-      final spiel = widget.begegnung.spielAt(slot);
-      if (spiel is! Doppel) {
-        continue;
-      }
-      for (final s in spiel.heimSpieler) {
-        heim
-            .putIfAbsent(s.id, () {
-              return <SpielSlot>[];
-            })
-            .add(slot);
-      }
-      for (final s in spiel.gastSpieler) {
-        gast
-            .putIfAbsent(s.id, () {
-              return <SpielSlot>[];
-            })
-            .add(slot);
-      }
-    }
-    final result = <SpielSlot>{};
-    for (final slots in heim.values) {
-      if (slots.length > 2) {
-        result.addAll(slots);
-      }
-    }
-    for (final slots in gast.values) {
-      if (slots.length > 2) {
-        result.addAll(slots);
-      }
-    }
-    return result;
-  }
-
   Set<SpielSlot> _duplikatEinzelSpielerSlots() {
     final Map<String, List<SpielSlot>> heim = {};
     final Map<String, List<SpielSlot>> gast = {};
-    for (final slot in SpielSlot.values) {
+    for (final slot in widget.begegnung.slots) {
       final spiel = widget.begegnung.spielAt(slot);
       if (spiel is! Einzel) {
         continue;
@@ -412,8 +342,6 @@ class _BegegnungRowState extends State<BegegnungRow> {
 
     final duplikatSlots = _duplikatPaarungSlots();
     final duplikatEinzelSlots = _duplikatEinzelSpielerSlots();
-    final zuvielDoppelSlots = _zuvielDoppelSlots();
-    final zuwenigSpielerWarnung = _hatZuwenigSpieler();
 
     return Material(
       color: Colors.transparent,
@@ -564,7 +492,7 @@ class _BegegnungRowState extends State<BegegnungRow> {
               ),
               child: Column(
                 children: [
-                  ...SpielSlot.values.expand((slot) {
+                  ...widget.begegnung.slots.expand((slot) {
                     return [
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       SpielDetail(
@@ -588,8 +516,6 @@ class _BegegnungRowState extends State<BegegnungRow> {
                         },
                         hatDoppeltePaarung: duplikatSlots.contains(slot),
                         hatDuplikatEinzel: duplikatEinzelSlots.contains(slot),
-                        hatZuvielDoppel: zuvielDoppelSlots.contains(slot),
-                        hatZuwenigSpieler: zuwenigSpielerWarnung,
                       ),
                     ];
                   }),

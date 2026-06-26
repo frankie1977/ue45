@@ -221,37 +221,98 @@ class TeamsTab extends StatelessWidget {
     );
   }
 
+  void _formatAendern(int anzahl) {
+    if (anzahl == liga.anzahlSpiele) {
+      return;
+    }
+    onLigaGeaendert(liga.mitAnzahlSpiele(anzahl));
+  }
+
+  Widget _formatLeiste(BuildContext context) {
+    final theme = Theme.of(context);
+    final darfAendern = !liga.hatErgebnisse;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20,),
+      child: Row(
+        children: [
+          Text(
+            'Spielmodus',
+            style: theme.textTheme.labelLarge,
+          ),
+          const SizedBox(width: 16,),
+          SegmentedButton<int>(
+            segments: const [
+              ButtonSegment<int>(
+                value: 5,
+                label: Text('5 Spiele'),
+              ),
+              ButtonSegment<int>(
+                value: 7,
+                label: Text('7 Spiele'),
+              ),
+            ],
+            selected: {liga.anzahlSpiele},
+            onSelectionChanged: darfAendern
+                ? (auswahl) {
+                    _formatAendern(auswahl.first);
+                  }
+                : null,
+          ),
+          if (!darfAendern) ...[
+            const SizedBox(width: 12,),
+            Expanded(
+              child: Text(
+                'Nur änderbar, solange keine Ergebnisse eingetragen sind.',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final kannLoeschen = !liga.hatErgebnisse;
     final darfAuslosen = !liga.hatErgebnisse && liga.teams.length >= 2;
     final aufgestellt = liga.aufgestellteSpielerIds;
     return Scaffold(
-      body: ListView.builder(
-        itemCount: liga.teams.length,
-        itemBuilder: (context, index) {
-          final team = liga.teams[index];
-          return TeamCard(
-            team: team,
-            kannLoeschen: kannLoeschen,
-            aufgestellteSpielerIds: aufgestellt,
-            onUmbenennen: () {
-              _teamUmbenennen(context, team);
-            },
-            onLoeschen: () {
-              _teamLoeschen(context, team);
-            },
-            onSpielerUmbenennen: (s) {
-              _spielerUmbenennen(context, team, s);
-            },
-            onSpielerLoeschen: (s) {
-              _spielerLoeschen(context, team, s);
-            },
-            onSpielerHinzufuegen: () {
-              _spielerHinzufuegen(context, team);
-            },
-          );
-        },
+      body: Column(
+        children: [
+          _formatLeiste(context),
+          const Divider(height: 1,),
+          Expanded(
+            child: ListView.builder(
+              itemCount: liga.teams.length,
+              itemBuilder: (context, index) {
+                final team = liga.teams[index];
+                return TeamCard(
+                  team: team,
+                  kannLoeschen: kannLoeschen,
+                  aufgestellteSpielerIds: aufgestellt,
+                  onUmbenennen: () {
+                    _teamUmbenennen(context, team);
+                  },
+                  onLoeschen: () {
+                    _teamLoeschen(context, team);
+                  },
+                  onSpielerUmbenennen: (s) {
+                    _spielerUmbenennen(context, team, s);
+                  },
+                  onSpielerLoeschen: (s) {
+                    _spielerLoeschen(context, team, s);
+                  },
+                  onSpielerHinzufuegen: () {
+                    _spielerHinzufuegen(context, team);
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: kannLoeschen
           ? Column(

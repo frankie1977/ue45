@@ -19,8 +19,6 @@ class SpielDetail extends StatelessWidget {
     required this.onSpielerGeandert,
     required this.hatDoppeltePaarung,
     required this.hatDuplikatEinzel,
-    required this.hatZuwenigSpieler,
-    required this.hatZuvielDoppel,
     super.key,
   });
 
@@ -34,8 +32,6 @@ class SpielDetail extends StatelessWidget {
   final void Function(Spiel neuesSpiel) onSpielerGeandert;
   final bool hatDoppeltePaarung;
   final bool hatDuplikatEinzel;
-  final bool hatZuwenigSpieler;
-  final bool hatZuvielDoppel;
 
   String _uhrzeit(DateTime d) {
     String zweiStellig(int n) {
@@ -242,19 +238,12 @@ class SpielDetail extends StatelessWidget {
       _ => false,
     };
     final bool zeigeWarnung =
-        hatDoppelteSpieler ||
-        hatDoppeltePaarung ||
-        hatDuplikatEinzel ||
-        hatZuwenigSpieler ||
-        hatZuvielDoppel;
+        hatDoppelteSpieler || hatDoppeltePaarung || hatDuplikatEinzel;
 
     final List<String> warnTexte = [
       if (hatDoppelteSpieler) 'Gleiche/r Spieler:in zweimal im Doppel!',
       if (hatDoppeltePaarung) 'Paarung kommt mehrfach vor!',
       if (hatDuplikatEinzel) 'Spieler:in in mehr als 1 Einzel!',
-      if (hatZuwenigSpieler)
-        'Weniger als 4 verschiedene Spieler:innen pro Seite!',
-      if (hatZuvielDoppel) 'Spieler:in in mehr als 2 Doppeln!',
     ];
 
     final rowCount = slot.istDoppel ? 2 : 1;

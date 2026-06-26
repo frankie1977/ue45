@@ -28,12 +28,17 @@ class Liga {
     return st.begegnungen;
   }).toList();
 
+  /// Anzahl Spiele pro Begegnung (5 oder 7) – abgeleitet aus den Daten.
+  int get anzahlSpiele =>
+      begegnungen.isNotEmpty ? begegnungen.first.spiele.length : 5;
+
   /// Erstellt den Spielplan per Round-Robin.
   /// Bei ungerader Teamanzahl erhält ein Team pro Spieltag ein Freilos.
   factory Liga.mitSpielplan({
     required String name,
     required List<Team> teams,
     List<Tisch> tische = const [],
+    int anzahlSpiele = 5,
   }) {
     // Bei ungerader Anzahl: null als Platzhalter für Freilos einfügen
     final List<Team?> rot = teams.length.isOdd
@@ -70,6 +75,7 @@ class Liga {
             heimTeam: heim,
             gastTeam: gast,
             istHinrunde: true,
+            spiele: List<Spiel?>.filled(anzahlSpiele, null),
           ),
         );
         rueckBeg.add(
@@ -78,6 +84,7 @@ class Liga {
             heimTeam: gast,
             gastTeam: heim,
             istHinrunde: false,
+            spiele: List<Spiel?>.filled(anzahlSpiele, null),
           ),
         );
       }
@@ -209,6 +216,7 @@ class Liga {
     name: name,
     teams: List<Team>.from(teams)..shuffle(),
     tische: tische,
+    anzahlSpiele: anzahlSpiele,
   );
 
   Liga mitTeamUmbenennt(
@@ -235,7 +243,39 @@ class Liga {
     name: name,
     teams: [...teams, neuesTeam],
     tische: tische,
+    anzahlSpiele: anzahlSpiele,
   );
+
+  /// Stellt das Liga-Format um (5 oder 7 Spiele pro Begegnung). Bestehende
+  /// Einträge in vorhandenen Slots bleiben erhalten; beim Verkleinern
+  /// entfallen die hinteren Slots, beim Vergrößern kommen leere hinzu.
+  Liga mitAnzahlSpiele(int anzahl) {
+    Spieltag angepasst(Spieltag st) => Spieltag(
+      nummer: st.nummer,
+      istHinrunde: st.istHinrunde,
+      freilos: st.freilos,
+      begegnungen: st.begegnungen.map((b) {
+        return Begegnung(
+          id: b.id,
+          heimTeam: b.heimTeam,
+          gastTeam: b.gastTeam,
+          istHinrunde: b.istHinrunde,
+          tisch: b.tisch,
+          spiele: <Spiel?>[
+            for (int i = 0; i < anzahl; i++)
+              i < b.spiele.length ? b.spiele[i] : null,
+          ],
+        );
+      }).toList(),
+    );
+    return Liga(
+      name: name,
+      teams: teams,
+      hinrunde: hinrunde.map(angepasst).toList(),
+      rueckrunde: rueckrunde.map(angepasst).toList(),
+      tische: tische,
+    );
+  }
 
   Liga mitSpielerUmbenennt(
     String teamId,
@@ -382,6 +422,7 @@ class Liga {
         return t.id != teamId;
       }).toList(),
       tische: tische,
+      anzahlSpiele: anzahlSpiele,
     );
   }
 
@@ -611,7 +652,7 @@ class Liga {
     }
 
     for (final beg in begegnungen) {
-      for (final slot in SpielSlot.values) {
+      for (final slot in beg.slots) {
         switch (beg.spielAt(slot)) {
           case Einzel(
                 :final heimSpieler,

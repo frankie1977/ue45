@@ -47,7 +47,7 @@ class AktuelleSpiele extends StatelessWidget {
         if (beg.istAbgeschlossen) {
           continue;
         }
-        for (final slot in SpielSlot.values) {
+        for (final slot in beg.slots) {
           final spiel = beg.spielAt(slot);
           if (spiel == null || !spiel.istAbgeschlossen) {
             return (beg: beg, slot: slot, spieltag: st);
