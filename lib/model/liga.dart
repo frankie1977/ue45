@@ -183,6 +183,7 @@ class Liga {
             heimTeam: b.heimTeam.id == neues.id ? neues : b.heimTeam,
             gastTeam: b.gastTeam.id == neues.id ? neues : b.gastTeam,
             istHinrunde: b.istHinrunde,
+            tisch: b.tisch,
             spiele: b.spiele,
           );
         },
@@ -294,6 +295,7 @@ class Liga {
             heimTeam: e.$2.heimTeam,
             gastTeam: e.$2.gastTeam,
             istHinrunde: e.$2.istHinrunde,
+            tisch: alt.begegnungen[e.$1].tisch,
             spiele: alt.begegnungen[e.$1].spiele.map((s) {
               return s != null ? spielerErsetzen(s) : null;
             }).toList(),

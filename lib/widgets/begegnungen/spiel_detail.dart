@@ -37,6 +37,14 @@ class SpielDetail extends StatelessWidget {
   final bool hatZuwenigSpieler;
   final bool hatZuvielDoppel;
 
+  String _uhrzeit(DateTime d) {
+    String zweiStellig(int n) {
+      return n.toString().padLeft(2, '0');
+    }
+
+    return '${zweiStellig(d.hour)}:${zweiStellig(d.minute)}';
+  }
+
   Spiel _spielerAktualisieren(
     bool istHeim,
     int index,
@@ -425,6 +433,15 @@ class SpielDetail extends StatelessWidget {
                             ),
                           )
                         : Container(),
+                    if (satz?.eingabe != null) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        _uhrzeit(satz!.eingabe!),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.outline,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

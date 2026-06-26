@@ -18,7 +18,13 @@ class LetzteErgebnisse extends StatelessWidget {
     for (final beg in liga.begegnungen) {
       for (final slot in SpielSlot.values) {
         final spiel = beg.spielAt(slot);
-        if (spiel != null && spiel.istAbgeschlossen) {
+        // Doppel schon ab dem ersten fertigen Satz zeigen (nicht erst,
+        // wenn beide Sätze eingetragen sind).
+        final hatFertigenSatz = spiel != null &&
+            spiel.saetze.any((s) {
+              return s.istAbgeschlossen;
+            });
+        if (hatFertigenSatz) {
           result.add((spiel: spiel, slot: slot, beg: beg,),);
         }
       }

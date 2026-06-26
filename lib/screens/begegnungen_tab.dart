@@ -10,11 +10,15 @@ class BegegnungenTab extends StatefulWidget {
   const BegegnungenTab({
     required this.liga,
     required this.onBegegnungGeaendert,
+    required this.expandedIds,
+    required this.onExpandToggle,
     super.key,
   });
 
   final Liga liga;
   final void Function(Begegnung) onBegegnungGeaendert;
+  final Set<String> expandedIds;
+  final void Function(String) onExpandToggle;
 
   @override
   State<BegegnungenTab> createState() => _BegegnungenTabState();
@@ -24,16 +28,6 @@ class _BegegnungenTabState extends State<BegegnungenTab>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-
-  final Set<String> _expandedIds = {};
-
-  void _expandToggle(String begegnungId) {
-    setState(() {
-      if (!_expandedIds.remove(begegnungId)) {
-        _expandedIds.add(begegnungId);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +53,8 @@ class _BegegnungenTabState extends State<BegegnungenTab>
           startIndex: hinIndex,
           tische: tische,
           onBegegnungGeaendert: widget.onBegegnungGeaendert,
-          expandedIds: _expandedIds,
-          onExpandToggle: _expandToggle,
+          expandedIds: widget.expandedIds,
+          onExpandToggle: widget.onExpandToggle,
           istAktiv: st == aktiverSpieltag,
         ),
       );
@@ -76,8 +70,8 @@ class _BegegnungenTabState extends State<BegegnungenTab>
           startIndex: rueckIndex,
           tische: tische,
           onBegegnungGeaendert: widget.onBegegnungGeaendert,
-          expandedIds: _expandedIds,
-          onExpandToggle: _expandToggle,
+          expandedIds: widget.expandedIds,
+          onExpandToggle: widget.onExpandToggle,
           istAktiv: st == aktiverSpieltag,
         ),
       );

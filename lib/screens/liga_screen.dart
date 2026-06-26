@@ -31,6 +31,18 @@ class _LigaScreenState extends State<LigaScreen> {
   late Liga _liga;
   bool _viewModus = false;
 
+  /// Aufgeklappte Begegnungen (per id). Liegt im Screen, damit der Zustand
+  /// Tab-Wechsel und View-Modus übersteht.
+  final Set<String> _expandedBegegnungIds = {};
+
+  void _begegnungExpandToggle(String begegnungId) {
+    setState(() {
+      if (!_expandedBegegnungIds.remove(begegnungId)) {
+        _expandedBegegnungIds.add(begegnungId);
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -245,6 +257,8 @@ class _LigaScreenState extends State<LigaScreen> {
                     BegegnungenTab(
                       liga: _liga,
                       onBegegnungGeaendert: _begegnungGeaendert,
+                      expandedIds: _expandedBegegnungIds,
+                      onExpandToggle: _begegnungExpandToggle,
                     ),
                     TeamsTab(liga: _liga, onLigaGeaendert: _ligaGeaendert,),
                     TischeTab(

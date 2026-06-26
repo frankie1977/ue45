@@ -36,16 +36,17 @@ class _BegegnungRowState extends State<BegegnungRow> {
     if (spiel == null) {
       return;
     }
+    final Satz satzMitZeit = satz.mitEingabe(DateTime.now());
     final Spiel neuesSpiel = switch (spiel) {
       Einzel(:final heimSpieler, :final gastSpieler) => Einzel(
         heimSpieler: heimSpieler,
         gastSpieler: gastSpieler,
-        satz: satz,
+        satz: satzMitZeit,
       ),
       Doppel(:final heimSpieler, :final gastSpieler, :final saetze) => Doppel(
         heimSpieler: heimSpieler,
         gastSpieler: gastSpieler,
-        saetze: _saetzeAktualisiert(saetze, satzIndex, satz),
+        saetze: _saetzeAktualisiert(saetze, satzIndex, satzMitZeit),
       ),
     };
     _logErgebnis(
