@@ -121,7 +121,7 @@ class _AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<_AppRoot> {
   
-  bool _angemeldet = true;
+  bool _angemeldet = false;
 
   late final LigaSpeicherFallback _speicher = LigaSpeicherFallback(
     remote: LigaSpeicherSupabase(
