@@ -325,7 +325,7 @@ class TeamsTab extends StatelessWidget {
                     onPressed: () {
                       _spielplanNeuAuslosen(context);
                     },
-                    child: const Icon(Icons.casino),
+                    child: const Icon(Icons.shuffle),
                   ),
                   const SizedBox(height: 12,),
                 ],
