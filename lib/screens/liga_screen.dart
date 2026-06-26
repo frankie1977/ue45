@@ -100,7 +100,11 @@ class _LigaScreenState extends State<LigaScreen> {
       mainAxisAlignment: .spaceBetween,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10,),
+          padding: const EdgeInsets.only(
+            left: 20,
+            top: 20,
+            bottom: 10,
+          ),
           child: Text(
             _liga.name,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -110,7 +114,10 @@ class _LigaScreenState extends State<LigaScreen> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 8, top: 10,),
+          padding: const EdgeInsets.only(
+            right: 8,
+            top: 10,
+          ),
           child: Row(
             mainAxisSize: .min,
             children: [
@@ -154,7 +161,9 @@ class _LigaScreenState extends State<LigaScreen> {
         crossAxisAlignment: .stretch,
         children: [
           _titelMitUmschalter(context),
-          const Divider(height: 1,),
+          const Divider(
+            height: 1,
+          ),
           Expanded(
             child: Row(
               crossAxisAlignment: .stretch,
@@ -165,15 +174,27 @@ class _LigaScreenState extends State<LigaScreen> {
                     child: Column(
                       crossAxisAlignment: .stretch,
                       children: [
-                        const SizedBox(height: 8,),
-                        AktuelleSpiele(liga: _liga, viewModus: true,),
-                        const SizedBox(height: 8,),
-                        LetzteErgebnisse(liga: _liga, viewModus: true,),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        AktuelleSpiele(
+                          liga: _liga,
+                          viewModus: true,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        LetzteErgebnisse(
+                          liga: _liga,
+                          viewModus: true,
+                        ),
                       ],
                     ),
                   ),
                 ),
-                const VerticalDivider(width: 1,),
+                const VerticalDivider(
+                  width: 1,
+                ),
                 Expanded(
                   flex: 2,
                   child: SingleChildScrollView(
@@ -181,40 +202,55 @@ class _LigaScreenState extends State<LigaScreen> {
                       crossAxisAlignment: .stretch,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0,),
+                          padding: const EdgeInsets.fromLTRB(
+                            8,
+                            8,
+                            8,
+                            0,
+                          ),
                           child: Card(
                             clipBehavior: Clip.antiAlias,
                             child: Column(
                               children: [
                                 const TabelleHeader(),
-                                const Divider(height: 1,),
+                                const Divider(
+                                  height: 1,
+                                ),
                                 ListView.separated(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: teams.length,
-                                  separatorBuilder: (
-                                    BuildContext ctx,
-                                    int i,
-                                  ) {
-                                    return const Divider(height: 1,);
-                                  },
-                                  itemBuilder: (
-                                    BuildContext ctx,
-                                    int index,
-                                  ) {
-                                    return TabelleRow(
-                                      rang: index + 1,
-                                      team: teams[index],
-                                      liga: _liga,
-                                    );
-                                  },
+                                  separatorBuilder:
+                                      (
+                                        BuildContext ctx,
+                                        int i,
+                                      ) {
+                                        return const Divider(
+                                          height: 1,
+                                        );
+                                      },
+                                  itemBuilder:
+                                      (
+                                        BuildContext ctx,
+                                        int index,
+                                      ) {
+                                        return TabelleRow(
+                                          rang: index + 1,
+                                          team: teams[index],
+                                          liga: _liga,
+                                        );
+                                      },
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8,),
-                        SpielerTopListe(liga: _liga,),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        SpielerTopListe(
+                          liga: _liga,
+                        ),
                       ],
                     ),
                   ),
@@ -234,19 +270,30 @@ class _LigaScreenState extends State<LigaScreen> {
         Expanded(
           child: Column(
             children: [
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               const TabBar(
                 tabs: [
                   Tab(
-                    icon: Icon(Icons.sports_soccer, size: 32,),
+                    icon: Icon(
+                      Icons.sports_soccer,
+                      size: 32,
+                    ),
                     text: 'Spiele',
                   ),
                   Tab(
-                    icon: Icon(Icons.groups, size: 32,),
+                    icon: Icon(
+                      Icons.groups,
+                      size: 32,
+                    ),
                     text: 'Anmeldung',
                   ),
                   Tab(
-                    icon: Icon(Icons.table_restaurant, size: 32,),
+                    icon: Icon(
+                      Icons.table_restaurant,
+                      size: 32,
+                    ),
                     text: 'Tische',
                   ),
                 ],
@@ -260,7 +307,10 @@ class _LigaScreenState extends State<LigaScreen> {
                       expandedIds: _expandedBegegnungIds,
                       onExpandToggle: _begegnungExpandToggle,
                     ),
-                    TeamsTab(liga: _liga, onLigaGeaendert: _ligaGeaendert,),
+                    TeamsTab(
+                      liga: _liga,
+                      onLigaGeaendert: _ligaGeaendert,
+                    ),
                     TischeTab(
                       liga: _liga,
                       onLigaGeaendert: _ligaGeaendert,
@@ -271,7 +321,9 @@ class _LigaScreenState extends State<LigaScreen> {
             ],
           ),
         ),
-        const VerticalDivider(width: 1,),
+        const VerticalDivider(
+          width: 1,
+        ),
         SizedBox(
           width: MediaQuery.of(context).size.width / 2.7,
           child: Column(
@@ -279,7 +331,9 @@ class _LigaScreenState extends State<LigaScreen> {
             children: [
               _titelMitUmschalter(context),
               Expanded(
-                child: TabelleTab(liga: _liga,),
+                child: TabelleTab(
+                  liga: _liga,
+                ),
               ),
             ],
           ),
@@ -293,9 +347,7 @@ class _LigaScreenState extends State<LigaScreen> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        body: _viewModus
-            ? _buildViewModus(context)
-            : _buildEditModus(context),
+        body: _viewModus ? _buildViewModus(context) : _buildEditModus(context),
       ),
     );
   }

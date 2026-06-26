@@ -49177,7 +49177,7 @@ A.a3k.prototype={
 $1(a){return a==null?null:a.b},
 $S:91}
 A.a3l.prototype={
-$1(a){return B.Hn},
+$1(a){return B.Hm},
 $S:87}
 A.a3m.prototype={
 $1(a){return"Close"},
@@ -50315,7 +50315,7 @@ return b instanceof A.yU&&b.b==s.b&&b.c==s.c&&b.d==s.d&&b.e==s.e&&J.d(b.w,s.w)&&
 A.SP.prototype={}
 A.KV.prototype={
 I(a){var s=this,r=null
-return new A.Cf(r,s.d,r,r,B.HK,r,r,r,s.r,s.w,B.F,r,!1,r,s.as,r,r,s.cy,r,r,r,r,r,r,r,r,!1,r)}}
+return new A.Cf(r,s.d,r,r,B.HJ,r,r,r,s.r,s.w,B.F,r,!1,r,s.as,r,r,s.cy,r,r,r,r,r,r,r,r,!1,r)}}
 A.Cf.prototype={
 ah(){return new A.GW(A.ET(),null,null)}}
 A.GW.prototype={
@@ -58900,7 +58900,7 @@ p=k.a
 o=p.d
 n=t.A9
 n=q?new A.dr(B.AE,n):new A.dr(B.RR,n)
-m=A.lg(q?B.oK:B.Hq,j,j,j)
+m=A.lg(q?B.oK:B.Hp,j,j,j)
 l=q?"Back":"More"
 n=A.b([new A.Za(m,new A.azJ(k),l,n)],t.p)
 B.b.L(n,k.a.c)
@@ -95180,7 +95180,7 @@ s=A.ah(m.a,n,n,n,n,s,n,n)
 m=A.lh(A.T(a).ax.b,n,B.HE,n,n,new A.auE(a),n,n,"Ergebnis-Log")
 r=A.T(a)
 q=this.e
-p=A.lg(q?B.Hp:B.Hv,n,n,n)
+p=A.lg(q?B.Ho:B.Hv,n,n,n)
 q=q?"Bearbeiten":"Anzeigemodus"
 o=t.p
 return A.c9(A.b([new A.aR(B.Gs,s,n),new A.aR(B.Gf,A.c9(A.b([m,A.lh(r.ax.b,n,p,n,n,new A.auF(this),n,n,q)],o),B.t,B.q,B.aG,0),n)],o),B.t,B.l6,B.u,0)},
@@ -95371,7 +95371,7 @@ o=n}B.b.L(s,A.b([B.Rk,A.cD(A.ah("Nur \xe4nderbar, solange keine Ergebnisse einge
 I(a){var s,r=this,q=r.c,p=!q.gKL(),o=!q.gKL()&&q.b.length>=2,n=q.gXh(),m=t.p
 q=A.cj(A.b([r.acu(a),B.bv,A.cD(A.aJa(new A.anT(r,p,n),q.b.length),1)],m),B.t,B.q,B.u)
 if(p){s=A.b([],m)
-if(o)B.b.L(s,A.b([new A.Ae(B.HG,"Spielpaarungen neu auslosen","auslosen",new A.anU(r,a),B.Zb,null),B.Rq],m))
+if(o)B.b.L(s,A.b([new A.Ae(B.HL,"Spielpaarungen neu auslosen","auslosen",new A.anU(r,a),B.Zb,null),B.Rq],m))
 s.push(A.aIk(B.oR,"team",new A.anV(r,a)))
 m=A.cj(s,B.t,B.q,B.aG)}else m=null
 return A.D_(null,q,m)}}
@@ -95498,7 +95498,7 @@ $0(){A.cQ(this.a,!1).dX(!0)},
 $S:0}
 A.aoP.prototype={
 $2(a,b){var s=null,r=this.a,q=r.c.e[b],p=this.b.ax
-return A.pb(A.aaU(s,s,s,!0,!0,B.HJ,s,s,s,s,s,A.ah(q.b,s,s,s,s,s,s,s),A.c9(A.b([A.lh(s,s,A.lg(B.kL,p.b,s,s),s,s,new A.aoN(r,a,q),s,s,"Umbenennen"),A.lh(s,s,A.lg(B.oL,p.fy,s,s),s,s,new A.aoO(r,a,q),s,s,"Entfernen")],t.p),B.t,B.q,B.aG,0),s),s,s,B.ob,s)},
+return A.pb(A.aaU(s,s,s,!0,!0,B.HI,s,s,s,s,s,A.ah(q.b,s,s,s,s,s,s,s),A.c9(A.b([A.lh(s,s,A.lg(B.kL,p.b,s,s),s,s,new A.aoN(r,a,q),s,s,"Umbenennen"),A.lh(s,s,A.lg(B.oL,p.fy,s,s),s,s,new A.aoO(r,a,q),s,s,"Entfernen")],t.p),B.t,B.q,B.aG,0),s),s,s,B.ob,s)},
 $S:650}
 A.aoN.prototype={
 $0(){this.a.Aa(this.b,this.c)},
@@ -95723,8 +95723,8 @@ $1(a){var s,r,q=null,p=this.b,o=A.ah(a.b+" "+a.c,q,q,q,q,p.ok.y,q,q)
 p=p.ax
 s=this.a
 r=A.b([A.lh(q,q,A.lg(B.kL,p.b,q,q),q,q,new A.anv(s,a),q,q,"Umbenennen")],t.p)
-if(s.d&&!s.e.p(0,a.a))r.push(A.lh(p.fy,q,B.HH,q,q,new A.anw(s,a),q,q,"Entfernen"))
-return A.aaU(q,q,q,!0,!0,B.HL,q,q,q,q,q,o,A.c9(r,B.t,B.q,B.aG,0),q)},
+if(s.d&&!s.e.p(0,a.a))r.push(A.lh(p.fy,q,B.HG,q,q,new A.anw(s,a),q,q,"Entfernen"))
+return A.aaU(q,q,q,!0,!0,B.HK,q,q,q,q,q,o,A.c9(r,B.t,B.q,B.aG,0),q)},
 $S:652}
 A.anv.prototype={
 $0(){this.a.w.$1(this.b)},
@@ -95951,7 +95951,7 @@ A.Mt.prototype={
 I(a){var s,r,q=null,p=A.T(a).ax,o=p.ry
 if(o==null){o=p.n
 p=o==null?p.k3:o}else p=o
-p=A.lg(B.Hr,p,q,16)
+p=A.lg(B.Hq,p,q,16)
 o=A.T(a).ok.Q
 if(o==null)o=q
 else{s=A.T(a).ax
@@ -100594,12 +100594,12 @@ B.Hg=new A.n0(null)
 B.oK=new A.cP(57490,"MaterialIcons",!0)
 B.Hi=new A.cP(57496,"MaterialIcons",!1)
 B.Hj=new A.cP(57502,"MaterialIcons",!0)
-B.Hn=new A.cP(57706,"MaterialIcons",!1)
+B.Hm=new A.cP(57706,"MaterialIcons",!1)
 B.oL=new A.cP(57787,"MaterialIcons",!1)
-B.Hp=new A.cP(57882,"MaterialIcons",!1)
+B.Ho=new A.cP(57882,"MaterialIcons",!1)
 B.oN=new A.cP(58332,"MaterialIcons",!1)
-B.Hq=new A.cP(58372,"MaterialIcons",!1)
-B.Hr=new A.cP(58495,"MaterialIcons",!1)
+B.Hp=new A.cP(58372,"MaterialIcons",!1)
+B.Hq=new A.cP(58495,"MaterialIcons",!1)
 B.Hv=new A.cP(59069,"MaterialIcons",!1)
 B.kL=new A.cP(61453,"MaterialIcons",!1)
 B.Hw=new A.cP(62072,"MaterialIcons",!1)
@@ -100621,20 +100621,20 @@ B.Mn=new A.qj(B.Mf,1,1,0.596078431372549,0,B.f)
 B.HB=new A.ez(B.Hy,20,B.Mn,null,null)
 B.oM=new A.cP(58094,"MaterialIcons",!1)
 B.HD=new A.ez(B.oM,null,null,null,null)
-B.Ht=new A.cP(58637,"MaterialIcons",!1)
-B.HE=new A.ez(B.Ht,null,null,null,null)
-B.Hm=new A.cP(57686,"MaterialIcons",!1)
-B.oQ=new A.ez(B.Hm,null,null,null,null)
-B.Hl=new A.cP(57667,"MaterialIcons",!1)
-B.HG=new A.ez(B.Hl,null,null,null,null)
+B.Hs=new A.cP(58637,"MaterialIcons",!1)
+B.HE=new A.ez(B.Hs,null,null,null,null)
+B.Hl=new A.cP(57686,"MaterialIcons",!1)
+B.oQ=new A.ez(B.Hl,null,null,null,null)
 B.Hx=new A.cP(62079,"MaterialIcons",!1)
-B.HH=new A.ez(B.Hx,null,null,null,null)
+B.HG=new A.ez(B.Hx,null,null,null,null)
 B.oO=new A.cP(984453,"MaterialIcons",!1)
-B.HJ=new A.ez(B.oO,null,null,null,null)
+B.HI=new A.ez(B.oO,null,null,null,null)
 B.Hk=new A.cP(57657,"MaterialIcons",!1)
-B.HK=new A.ez(B.Hk,null,null,null,null)
-B.Hs=new A.cP(58513,"MaterialIcons",!1)
-B.HL=new A.ez(B.Hs,null,null,null,null)
+B.HJ=new A.ez(B.Hk,null,null,null,null)
+B.Hr=new A.cP(58513,"MaterialIcons",!1)
+B.HK=new A.ez(B.Hr,null,null,null,null)
+B.Ht=new A.cP(58785,"MaterialIcons",!1)
+B.HL=new A.ez(B.Ht,null,null,null,null)
 B.HM=new A.ez(B.oL,null,null,null,null)
 B.Hh=new A.cP(57415,"MaterialIcons",!1)
 B.oR=new A.ez(B.Hh,null,null,null,null)
@@ -100798,8 +100798,8 @@ B.Z4=new A.mg(8,0.12)
 B.Z3=new A.mg(12,0.14)
 B.p7=s([B.Z2,B.Z7,B.Z5,B.Z6,B.Z4,B.Z3],A.au("z<mg>"))
 B.p8=s([0,21,51,121,151,191,271,321,360],t.n)
-B.Ho=new A.cP(57715,"MaterialIcons",!1)
-B.HC=new A.ez(B.Ho,20,B.k,null,null)
+B.Hn=new A.cP(57715,"MaterialIcons",!1)
+B.HC=new A.ez(B.Hn,20,B.k,null,null)
 B.lQ=new A.dB(8,null,null,null)
 B.TL=new A.q(!0,B.k,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.WZ=new A.d6("Offline \u2013 Ergebnisse werden lokal gespeichert und automatisch synchronisiert, sobald die Verbindung zur\xfcck ist.",null,B.TL,null,null,null,null,null,null,null)
@@ -100852,8 +100852,8 @@ B.HF=new A.ez(B.Hu,32,null,null,null)
 B.Sc=new A.vX("Spiele",B.HF,null)
 B.HN=new A.ez(B.oM,32,null,null,null)
 B.Sd=new A.vX("Anmeldung",B.HN,null)
-B.HI=new A.ez(B.oO,32,null,null,null)
-B.Sb=new A.vX("Tische",B.HI,null)
+B.HH=new A.ez(B.oO,32,null,null,null)
+B.Sb=new A.vX("Tische",B.HH,null)
 B.hK=s([B.Sc,B.Sd,B.Sb],t.p)
 B.JP=s(["click","scroll"],t.s)
 B.Cv=new A.tn()
