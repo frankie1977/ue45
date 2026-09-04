@@ -42,6 +42,11 @@
               "id": "t1781162800916_s1782635176432",
               "vorname": "Entfällt",
               "nachname": "-"
+            },
+            {
+              "id": "t1781162800916_s1788265717534",
+              "vorname": "Thomas",
+              "nachname": "Böttcher"
             }
           ]
         },
@@ -129,6 +134,11 @@
               "id": "t1781162763549_s1782635195288",
               "vorname": "Entfällt",
               "nachname": "-"
+            },
+            {
+              "id": "t1781162763549_s1788501922219",
+              "vorname": "Bernhard",
+              "nachname": "Jürgens"
             }
           ]
         },
@@ -170,6 +180,11 @@
               "id": "t1781162707228_s1782635204143",
               "vorname": "Entfällt",
               "nachname": "-"
+            },
+            {
+              "id": "t1781162707228_s1788104844731",
+              "vorname": "Kai",
+              "nachname": "Schneider"
             }
           ]
         },
@@ -380,7 +395,7 @@
                   ]
                 }
               ],
-              "tischId": "tisch_1776088934504"
+              "tischId": null
             },
             {
               "id": "b3",
@@ -511,7 +526,7 @@
                   ]
                 }
               ],
-              "tischId": "tisch_1776088932377"
+              "tischId": null
             }
           ]
         },
@@ -649,7 +664,7 @@
                   ]
                 }
               ],
-              "tischId": "tisch_1776088934504"
+              "tischId": null
             },
             {
               "id": "b7",
@@ -780,7 +795,7 @@
                   ]
                 }
               ],
-              "tischId": "tisch_1776088932377"
+              "tischId": null
             }
           ]
         },
@@ -1595,47 +1610,8 @@
       "rueckrunde": [
         {
           "hin": false,
-          "frei": "t1781162763549",
-          "nummer": 6,
-          "begegnungen": [
-            {
-              "id": "b10",
-              "hin": false,
-              "gast": "t1781162707228",
-              "heim": "t1781162807788",
-              "spiele": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-              ],
-              "tischId": null
-            },
-            {
-              "id": "b12",
-              "hin": false,
-              "gast": "t1781162702468",
-              "heim": "t1781162800916",
-              "spiele": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-              ],
-              "tischId": null
-            }
-          ]
-        },
-        {
-          "hin": false,
           "frei": "t1781162807788",
-          "nummer": 7,
+          "nummer": 6,
           "begegnungen": [
             {
               "id": "b14",
@@ -1658,6 +1634,45 @@
               "hin": false,
               "gast": "t1781162707228",
               "heim": "t1781162702468",
+              "spiele": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "tischId": null
+            }
+          ]
+        },
+        {
+          "hin": false,
+          "frei": "t1781162763549",
+          "nummer": 7,
+          "begegnungen": [
+            {
+              "id": "b10",
+              "hin": false,
+              "gast": "t1781162707228",
+              "heim": "t1781162807788",
+              "spiele": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "tischId": null
+            },
+            {
+              "id": "b12",
+              "hin": false,
+              "gast": "t1781162702468",
+              "heim": "t1781162800916",
               "spiele": [
                 null,
                 null,
