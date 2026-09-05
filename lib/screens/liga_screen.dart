@@ -212,7 +212,9 @@ class _LigaScreenState extends State<LigaScreen> {
                             clipBehavior: Clip.antiAlias,
                             child: Column(
                               children: [
-                                const TabelleHeader(),
+                                const TabelleHeader(
+                                  breiteNamen: true,
+                                ),
                                 const Divider(
                                   height: 1,
                                 ),
@@ -238,6 +240,7 @@ class _LigaScreenState extends State<LigaScreen> {
                                           rang: index + 1,
                                           team: teams[index],
                                           liga: _liga,
+                                          breiteNamen: true,
                                         );
                                       },
                                 ),

@@ -20,12 +20,19 @@ class LetzteErgebnisse extends StatelessWidget {
         final spiel = beg.spielAt(slot);
         // Doppel schon ab dem ersten fertigen Satz zeigen (nicht erst,
         // wenn beide Sätze eingetragen sind).
-        final hatFertigenSatz = spiel != null &&
+        final hatFertigenSatz =
+            spiel != null &&
             spiel.saetze.any((s) {
               return s.istAbgeschlossen;
             });
         if (hatFertigenSatz) {
-          result.add((spiel: spiel, slot: slot, beg: beg,),);
+          result.add(
+            (
+              spiel: spiel,
+              slot: slot,
+              beg: beg,
+            ),
+          );
         }
       }
     }
@@ -61,13 +68,17 @@ class LetzteErgebnisse extends StatelessWidget {
                 ),
               ),
             ),
-            const Divider(height: 1,),
+            const Divider(
+              height: 1,
+            ),
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: spiele.length,
               separatorBuilder: (BuildContext ctx, int index) {
-                return const Divider(height: 1,);
+                return const Divider(
+                  height: 1,
+                );
               },
               itemBuilder: (BuildContext ctx, int index) {
                 final (:spiel, :slot, :beg) = spiele[index];
@@ -102,18 +113,24 @@ class _SpielRow extends StatelessWidget {
   String _heimText() {
     return switch (spiel) {
       Einzel(:final heimSpieler) => heimSpieler?.name ?? '?',
-      Doppel(:final heimSpieler) => heimSpieler.map((s) {
-          return s.name;
-        }).join(' & '),
+      Doppel(:final heimSpieler) =>
+        heimSpieler
+            .map((s) {
+              return s.name;
+            })
+            .join(' & '),
     };
   }
 
   String _gastText() {
     return switch (spiel) {
       Einzel(:final gastSpieler) => gastSpieler?.name ?? '?',
-      Doppel(:final gastSpieler) => gastSpieler.map((s) {
-          return s.name;
-        }).join(' & '),
+      Doppel(:final gastSpieler) =>
+        gastSpieler
+            .map((s) {
+              return s.name;
+            })
+            .join(' & '),
     };
   }
 
@@ -121,9 +138,12 @@ class _SpielRow extends StatelessWidget {
     return switch (spiel) {
       Einzel(:final satz) =>
         satz != null ? '${satz.heimTore}:${satz.gastTore}' : '?',
-      Doppel(:final saetze) => saetze.map((s) {
-          return '${s.heimTore}:${s.gastTore}';
-        }).join('  '),
+      Doppel(:final saetze) =>
+        saetze
+            .map((s) {
+              return '${s.heimTore}:${s.gastTore}';
+            })
+            .join('  '),
     };
   }
 
@@ -132,7 +152,10 @@ class _SpielRow extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8,),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -147,26 +170,26 @@ class _SpielRow extends StatelessWidget {
               horizontal: viewModus ? 16.0 : 0.0,
             ),
             child: SizedBox(
-            width: 100,
-            child: Column(
-              children: [
-                Text(
-                  slot.label,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.outline,
+              width: 100,
+              child: Column(
+                children: [
+                  Text(
+                    slot.label,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.outline,
+                    ),
                   ),
-                ),
-                Text(
-                  _scoreText(),
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.primary,
+                  Text(
+                    _scoreText(),
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
             ),
           ),
           Expanded(

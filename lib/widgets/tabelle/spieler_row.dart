@@ -27,7 +27,10 @@ class SpielerRow extends StatelessWidget {
         : '${(stats.quote * 100).round()}%';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8,),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
       child: Row(
         children: [
           SizedBox(
@@ -85,7 +88,9 @@ class SpielerRow extends StatelessWidget {
             child: Text(
               torDiffText,
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall?.copyWith(color: torDiffColor,),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: torDiffColor,
+              ),
             ),
           ),
         ],

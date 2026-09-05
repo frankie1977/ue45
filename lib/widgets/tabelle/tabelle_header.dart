@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:ue45x/widgets/tabelle/tabelle_spalten.dart';
 
 class TabelleHeader extends StatelessWidget {
-  const TabelleHeader({super.key});
+  const TabelleHeader({
+    this.breiteNamen = false,
+    super.key,
+  });
+
+  /// Teamname belegt die halbe Breite, die Statistik-Spalten teilen sich
+  /// den Rest (Anzeigemodus).
+  final bool breiteNamen;
 
   @override
   Widget build(BuildContext context) {
@@ -9,49 +17,77 @@ class TabelleHeader extends StatelessWidget {
       color: Theme.of(context).colorScheme.outline,
     );
 
+    Widget spalte(
+      String text,
+      int flex,
+    ) {
+      return tabelleSpalte(
+        flex: flex,
+        flexibel: breiteNamen,
+        kind: Text(
+          text,
+          style: style,
+          textAlign: .center,
+        ),
+      );
+    }
+
     return Padding(
-      padding: const .symmetric(horizontal: 16, vertical: 8),
+      padding: const .symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
       child: Row(
         children: [
           SizedBox(
-            width: 28,
-            child: Text('#', textAlign: .right, style: style),
+            width: tabelleRangBreite,
+            child: Text(
+              '#',
+              textAlign: .right,
+              style: style,
+            ),
           ),
-          SizedBox(
-            width: 10,
+          const SizedBox(
+            width: tabelleRangAbstand,
           ),
-          Expanded(child: Text('Team', style: style)),
-          SizedBox(
-            width: 32,
-            child: Text('Sp', style: style, textAlign: .center),
+          Expanded(
+            flex: breiteNamen ? tabelleFlexTeam : 1,
+            child: Text(
+              'Team',
+              style: style,
+            ),
           ),
-          SizedBox(
-            width: 78,
-            child: Text('Tore', style: style, textAlign: .center),
+          spalte(
+            'Sp',
+            tabelleFlexSpiele,
           ),
-          SizedBox(
-            width: 58,
-            child: Text('+/−', style: style, textAlign: .center),
+          spalte(
+            'Tore',
+            tabelleFlexTore,
           ),
-          SizedBox(
-            width: 32,
-            child: Text('S', style: style, textAlign: .center),
+          spalte(
+            '+/−',
+            tabelleFlexTorDifferenz,
           ),
-          SizedBox(
-            width: 32,
-            child: Text('U', style: style, textAlign: .center),
+          spalte(
+            'S',
+            tabelleFlexSiege,
           ),
-          SizedBox(
-            width: 32,
-            child: Text('N', style: style, textAlign: .center),
+          spalte(
+            'U',
+            tabelleFlexUnentschieden,
           ),
-          SizedBox(
-            width: 44,
-            child: Text('+/−', style: style, textAlign: .center),
+          spalte(
+            'N',
+            tabelleFlexNiederlagen,
           ),
-          SizedBox(
-            width: 36,
-            child: Text('', style: style, textAlign: .center),
+          spalte(
+            '+/−',
+            tabelleFlexPunkteDifferenz,
+          ),
+          spalte(
+            '',
+            tabelleFlexPunkte,
           ),
         ],
       ),
